@@ -263,11 +263,13 @@ h1, h2, h3, h4, h5, h6 {
 .clean-input {
     padding: 0.75rem;
     border: 1px solid #dee2e6;
-    border-radius: 8px;
+    border-radius: 8px !important;
     background: #ffffff;
     color: #212529;
     font-size: 0.875rem;
     transition: all 0.2s ease;
+    -webkit-border-radius: 8px !important;
+    -moz-border-radius: 8px !important;
 }
 
 .clean-input:focus {

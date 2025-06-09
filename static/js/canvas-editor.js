@@ -176,7 +176,9 @@ class TemplateAdsEditor {
             originX: 'center',
             originY: 'center',
             backgroundColor: '#0077B5',
-            padding: 10,
+            padding: 15,
+            rx: 8,
+            ry: 8,
             id: 'cta'
         });
         
@@ -228,7 +230,9 @@ class TemplateAdsEditor {
             originX: 'left',
             originY: 'center',
             backgroundColor: '#0077B5',
-            padding: 10,
+            padding: 15,
+            rx: 8,
+            ry: 8,
             id: 'cta'
         });
         
@@ -280,7 +284,9 @@ class TemplateAdsEditor {
             originX: 'center',
             originY: 'center',
             backgroundColor: '#0077B5',
-            padding: 8,
+            padding: 15,
+            rx: 8,
+            ry: 8,
             id: 'cta'
         });
         
