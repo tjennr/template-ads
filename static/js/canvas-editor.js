@@ -201,9 +201,7 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            stroke: '#ffffff',
-            strokeWidth: 3,
-            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
+            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
             id: 'title'
         });
         
@@ -217,9 +215,7 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            stroke: '#ffffff',
-            strokeWidth: 2,
-            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
+            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
             id: 'subtitle'
         });
         
@@ -282,9 +278,7 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
-            stroke: '#ffffff',
-            strokeWidth: 3,
-            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
+            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
             id: 'title'
         });
         
@@ -298,9 +292,7 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
-            stroke: '#ffffff',
-            strokeWidth: 2,
-            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
+            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
             id: 'subtitle'
         });
         
@@ -363,9 +355,7 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            stroke: '#ffffff',
-            strokeWidth: 3,
-            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
+            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
             id: 'title'
         });
         
@@ -379,9 +369,7 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            stroke: '#ffffff',
-            strokeWidth: 2,
-            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
+            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
             id: 'subtitle'
         });
         
