@@ -107,10 +107,6 @@ class TemplateAdsEditor {
             this.resetCanvas();
         });
         
-        document.getElementById('centerElements').addEventListener('click', () => {
-            this.centerElements();
-        });
-        
         // Initialize slider fills on load
         this.initializeSliderFills();
     }
@@ -435,11 +431,11 @@ class TemplateAdsEditor {
                 let scaleX, scaleY;
                 if (imageAspectRatio > canvasAspectRatio) {
                     // Image is wider than canvas - fit to height
-                    scaleY = canvasHeight / clonedImg.height * 0.8; // 80% of canvas height
+                    scaleY = canvasHeight / clonedImg.height * 1.2; // 120% of canvas height for better coverage
                     scaleX = scaleY;
                 } else {
                     // Image is taller than canvas - fit to width
-                    scaleX = canvasWidth / clonedImg.width * 0.9; // 90% of canvas width
+                    scaleX = canvasWidth / clonedImg.width * 1.1; // 110% of canvas width for better coverage
                     scaleY = scaleX;
                 }
                 
@@ -553,11 +549,11 @@ class TemplateAdsEditor {
                 let scaleX, scaleY;
                 if (imageAspectRatio > canvasAspectRatio) {
                     // Image is wider than canvas - fit to height
-                    scaleY = canvasHeight / img.height * 0.8; // 80% of canvas height
+                    scaleY = canvasHeight / img.height * 1.2; // 120% of canvas height for better coverage
                     scaleX = scaleY;
                 } else {
                     // Image is taller than canvas - fit to width
-                    scaleX = canvasWidth / img.width * 0.9; // 90% of canvas width
+                    scaleX = canvasWidth / img.width * 1.1; // 110% of canvas width for better coverage
                     scaleY = scaleX;
                 }
                 
@@ -785,24 +781,38 @@ class TemplateAdsEditor {
     }
     
     resetCanvas() {
-        this.loadTemplate(this.currentTemplate);
+        // Clear all stored images
+        this.mainImage = null;
+        this.logo = null;
+        
+        // Reset form values to defaults
+        document.getElementById('titleText').value = 'Your Title Here';
+        document.getElementById('subtitleText').value = 'Your subtitle text goes here';
+        document.getElementById('ctaText').value = 'Get Started';
+        document.getElementById('titleSize').value = '48';
+        document.getElementById('subtitleSize').value = '24';
+        document.getElementById('ctaSize').value = '16';
+        document.getElementById('titleColor').value = '#333333';
+        document.getElementById('subtitleColor').value = '#666666';
+        document.getElementById('ctaColor').value = '#ffffff';
+        document.getElementById('backgroundColor').value = '#ffffff';
+        
+        // Clear file inputs
+        document.getElementById('mainImageUpload').value = '';
+        document.getElementById('logoUpload').value = '';
+        
+        // Clear canvas completely
+        this.canvas.clear();
+        this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+        
+        // Reload current template with default values
+        this.loadTemplate(this.currentTemplate || 'template1');
+        
+        // Re-initialize slider fills
+        this.initializeSliderFills();
     }
     
-    centerElements() {
-        const canvasWidth = this.canvas.getWidth();
-        const canvasHeight = this.canvas.getHeight();
-        
-        this.canvas.getObjects().forEach(obj => {
-            if (obj.id && obj.id.includes('text') || obj.id === 'title' || obj.id === 'subtitle' || obj.id === 'cta') {
-                obj.set({
-                    left: canvasWidth / 2,
-                    originX: 'center'
-                });
-            }
-        });
-        
-        this.canvas.renderAll();
-    }
+
 }
 
 // Initialize the editor when the page loads
