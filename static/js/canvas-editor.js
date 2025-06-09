@@ -122,6 +122,14 @@ class TemplateAdsEditor {
         if (templates[templateName]) {
             templates[templateName].call(this);
         }
+        
+        // Re-add existing images if they exist and ensure proper layering
+        if (this.mainImage) {
+            this.addExistingImageToCanvas(this.mainImage, 'main');
+        }
+        if (this.logo) {
+            this.addExistingImageToCanvas(this.logo, 'logo');
+        }
     }
     
     createTemplate1() {
@@ -280,6 +288,42 @@ class TemplateAdsEditor {
         this.canvas.renderAll();
     }
     
+    addExistingImageToCanvas(existingImg, type) {
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Clone the existing image
+        existingImg.clone((clonedImg) => {
+            if (type === 'main') {
+                // Reposition main image based on current template
+                clonedImg.set({
+                    left: canvasWidth / 2,
+                    top: this.currentTemplate === 'template1' ? canvasHeight * 0.3 : 
+                         this.currentTemplate === 'template2' ? canvasHeight * 0.25 : canvasHeight * 0.2,
+                    originX: 'center',
+                    originY: 'center',
+                    id: 'mainImage'
+                });
+                
+                this.canvas.add(clonedImg);
+                this.canvas.sendToBack(clonedImg);
+                
+            } else if (type === 'logo') {
+                // Keep logo in original position
+                clonedImg.set({
+                    id: 'logo'
+                });
+                
+                this.canvas.add(clonedImg);
+                if (this.canvas.getObjects().find(obj => obj.id === 'mainImage')) {
+                    this.canvas.bringForward(clonedImg);
+                }
+            }
+            
+            this.canvas.renderAll();
+        });
+    }
+    
     handleImageUpload(event, type) {
         const file = event.target.files[0];
         if (!file) return;
@@ -311,14 +355,15 @@ class TemplateAdsEditor {
             const canvasHeight = this.canvas.getHeight();
             
             if (type === 'main') {
-                // Main image positioning based on template
+                // Main image positioning based on template - adjusted for vertical canvas
                 img.set({
-                    left: this.currentTemplate === 'template2' ? canvasWidth * 0.65 : canvasWidth / 2,
-                    top: this.currentTemplate === 'template1' ? canvasHeight * 0.25 : canvasHeight * 0.3,
+                    left: canvasWidth / 2,
+                    top: this.currentTemplate === 'template1' ? canvasHeight * 0.3 : 
+                         this.currentTemplate === 'template2' ? canvasHeight * 0.25 : canvasHeight * 0.2,
                     originX: 'center',
                     originY: 'center',
-                    scaleX: 0.5,
-                    scaleY: 0.5,
+                    scaleX: 0.6,
+                    scaleY: 0.6,
                     id: 'mainImage'
                 });
                 
