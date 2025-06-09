@@ -423,12 +423,6 @@ class TemplateAdsEditor {
         // Clone the existing image
         existingImg.clone((clonedImg) => {
             if (type === 'main') {
-                // Apply light overlay filter for better text readability
-                clonedImg.filters = clonedImg.filters || [];
-                if (!clonedImg.filters.some(filter => filter.type === 'Brightness')) {
-                    clonedImg.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.15 }));
-                    clonedImg.applyFilters();
-                }
                 
                 // Calculate automatic fitting scale to fill canvas area
                 const imageAspectRatio = clonedImg.width / clonedImg.height;
@@ -522,9 +516,6 @@ class TemplateAdsEditor {
             const canvasHeight = this.canvas.getHeight();
             
             if (type === 'main') {
-                // Apply light overlay filter for better text readability
-                img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.15 }));
-                img.applyFilters();
                 
                 // Calculate automatic fitting scale to fill canvas area
                 const imageAspectRatio = img.width / img.height;
