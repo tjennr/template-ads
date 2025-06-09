@@ -80,7 +80,6 @@ class TemplateAdsEditor {
         
         document.getElementById('subtitleSize').addEventListener('input', (e) => {
             this.updateTextStyle('subtitle', 'fontSize', parseInt(e.target.value));
-            this.updateSliderFill(e.target);
         });
         
         document.getElementById('ctaColor').addEventListener('change', (e) => {
@@ -227,7 +226,10 @@ class TemplateAdsEditor {
         const templates = {
             template1: this.createTemplate1,
             template2: this.createTemplate2,
-            template3: this.createTemplate3
+            template3: this.createTemplate3,
+            template4: this.createTemplate4,
+            template5: this.createTemplate5,
+            template6: this.createTemplate6
         };
         
         if (templates[templateName]) {
@@ -299,6 +301,27 @@ class TemplateAdsEditor {
                     originX: 'left',
                     originY: 'top'
                 };
+            case 'template4': // Split Left - top right in text area
+                return {
+                    left: canvasWidth - margin,
+                    top: margin,
+                    originX: 'right',
+                    originY: 'top'
+                };
+            case 'template5': // Split Right - top left in text area
+                return {
+                    left: margin,
+                    top: margin,
+                    originX: 'left',
+                    originY: 'top'
+                };
+            case 'template6': // Split Top - bottom right in text area
+                return {
+                    left: canvasWidth - margin,
+                    top: canvasHeight - margin,
+                    originX: 'right',
+                    originY: 'bottom'
+                };
             default:
                 return {
                     left: margin,
@@ -326,6 +349,76 @@ class TemplateAdsEditor {
             });
             
             this.canvas.renderAll();
+        }
+    }
+
+    updateAllTextFonts(fontFamily) {
+        const textObjects = this.canvas.getObjects().filter(obj => 
+            obj.type === 'text' || (obj.type === 'group' && obj._objects && obj._objects[1] && obj._objects[1].type === 'text')
+        );
+        
+        textObjects.forEach(obj => {
+            if (obj.type === 'text') {
+                obj.set('fontFamily', fontFamily);
+            } else if (obj.type === 'group' && obj._objects && obj._objects[1]) {
+                obj._objects[1].set('fontFamily', fontFamily);
+                obj.addWithUpdate();
+            }
+        });
+        
+        this.canvas.renderAll();
+        this.saveState();
+    }
+
+    getImageConfigForTemplate(templateName, canvasWidth, canvasHeight) {
+        switch(templateName) {
+            case 'template1': // Classic - full canvas
+            case 'template2': // Modern Grid - full canvas
+            case 'template3': // Minimalist - full canvas
+                return {
+                    left: canvasWidth / 2,
+                    top: canvasHeight / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    width: canvasWidth,
+                    height: canvasHeight
+                };
+            case 'template4': // Split Left - left half
+                return {
+                    left: canvasWidth * 0.25,
+                    top: canvasHeight / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    width: canvasWidth * 0.5,
+                    height: canvasHeight
+                };
+            case 'template5': // Split Right - right half
+                return {
+                    left: canvasWidth * 0.75,
+                    top: canvasHeight / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    width: canvasWidth * 0.5,
+                    height: canvasHeight
+                };
+            case 'template6': // Split Top - top half
+                return {
+                    left: canvasWidth / 2,
+                    top: canvasHeight * 0.25,
+                    originX: 'center',
+                    originY: 'center',
+                    width: canvasWidth,
+                    height: canvasHeight * 0.5
+                };
+            default:
+                return {
+                    left: canvasWidth / 2,
+                    top: canvasHeight / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    width: canvasWidth,
+                    height: canvasHeight
+                };
         }
     }
     
@@ -559,6 +652,231 @@ class TemplateAdsEditor {
         this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
     }
+
+    createTemplate4() {
+        // Split Left - Image covers left half, text on right half
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Title
+        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+            left: canvasWidth * 0.75,
+            top: canvasHeight * 0.4,
+            fontSize: parseInt(document.getElementById('titleSize').value),
+            fill: document.getElementById('titleColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
+            id: 'title'
+        });
+        
+        // Subtitle
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+            left: canvasWidth * 0.75,
+            top: canvasHeight * 0.55,
+            fontSize: parseInt(document.getElementById('subtitleSize').value),
+            fill: document.getElementById('subtitleColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
+            id: 'subtitle'
+        });
+        
+        // CTA Button
+        const ctaButtonBg = new fabric.Rect({
+            left: canvasWidth * 0.75,
+            top: canvasHeight * 0.7,
+            width: 120,
+            height: 40,
+            fill: '#0077B5',
+            rx: 8,
+            ry: 8,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            evented: false,
+            id: 'ctaBackground'
+        });
+
+        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            left: canvasWidth * 0.75,
+            top: canvasHeight * 0.7,
+            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fill: document.getElementById('ctaColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            id: 'cta'
+        });
+
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth * 0.75,
+            top: canvasHeight * 0.7,
+            originX: 'center',
+            originY: 'center',
+            id: 'ctaGroup'
+        });
+        
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
+        this.canvas.renderAll();
+    }
+
+    createTemplate5() {
+        // Split Right - Image covers right half, text on left half
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Title
+        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+            left: canvasWidth * 0.25,
+            top: canvasHeight * 0.4,
+            fontSize: parseInt(document.getElementById('titleSize').value),
+            fill: document.getElementById('titleColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
+            id: 'title'
+        });
+        
+        // Subtitle
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+            left: canvasWidth * 0.25,
+            top: canvasHeight * 0.55,
+            fontSize: parseInt(document.getElementById('subtitleSize').value),
+            fill: document.getElementById('subtitleColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
+            id: 'subtitle'
+        });
+        
+        // CTA Button
+        const ctaButtonBg = new fabric.Rect({
+            left: canvasWidth * 0.25,
+            top: canvasHeight * 0.7,
+            width: 120,
+            height: 40,
+            fill: '#0077B5',
+            rx: 8,
+            ry: 8,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            evented: false,
+            id: 'ctaBackground'
+        });
+
+        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            left: canvasWidth * 0.25,
+            top: canvasHeight * 0.7,
+            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fill: document.getElementById('ctaColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            id: 'cta'
+        });
+
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth * 0.25,
+            top: canvasHeight * 0.7,
+            originX: 'center',
+            originY: 'center',
+            id: 'ctaGroup'
+        });
+        
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
+        this.canvas.renderAll();
+    }
+
+    createTemplate6() {
+        // Split Top - Image covers top half, text on bottom half
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Title
+        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.65,
+            fontSize: parseInt(document.getElementById('titleSize').value),
+            fill: document.getElementById('titleColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
+            id: 'title'
+        });
+        
+        // Subtitle
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.78,
+            fontSize: parseInt(document.getElementById('subtitleSize').value),
+            fill: document.getElementById('subtitleColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
+            id: 'subtitle'
+        });
+        
+        // CTA Button
+        const ctaButtonBg = new fabric.Rect({
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.9,
+            width: 120,
+            height: 40,
+            fill: '#0077B5',
+            rx: 8,
+            ry: 8,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            evented: false,
+            id: 'ctaBackground'
+        });
+
+        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.9,
+            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fill: document.getElementById('ctaColor').value,
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            originX: 'center',
+            originY: 'center',
+            id: 'cta'
+        });
+
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.9,
+            originX: 'center',
+            originY: 'center',
+            id: 'ctaGroup'
+        });
+        
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
+        this.canvas.renderAll();
+    }
     
     addExistingImageToCanvas(existingImg, type) {
         const canvasWidth = this.canvas.getWidth();
@@ -567,29 +885,22 @@ class TemplateAdsEditor {
         // Clone the existing image
         existingImg.clone((clonedImg) => {
             if (type === 'main') {
+                // Get image dimensions and position based on current template
+                const imageConfig = this.getImageConfigForTemplate(this.currentTemplate, canvasWidth, canvasHeight);
                 
-                // Calculate automatic fitting scale to fill canvas area
-                const imageAspectRatio = clonedImg.width / clonedImg.height;
-                const canvasAspectRatio = canvasWidth / canvasHeight;
-                
-                let scaleX, scaleY;
-                // Calculate scale to completely fill canvas (may crop image)
-                const scaleToFitWidth = canvasWidth / clonedImg.width;
-                const scaleToFitHeight = canvasHeight / clonedImg.height;
-                
-                // Use the larger scale to ensure complete coverage
+                // Calculate scale to fit the designated area
+                const scaleToFitWidth = imageConfig.width / clonedImg.width;
+                const scaleToFitHeight = imageConfig.height / clonedImg.height;
                 const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
-                scaleX = scale;
-                scaleY = scale;
                 
-                // Position image to cover the entire canvas
+                // Position image in the designated area
                 clonedImg.set({
-                    left: canvasWidth / 2,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
-                    scaleX: scaleX,
-                    scaleY: scaleY,
+                    left: imageConfig.left,
+                    top: imageConfig.top,
+                    originX: imageConfig.originX,
+                    originY: imageConfig.originY,
+                    scaleX: scale,
+                    scaleY: scale,
                     id: 'mainImage'
                 });
                 
@@ -669,29 +980,22 @@ class TemplateAdsEditor {
             const canvasHeight = this.canvas.getHeight();
             
             if (type === 'main') {
+                // Get image dimensions and position based on current template
+                const imageConfig = this.getImageConfigForTemplate(this.currentTemplate, canvasWidth, canvasHeight);
                 
-                // Calculate automatic fitting scale to fill canvas area
-                const imageAspectRatio = img.width / img.height;
-                const canvasAspectRatio = canvasWidth / canvasHeight;
-                
-                let scaleX, scaleY;
-                // Calculate scale to completely fill canvas (may crop image)
-                const scaleToFitWidth = canvasWidth / img.width;
-                const scaleToFitHeight = canvasHeight / img.height;
-                
-                // Use the larger scale to ensure complete coverage
+                // Calculate scale to fit the designated area
+                const scaleToFitWidth = imageConfig.width / img.width;
+                const scaleToFitHeight = imageConfig.height / img.height;
                 const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
-                scaleX = scale;
-                scaleY = scale;
                 
-                // Position image to cover the entire canvas
+                // Position image in the designated area
                 img.set({
-                    left: canvasWidth / 2,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
-                    scaleX: scaleX,
-                    scaleY: scaleY,
+                    left: imageConfig.left,
+                    top: imageConfig.top,
+                    originX: imageConfig.originX,
+                    originY: imageConfig.originY,
+                    scaleX: scale,
+                    scaleY: scale,
                     id: 'mainImage'
                 });
                 
