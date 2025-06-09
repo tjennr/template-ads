@@ -1132,7 +1132,14 @@ class TemplateAdsEditor {
         }
         
         if (textObj) {
-            textObj.set('text', value);
+            if (textObj.type === 'textbox') {
+                textObj.set('text', value);
+                // Force textbox to recalculate wrapping
+                textObj._forceClearCache = true;
+                textObj.initDimensions();
+            } else {
+                textObj.set('text', value);
+            }
             this.canvas.renderAll();
             this.saveState();
         }
