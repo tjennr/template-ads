@@ -164,7 +164,23 @@ class TemplateAdsEditor {
             id: 'subtitle'
         });
         
-        // CTA Button
+        // CTA Button - Create rounded rectangle background
+        const ctaButtonBg = new fabric.Rect({
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.88,
+            width: 120,
+            height: 40,
+            fill: '#0077B5',
+            rx: 8,
+            ry: 8,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            evented: false,
+            id: 'ctaBackground'
+        });
+
+        // CTA Button Text
         this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.88,
@@ -175,14 +191,19 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            backgroundColor: '#0077B5',
-            padding: 15,
-            rx: 8,
-            ry: 8,
             id: 'cta'
         });
+
+        // Group them together
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.88,
+            originX: 'center',
+            originY: 'center',
+            id: 'ctaGroup'
+        });
         
-        this.canvas.add(this.titleText, this.subtitleText, this.ctaText);
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
     }
     
@@ -218,25 +239,46 @@ class TemplateAdsEditor {
             id: 'subtitle'
         });
         
-        // CTA Button
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+        // CTA Button - Create rounded rectangle background
+        const ctaButtonBg = new fabric.Rect({
             left: canvasWidth * 0.1,
+            top: canvasHeight * 0.85,
+            width: 120,
+            height: 40,
+            fill: '#0077B5',
+            rx: 8,
+            ry: 8,
+            originX: 'left',
+            originY: 'center',
+            selectable: false,
+            evented: false,
+            id: 'ctaBackground'
+        });
+
+        // CTA Button Text
+        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            left: canvasWidth * 0.1 + 60,
             top: canvasHeight * 0.85,
             fontSize: parseInt(document.getElementById('ctaSize').value),
             fill: document.getElementById('ctaColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
-            originX: 'left',
+            originX: 'center',
             originY: 'center',
-            backgroundColor: '#0077B5',
-            padding: 15,
-            rx: 8,
-            ry: 8,
             id: 'cta'
         });
+
+        // Group them together
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth * 0.1,
+            top: canvasHeight * 0.85,
+            originX: 'left',
+            originY: 'center',
+            id: 'ctaGroup'
+        });
         
-        this.canvas.add(this.titleText, this.subtitleText, this.ctaText);
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
     }
     
@@ -272,7 +314,23 @@ class TemplateAdsEditor {
             id: 'subtitle'
         });
         
-        // CTA Button
+        // CTA Button - Create rounded rectangle background
+        const ctaButtonBg = new fabric.Rect({
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.8,
+            width: 120,
+            height: 40,
+            fill: '#0077B5',
+            rx: 8,
+            ry: 8,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            evented: false,
+            id: 'ctaBackground'
+        });
+
+        // CTA Button Text
         this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.8,
@@ -283,14 +341,19 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            backgroundColor: '#0077B5',
-            padding: 15,
-            rx: 8,
-            ry: 8,
             id: 'cta'
         });
+
+        // Group them together
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth / 2,
+            top: canvasHeight * 0.8,
+            originX: 'center',
+            originY: 'center',
+            id: 'ctaGroup'
+        });
         
-        this.canvas.add(this.titleText, this.subtitleText, this.ctaText);
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
     }
     
@@ -480,6 +543,13 @@ class TemplateAdsEditor {
                 textObj = this.subtitleText;
                 break;
             case 'cta':
+                // For CTA, we need to update the text within the group
+                if (this.ctaGroup && this.ctaGroup._objects && this.ctaGroup._objects[1]) {
+                    this.ctaGroup._objects[1].set('text', value);
+                    this.ctaGroup.addWithUpdate();
+                    this.canvas.renderAll();
+                    return;
+                }
                 textObj = this.ctaText;
                 break;
         }
@@ -501,6 +571,13 @@ class TemplateAdsEditor {
                 textObj = this.subtitleText;
                 break;
             case 'cta':
+                // For CTA, we need to update the text within the group
+                if (this.ctaGroup && this.ctaGroup._objects && this.ctaGroup._objects[1]) {
+                    this.ctaGroup._objects[1].set(property, value);
+                    this.ctaGroup.addWithUpdate();
+                    this.canvas.renderAll();
+                    return;
+                }
                 textObj = this.ctaText;
                 break;
         }
