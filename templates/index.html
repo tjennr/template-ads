@@ -11,6 +11,9 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Google Fonts - Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <!-- Fabric.js for canvas manipulation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     
@@ -22,8 +25,8 @@
         <!-- Header -->
         <header class="py-3 mb-4 border-bottom">
             <div class="d-flex align-items-center">
-                <i class="fas fa-palette me-2 text-info fs-3"></i>
-                <h1 class="mb-0">Template Ads</h1>
+                <i class="fas fa-palette me-2 fs-3" style="color: #0077B5;"></i>
+                <h1 class="mb-0" style="color: #0077B5;">Template Ads</h1>
                 <small class="text-muted ms-3">Create professional advertisements with ease</small>
             </div>
         </header>
@@ -31,124 +34,104 @@
         <div class="row">
             <!-- Left Sidebar - Controls -->
             <div class="col-lg-3 col-md-4">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Templates</h5>
+                <div class="sidebar-section mb-4">
+                    <h6 class="sidebar-title">Templates</h6>
+                    <div class="template-grid">
+                        <button class="template-btn active" data-template="template1">
+                            <div class="template-preview template1-preview"></div>
+                            <span>Classic</span>
+                        </button>
+                        <button class="template-btn" data-template="template2">
+                            <div class="template-preview template2-preview"></div>
+                            <span>Grid</span>
+                        </button>
+                        <button class="template-btn" data-template="template3">
+                            <div class="template-preview template3-preview"></div>
+                            <span>Minimal</span>
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-2">
-                            <div class="col-12">
-                                <button class="btn btn-outline-secondary w-100 template-btn active" data-template="template1">
-                                    <div class="template-preview template1-preview mb-2"></div>
-                                    Classic Layout
-                                </button>
-                            </div>
-                            <div class="col-12">
-                                <button class="btn btn-outline-secondary w-100 template-btn" data-template="template2">
-                                    <div class="template-preview template2-preview mb-2"></div>
-                                    Modern Grid
-                                </button>
-                            </div>
-                            <div class="col-12">
-                                <button class="btn btn-outline-secondary w-100 template-btn" data-template="template3">
-                                    <div class="template-preview template3-preview mb-2"></div>
-                                    Minimalist
-                                </button>
-                            </div>
+                </div>
+
+                <div class="sidebar-section mb-4">
+                    <h6 class="sidebar-title">Images</h6>
+                    <div class="upload-area">
+                        <label class="upload-label">
+                            <i class="fas fa-image"></i>
+                            <span>Main Image</span>
+                            <input type="file" class="upload-input" id="mainImageUpload" accept="image/*">
+                        </label>
+                        <label class="upload-label">
+                            <i class="fas fa-copyright"></i>
+                            <span>Logo</span>
+                            <input type="file" class="upload-input" id="logoUpload" accept="image/*">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="sidebar-section mb-4">
+                    <h6 class="sidebar-title">Content</h6>
+                    <div class="content-inputs">
+                        <div class="input-group">
+                            <label class="input-label">Title</label>
+                            <input type="text" class="clean-input" id="titleText" placeholder="Enter your title" value="Your Amazing Product">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Subtitle</label>
+                            <input type="text" class="clean-input" id="subtitleText" placeholder="Enter subtitle" value="Premium quality at affordable prices">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Call to Action</label>
+                            <input type="text" class="clean-input" id="ctaText" placeholder="Call to action" value="Shop Now">
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-images me-2"></i>Images</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Main Image</label>
-                            <input type="file" class="form-control" id="mainImageUpload" accept="image/*">
+                <div class="sidebar-section mb-4">
+                    <h6 class="sidebar-title">Style</h6>
+                    <div class="style-controls">
+                        <div class="style-row">
+                            <label class="input-label">Title</label>
+                            <div class="control-pair">
+                                <input type="color" class="color-input" id="titleColor" value="#ffffff">
+                                <input type="range" class="size-slider" id="titleSize" min="20" max="80" value="40">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Logo</label>
-                            <input type="file" class="form-control" id="logoUpload" accept="image/*">
+                        <div class="style-row">
+                            <label class="input-label">Subtitle</label>
+                            <div class="control-pair">
+                                <input type="color" class="color-input" id="subtitleColor" value="#cccccc">
+                                <input type="range" class="size-slider" id="subtitleSize" min="12" max="40" value="24">
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-font me-2"></i>Text Content</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control" id="titleText" placeholder="Enter your title" value="Your Amazing Product">
+                        <div class="style-row">
+                            <label class="input-label">Button</label>
+                            <div class="control-pair">
+                                <input type="color" class="color-input" id="ctaColor" value="#000000">
+                                <input type="range" class="size-slider" id="ctaSize" min="12" max="30" value="18">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Subtitle</label>
-                            <input type="text" class="form-control" id="subtitleText" placeholder="Enter subtitle" value="Premium quality at affordable prices">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Call to Action</label>
-                            <input type="text" class="form-control" id="ctaText" placeholder="Call to action" value="Shop Now">
+                        <div class="style-row">
+                            <label class="input-label">Background</label>
+                            <input type="color" class="color-input-full" id="backgroundColor" value="#1a1a1a">
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-palette me-2"></i>Styling</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <label class="form-label">Title Color</label>
-                                <input type="color" class="form-control form-control-color" id="titleColor" value="#ffffff">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Title Size</label>
-                                <input type="range" class="form-range" id="titleSize" min="20" max="80" value="40">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Subtitle Color</label>
-                                <input type="color" class="form-control form-control-color" id="subtitleColor" value="#cccccc">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Subtitle Size</label>
-                                <input type="range" class="form-range" id="subtitleSize" min="12" max="40" value="24">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">CTA Color</label>
-                                <input type="color" class="form-control form-control-color" id="ctaColor" value="#000000">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">CTA Size</label>
-                                <input type="range" class="form-range" id="ctaSize" min="12" max="30" value="18">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Background Color</label>
-                                <input type="color" class="form-control form-control-color" id="backgroundColor" value="#1a1a1a">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-download me-2"></i>Export</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success" id="exportPng">
-                                <i class="fas fa-file-image me-2"></i>Download PNG
-                            </button>
-                            <button class="btn btn-success" id="exportJpg">
-                                <i class="fas fa-file-image me-2"></i>Download JPG
-                            </button>
-                            <button class="btn btn-success" id="exportPdf">
-                                <i class="fas fa-file-pdf me-2"></i>Download PDF
-                            </button>
-                        </div>
+                <div class="sidebar-section">
+                    <h6 class="sidebar-title">Export</h6>
+                    <div class="export-buttons">
+                        <button class="export-btn" id="exportPng">
+                            <i class="fas fa-file-image"></i>
+                            <span>PNG</span>
+                        </button>
+                        <button class="export-btn" id="exportJpg">
+                            <i class="fas fa-file-image"></i>
+                            <span>JPG</span>
+                        </button>
+                        <button class="export-btn" id="exportPdf">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>PDF</span>
+                        </button>
                     </div>
                 </div>
             </div>
