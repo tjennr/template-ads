@@ -39,6 +39,7 @@ class TemplateAdsEditor {
                 btn.classList.add('active');
                 this.currentTemplate = btn.dataset.template;
                 this.loadTemplate(this.currentTemplate);
+                this.saveState();
             });
         });
         
@@ -94,6 +95,7 @@ class TemplateAdsEditor {
         
         document.getElementById('backgroundColor').addEventListener('change', (e) => {
             this.canvas.setBackgroundColor(e.target.value, this.canvas.renderAll.bind(this.canvas));
+            this.saveState();
         });
         
         // Export buttons
@@ -123,11 +125,19 @@ class TemplateAdsEditor {
     }
 
     setupCanvasEvents() {
-        // Track canvas changes for undo functionality
-        this.canvas.on('object:added', () => this.saveState());
-        this.canvas.on('object:removed', () => this.saveState());
-        this.canvas.on('object:modified', () => this.saveState());
-        this.canvas.on('path:created', () => this.saveState());
+        // Track canvas changes for undo functionality with debouncing
+        this.canvas.on('object:added', () => this.debouncedSaveState());
+        this.canvas.on('object:removed', () => this.debouncedSaveState());
+        this.canvas.on('object:modified', () => this.debouncedSaveState());
+        this.canvas.on('path:created', () => this.debouncedSaveState());
+    }
+
+    debouncedSaveState() {
+        // Debounce state saving to prevent excessive history entries
+        clearTimeout(this.saveStateTimeout);
+        this.saveStateTimeout = setTimeout(() => {
+            this.saveState();
+        }, 300);
     }
 
     saveState() {
@@ -745,6 +755,7 @@ class TemplateAdsEditor {
                     this.ctaGroup._objects[1].set('text', value);
                     this.ctaGroup.addWithUpdate();
                     this.canvas.renderAll();
+                    this.saveState();
                     return;
                 }
                 textObj = this.ctaText;
@@ -774,6 +785,7 @@ class TemplateAdsEditor {
                     this.ctaGroup._objects[1].set(property, value);
                     this.ctaGroup.addWithUpdate();
                     this.canvas.renderAll();
+                    this.saveState();
                     return;
                 }
                 textObj = this.ctaText;
@@ -783,6 +795,7 @@ class TemplateAdsEditor {
         if (textObj) {
             textObj.set(property, value);
             this.canvas.renderAll();
+            this.saveState();
         }
     }
     
