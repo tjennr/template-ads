@@ -323,7 +323,7 @@ h1, h2, h3, h4, h5, h6 {
     flex: 1;
     height: 8px !important;
     border-radius: 4px !important;
-    background: #f8f9fa !important;
+    background: linear-gradient(to right, var(--brand-primary) 0%, var(--brand-primary) var(--fill-percent, 50%), #f8f9fa var(--fill-percent, 50%), #f8f9fa 100%) !important;
     outline: none;
     cursor: pointer;
     border: 1px solid #dee2e6 !important;
@@ -332,15 +332,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .size-slider:hover {
-    background: #e9ecef !important;
     border-color: var(--brand-primary) !important;
 }
 
 .size-slider::-webkit-slider-track {
     height: 8px;
     border-radius: 4px;
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background: transparent;
+    border: none;
 }
 
 .size-slider::-webkit-slider-thumb {

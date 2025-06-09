@@ -64,6 +64,7 @@ class TemplateAdsEditor {
         
         document.getElementById('titleSize').addEventListener('input', (e) => {
             this.updateTextStyle('title', 'fontSize', parseInt(e.target.value));
+            this.updateSliderFill(e.target);
         });
         
         document.getElementById('subtitleColor').addEventListener('change', (e) => {
@@ -72,6 +73,7 @@ class TemplateAdsEditor {
         
         document.getElementById('subtitleSize').addEventListener('input', (e) => {
             this.updateTextStyle('subtitle', 'fontSize', parseInt(e.target.value));
+            this.updateSliderFill(e.target);
         });
         
         document.getElementById('ctaColor').addEventListener('change', (e) => {
@@ -80,6 +82,7 @@ class TemplateAdsEditor {
         
         document.getElementById('ctaSize').addEventListener('input', (e) => {
             this.updateTextStyle('cta', 'fontSize', parseInt(e.target.value));
+            this.updateSliderFill(e.target);
         });
         
         document.getElementById('backgroundColor').addEventListener('change', (e) => {
@@ -106,6 +109,19 @@ class TemplateAdsEditor {
         
         document.getElementById('centerElements').addEventListener('click', () => {
             this.centerElements();
+        });
+        
+        // Initialize slider fills on load
+        this.initializeSliderFills();
+    }
+    
+    initializeSliderFills() {
+        const sliders = ['titleSize', 'subtitleSize', 'ctaSize'];
+        sliders.forEach(sliderId => {
+            const slider = document.getElementById(sliderId);
+            if (slider) {
+                this.updateSliderFill(slider);
+            }
         });
     }
     
@@ -587,6 +603,15 @@ class TemplateAdsEditor {
             textObj.set(property, value);
             this.canvas.renderAll();
         }
+    }
+    
+    updateSliderFill(slider) {
+        const min = parseFloat(slider.min) || 0;
+        const max = parseFloat(slider.max) || 100;
+        const value = parseFloat(slider.value) || 0;
+        const percentage = ((value - min) / (max - min)) * 100;
+        
+        slider.style.setProperty('--fill-percent', `${percentage}%`);
     }
     
     exportImage(format) {
