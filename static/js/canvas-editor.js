@@ -29,6 +29,7 @@ class TemplateAdsEditor {
         this.setupCanvasEvents();
         this.loadTemplate(this.currentTemplate);
         this.loadDefaultImage();
+        this.updateFontFamilyDisplay();
         this.saveState();
     }
 
@@ -36,6 +37,12 @@ class TemplateAdsEditor {
         // Load the default office image on page load
         const defaultImagePath = '/static/images/default-office.jpg';
         this.addImageToCanvas(defaultImagePath, 'main');
+    }
+
+    updateFontFamilyDisplay() {
+        // Set the font family dropdown to show the current font
+        const fontFamilySelect = document.getElementById('fontFamily');
+        fontFamilySelect.value = 'Source Sans Pro';
     }
     
     setupEventListeners() {
