@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Ads - Advertisement Designer</title>
+    
+    <!-- Bootstrap CSS with Replit theme -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fabric.js for canvas manipulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="py-3 mb-4 border-bottom">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-palette me-2 text-info fs-3"></i>
+                <h1 class="mb-0">Template Ads</h1>
+                <small class="text-muted ms-3">Create professional advertisements with ease</small>
+            </div>
+        </header>
+
+        <div class="row">
+            <!-- Left Sidebar - Controls -->
+            <div class="col-lg-3 col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <button class="btn btn-outline-secondary w-100 template-btn active" data-template="template1">
+                                    <div class="template-preview template1-preview mb-2"></div>
+                                    Classic Layout
+                                </button>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-outline-secondary w-100 template-btn" data-template="template2">
+                                    <div class="template-preview template2-preview mb-2"></div>
+                                    Modern Grid
+                                </button>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-outline-secondary w-100 template-btn" data-template="template3">
+                                    <div class="template-preview template3-preview mb-2"></div>
+                                    Minimalist
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-images me-2"></i>Images</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Main Image</label>
+                            <input type="file" class="form-control" id="mainImageUpload" accept="image/*">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Logo</label>
+                            <input type="file" class="form-control" id="logoUpload" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-font me-2"></i>Text Content</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" id="titleText" placeholder="Enter your title" value="Your Amazing Product">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subtitle</label>
+                            <input type="text" class="form-control" id="subtitleText" placeholder="Enter subtitle" value="Premium quality at affordable prices">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Call to Action</label>
+                            <input type="text" class="form-control" id="ctaText" placeholder="Call to action" value="Shop Now">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-palette me-2"></i>Styling</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label">Title Color</label>
+                                <input type="color" class="form-control form-control-color" id="titleColor" value="#ffffff">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Title Size</label>
+                                <input type="range" class="form-range" id="titleSize" min="20" max="80" value="40">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Subtitle Color</label>
+                                <input type="color" class="form-control form-control-color" id="subtitleColor" value="#cccccc">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Subtitle Size</label>
+                                <input type="range" class="form-range" id="subtitleSize" min="12" max="40" value="24">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">CTA Color</label>
+                                <input type="color" class="form-control form-control-color" id="ctaColor" value="#000000">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">CTA Size</label>
+                                <input type="range" class="form-range" id="ctaSize" min="12" max="30" value="18">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Background Color</label>
+                                <input type="color" class="form-control form-control-color" id="backgroundColor" value="#1a1a1a">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-download me-2"></i>Export</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" id="exportPng">
+                                <i class="fas fa-file-image me-2"></i>Download PNG
+                            </button>
+                            <button class="btn btn-success" id="exportJpg">
+                                <i class="fas fa-file-image me-2"></i>Download JPG
+                            </button>
+                            <button class="btn btn-success" id="exportPdf">
+                                <i class="fas fa-file-pdf me-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Canvas Area -->
+            <div class="col-lg-9 col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-paint-brush me-2"></i>Design Canvas</h5>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-outline-secondary btn-sm" id="resetCanvas">
+                                <i class="fas fa-undo me-1"></i>Reset
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" id="centerElements">
+                                <i class="fas fa-align-center me-1"></i>Center
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="canvas-container">
+                            <canvas id="designCanvas" width="800" height="600"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6><i class="fas fa-info-circle me-2"></i>Instructions</h6>
+                        <ul class="mb-0 text-muted small">
+                            <li>Select a template to get started</li>
+                            <li>Upload your main image and logo using the file inputs</li>
+                            <li>Edit text content and customize colors and sizes</li>
+                            <li>Drag and resize elements on the canvas</li>
+                            <li>Export your design as PNG, JPG, or PDF</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/canvas-editor.js') }}"></script>
+</body>
+</html>
