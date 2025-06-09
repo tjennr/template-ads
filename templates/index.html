@@ -138,36 +138,19 @@
 
             <!-- Main Canvas Area -->
             <div class="col-lg-9 col-md-8">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="fas fa-paint-brush me-2"></i>Design Canvas</h5>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-outline-secondary btn-sm" id="resetCanvas">
-                                <i class="fas fa-undo me-1"></i>Reset
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm" id="centerElements">
-                                <i class="fas fa-align-center me-1"></i>Center
-                            </button>
-                        </div>
+                <div class="canvas-wrapper">
+                    <div class="canvas-header">
+                        <button class="canvas-action-btn" id="resetCanvas">
+                            <i class="fas fa-undo"></i>
+                            Reset
+                        </button>
+                        <button class="canvas-action-btn" id="centerElements">
+                            <i class="fas fa-align-center"></i>
+                            Center
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <div class="canvas-container">
-                            <canvas id="designCanvas" width="600" height="800"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Instructions -->
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h6><i class="fas fa-info-circle me-2"></i>Instructions</h6>
-                        <ul class="mb-0 text-muted small">
-                            <li>Select a template to get started</li>
-                            <li>Upload your main image and logo using the file inputs</li>
-                            <li>Edit text content and customize colors and sizes</li>
-                            <li>Drag and resize elements on the canvas</li>
-                            <li>Export your design as PNG, JPG, or PDF</li>
-                        </ul>
+                    <div class="canvas-container">
+                        <canvas id="designCanvas" width="600" height="800"></canvas>
                     </div>
                 </div>
             </div>
