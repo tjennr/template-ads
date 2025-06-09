@@ -428,6 +428,21 @@ class TemplateAdsEditor {
                     clonedImg.applyFilters();
                 }
                 
+                // Calculate automatic fitting scale to fill canvas area
+                const imageAspectRatio = clonedImg.width / clonedImg.height;
+                const canvasAspectRatio = canvasWidth / canvasHeight;
+                
+                let scaleX, scaleY;
+                if (imageAspectRatio > canvasAspectRatio) {
+                    // Image is wider than canvas - fit to height
+                    scaleY = canvasHeight / clonedImg.height * 0.8; // 80% of canvas height
+                    scaleX = scaleY;
+                } else {
+                    // Image is taller than canvas - fit to width
+                    scaleX = canvasWidth / clonedImg.width * 0.9; // 90% of canvas width
+                    scaleY = scaleX;
+                }
+                
                 // Reposition main image based on current template
                 clonedImg.set({
                     left: canvasWidth / 2,
@@ -435,6 +450,8 @@ class TemplateAdsEditor {
                          this.currentTemplate === 'template2' ? canvasHeight * 0.25 : canvasHeight * 0.2,
                     originX: 'center',
                     originY: 'center',
+                    scaleX: scaleX,
+                    scaleY: scaleY,
                     id: 'mainImage'
                 });
                 
@@ -529,6 +546,21 @@ class TemplateAdsEditor {
                 img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.15 }));
                 img.applyFilters();
                 
+                // Calculate automatic fitting scale to fill canvas area
+                const imageAspectRatio = img.width / img.height;
+                const canvasAspectRatio = canvasWidth / canvasHeight;
+                
+                let scaleX, scaleY;
+                if (imageAspectRatio > canvasAspectRatio) {
+                    // Image is wider than canvas - fit to height
+                    scaleY = canvasHeight / img.height * 0.8; // 80% of canvas height
+                    scaleX = scaleY;
+                } else {
+                    // Image is taller than canvas - fit to width
+                    scaleX = canvasWidth / img.width * 0.9; // 90% of canvas width
+                    scaleY = scaleX;
+                }
+                
                 // Main image positioning based on template - adjusted for vertical canvas
                 img.set({
                     left: canvasWidth / 2,
@@ -536,8 +568,8 @@ class TemplateAdsEditor {
                          this.currentTemplate === 'template2' ? canvasHeight * 0.25 : canvasHeight * 0.2,
                     originX: 'center',
                     originY: 'center',
-                    scaleX: 0.6,
-                    scaleY: 0.6,
+                    scaleX: scaleX,
+                    scaleY: scaleY,
                     id: 'mainImage'
                 });
                 
