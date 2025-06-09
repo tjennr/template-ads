@@ -364,10 +364,10 @@ class TemplateAdsEditor {
         // Clone the existing image
         existingImg.clone((clonedImg) => {
             if (type === 'main') {
-                // Apply dark overlay filter for better text readability
+                // Apply light overlay filter for better text readability
                 clonedImg.filters = clonedImg.filters || [];
                 if (!clonedImg.filters.some(filter => filter.type === 'Brightness')) {
-                    clonedImg.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.3 }));
+                    clonedImg.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.15 }));
                     clonedImg.applyFilters();
                 }
                 
@@ -384,13 +384,13 @@ class TemplateAdsEditor {
                 this.canvas.add(clonedImg);
                 this.canvas.sendToBack(clonedImg);
                 
-                // Add dark overlay rectangle for even better text contrast
+                // Add light overlay rectangle only on the image
                 const overlay = new fabric.Rect({
                     left: clonedImg.left,
                     top: clonedImg.top,
                     width: clonedImg.getScaledWidth(),
                     height: clonedImg.getScaledHeight(),
-                    fill: 'rgba(0, 0, 0, 0.2)',
+                    fill: 'rgba(0, 0, 0, 0.1)',
                     originX: 'center',
                     originY: 'center',
                     selectable: false,
@@ -398,9 +398,10 @@ class TemplateAdsEditor {
                     id: 'imageOverlay'
                 });
                 
+                this.canvas.add(clonedImg);
                 this.canvas.add(overlay);
-                this.canvas.sendToBack(overlay);
                 this.canvas.sendToBack(clonedImg);
+                this.canvas.sendToBack(overlay);
                 
             } else if (type === 'logo') {
                 // Keep logo in original position
@@ -449,8 +450,8 @@ class TemplateAdsEditor {
             const canvasHeight = this.canvas.getHeight();
             
             if (type === 'main') {
-                // Apply dark overlay filter for better text readability
-                img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.3 }));
+                // Apply light overlay filter for better text readability
+                img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.15 }));
                 img.applyFilters();
                 
                 // Main image positioning based on template - adjusted for vertical canvas
@@ -477,13 +478,13 @@ class TemplateAdsEditor {
                 this.canvas.add(img);
                 this.canvas.sendToBack(img);
                 
-                // Add dark overlay rectangle for even better text contrast
+                // Add light overlay rectangle only on the image
                 const overlay = new fabric.Rect({
                     left: img.left,
                     top: img.top,
                     width: img.getScaledWidth(),
                     height: img.getScaledHeight(),
-                    fill: 'rgba(0, 0, 0, 0.2)',
+                    fill: 'rgba(0, 0, 0, 0.1)',
                     originX: 'center',
                     originY: 'center',
                     selectable: false,
