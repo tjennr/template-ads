@@ -381,34 +381,56 @@ class TemplateAdsEditor {
                     originX: 'center',
                     originY: 'center',
                     width: canvasWidth,
-                    height: canvasHeight
+                    height: canvasHeight,
+                    clipPath: null
                 };
-            case 'template4': // Split Left - left half
+            case 'template4': // Split Left - left half only
                 return {
-                    left: canvasWidth * 0.25,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
+                    left: 0,
+                    top: 0,
+                    originX: 'left',
+                    originY: 'top',
                     width: canvasWidth * 0.5,
-                    height: canvasHeight
+                    height: canvasHeight,
+                    clipPath: new fabric.Rect({
+                        left: 0,
+                        top: 0,
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight,
+                        absolutePositioned: true
+                    })
                 };
-            case 'template5': // Split Right - right half
+            case 'template5': // Split Right - right half only
                 return {
-                    left: canvasWidth * 0.75,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
+                    left: canvasWidth * 0.5,
+                    top: 0,
+                    originX: 'left',
+                    originY: 'top',
                     width: canvasWidth * 0.5,
-                    height: canvasHeight
+                    height: canvasHeight,
+                    clipPath: new fabric.Rect({
+                        left: canvasWidth * 0.5,
+                        top: 0,
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight,
+                        absolutePositioned: true
+                    })
                 };
-            case 'template6': // Split Top - top half
+            case 'template6': // Split Top - top half only
                 return {
-                    left: canvasWidth / 2,
-                    top: canvasHeight * 0.25,
-                    originX: 'center',
-                    originY: 'center',
+                    left: 0,
+                    top: 0,
+                    originX: 'left',
+                    originY: 'top',
                     width: canvasWidth,
-                    height: canvasHeight * 0.5
+                    height: canvasHeight * 0.5,
+                    clipPath: new fabric.Rect({
+                        left: 0,
+                        top: 0,
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5,
+                        absolutePositioned: true
+                    })
                 };
             default:
                 return {
@@ -417,7 +439,8 @@ class TemplateAdsEditor {
                     originX: 'center',
                     originY: 'center',
                     width: canvasWidth,
-                    height: canvasHeight
+                    height: canvasHeight,
+                    clipPath: null
                 };
         }
     }
@@ -427,32 +450,30 @@ class TemplateAdsEditor {
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Title
+        // Title - white text over image
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: parseInt(document.getElementById('titleSize').value),
-            fill: document.getElementById('titleColor').value,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
             id: 'title'
         });
         
-        // Subtitle
+        // Subtitle - white text over image
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.75,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
-            fill: document.getElementById('subtitleColor').value,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
             id: 'subtitle'
         });
         
@@ -504,32 +525,30 @@ class TemplateAdsEditor {
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Title
+        // Title - white text over image
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.6,
             fontSize: parseInt(document.getElementById('titleSize').value),
-            fill: document.getElementById('titleColor').value,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
             id: 'title'
         });
         
-        // Subtitle
+        // Subtitle - white text over image
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.7,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
-            fill: document.getElementById('subtitleColor').value,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
             id: 'subtitle'
         });
         
@@ -658,7 +677,7 @@ class TemplateAdsEditor {
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Title
+        // Title - positioned in right text area, constrained within bounds
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth * 0.75,
             top: canvasHeight * 0.4,
@@ -669,11 +688,11 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
-            id: 'title'
+            id: 'title',
+            width: canvasWidth * 0.4 // Constrain text width to stay in right area
         });
         
-        // Subtitle
+        // Subtitle - positioned in right text area, constrained within bounds
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth * 0.75,
             top: canvasHeight * 0.55,
@@ -683,8 +702,8 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
-            id: 'subtitle'
+            id: 'subtitle',
+            width: canvasWidth * 0.4 // Constrain text width to stay in right area
         });
         
         // CTA Button
@@ -733,7 +752,7 @@ class TemplateAdsEditor {
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Title
+        // Title - positioned in left text area, constrained within bounds
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth * 0.25,
             top: canvasHeight * 0.4,
@@ -744,11 +763,11 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 3px 3px 8px',
-            id: 'title'
+            id: 'title',
+            width: canvasWidth * 0.4 // Constrain text width to stay in left area
         });
         
-        // Subtitle
+        // Subtitle - positioned in left text area, constrained within bounds
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth * 0.25,
             top: canvasHeight * 0.55,
@@ -758,8 +777,8 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            shadow: 'rgba(0,0,0,0.9) 2px 2px 6px',
-            id: 'subtitle'
+            id: 'subtitle',
+            width: canvasWidth * 0.4 // Constrain text width to stay in left area
         });
         
         // CTA Button
@@ -901,7 +920,8 @@ class TemplateAdsEditor {
                     originY: imageConfig.originY,
                     scaleX: scale,
                     scaleY: scale,
-                    id: 'mainImage'
+                    id: 'mainImage',
+                    clipPath: imageConfig.clipPath
                 });
                 
                 // Remove any existing main image first
@@ -996,7 +1016,8 @@ class TemplateAdsEditor {
                     originY: imageConfig.originY,
                     scaleX: scale,
                     scaleY: scale,
-                    id: 'mainImage'
+                    id: 'mainImage',
+                    clipPath: imageConfig.clipPath
                 });
                 
                 // Remove existing main image
