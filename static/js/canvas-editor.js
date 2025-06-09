@@ -438,11 +438,10 @@ class TemplateAdsEditor {
                 scaleX = scale;
                 scaleY = scale;
                 
-                // Reposition main image based on current template
+                // Position image to cover the entire canvas
                 clonedImg.set({
                     left: canvasWidth / 2,
-                    top: this.currentTemplate === 'template1' ? canvasHeight * 0.3 : 
-                         this.currentTemplate === 'template2' ? canvasHeight * 0.25 : canvasHeight * 0.2,
+                    top: canvasHeight / 2,
                     originX: 'center',
                     originY: 'center',
                     scaleX: scaleX,
@@ -555,11 +554,10 @@ class TemplateAdsEditor {
                 scaleX = scale;
                 scaleY = scale;
                 
-                // Main image positioning based on template - adjusted for vertical canvas
+                // Position image to cover the entire canvas
                 img.set({
                     left: canvasWidth / 2,
-                    top: this.currentTemplate === 'template1' ? canvasHeight * 0.3 : 
-                         this.currentTemplate === 'template2' ? canvasHeight * 0.25 : canvasHeight * 0.2,
+                    top: canvasHeight / 2,
                     originX: 'center',
                     originY: 'center',
                     scaleX: scaleX,
