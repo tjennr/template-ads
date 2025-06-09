@@ -429,15 +429,14 @@ class TemplateAdsEditor {
                 const canvasAspectRatio = canvasWidth / canvasHeight;
                 
                 let scaleX, scaleY;
-                if (imageAspectRatio > canvasAspectRatio) {
-                    // Image is wider than canvas - fit to height
-                    scaleY = canvasHeight / clonedImg.height * 1.2; // 120% of canvas height for better coverage
-                    scaleX = scaleY;
-                } else {
-                    // Image is taller than canvas - fit to width
-                    scaleX = canvasWidth / clonedImg.width * 1.1; // 110% of canvas width for better coverage
-                    scaleY = scaleX;
-                }
+                // Calculate scale to completely fill canvas (may crop image)
+                const scaleToFitWidth = canvasWidth / clonedImg.width;
+                const scaleToFitHeight = canvasHeight / clonedImg.height;
+                
+                // Use the larger scale to ensure complete coverage
+                const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                scaleX = scale;
+                scaleY = scale;
                 
                 // Reposition main image based on current template
                 clonedImg.set({
@@ -547,15 +546,14 @@ class TemplateAdsEditor {
                 const canvasAspectRatio = canvasWidth / canvasHeight;
                 
                 let scaleX, scaleY;
-                if (imageAspectRatio > canvasAspectRatio) {
-                    // Image is wider than canvas - fit to height
-                    scaleY = canvasHeight / img.height * 1.2; // 120% of canvas height for better coverage
-                    scaleX = scaleY;
-                } else {
-                    // Image is taller than canvas - fit to width
-                    scaleX = canvasWidth / img.width * 1.1; // 110% of canvas width for better coverage
-                    scaleY = scaleX;
-                }
+                // Calculate scale to completely fill canvas (may crop image)
+                const scaleToFitWidth = canvasWidth / img.width;
+                const scaleToFitHeight = canvasHeight / img.height;
+                
+                // Use the larger scale to ensure complete coverage
+                const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                scaleX = scale;
+                scaleY = scale;
                 
                 // Main image positioning based on template - adjusted for vertical canvas
                 img.set({
