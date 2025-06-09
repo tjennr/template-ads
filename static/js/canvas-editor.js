@@ -28,7 +28,14 @@ class TemplateAdsEditor {
         this.setupEventListeners();
         this.setupCanvasEvents();
         this.loadTemplate(this.currentTemplate);
+        this.loadDefaultImage();
         this.saveState();
+    }
+
+    loadDefaultImage() {
+        // Load the default office image on page load
+        const defaultImagePath = '/static/images/default-office.jpg';
+        this.addImageToCanvas(defaultImagePath, 'main');
     }
     
     setupEventListeners() {
@@ -354,11 +361,11 @@ class TemplateAdsEditor {
 
     updateAllTextFonts(fontFamily) {
         const textObjects = this.canvas.getObjects().filter(obj => 
-            obj.type === 'text' || (obj.type === 'group' && obj._objects && obj._objects[1] && obj._objects[1].type === 'text')
+            obj.type === 'text' || obj.type === 'textbox' || (obj.type === 'group' && obj._objects && obj._objects[1] && (obj._objects[1].type === 'text' || obj._objects[1].type === 'textbox'))
         );
         
         textObjects.forEach(obj => {
-            if (obj.type === 'text') {
+            if (obj.type === 'text' || obj.type === 'textbox') {
                 obj.set('fontFamily', fontFamily);
             } else if (obj.type === 'group' && obj._objects && obj._objects[1]) {
                 obj._objects[1].set('fontFamily', fontFamily);
@@ -653,7 +660,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - positioned in right text area, using color scheme
-        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
             left: canvasWidth * 0.75,
             top: canvasHeight * 0.4,
             fontSize: parseInt(document.getElementById('titleSize').value),
@@ -664,11 +671,12 @@ class TemplateAdsEditor {
             originX: 'center',
             originY: 'center',
             id: 'title',
-            width: canvasWidth * 0.4
+            width: canvasWidth * 0.35,
+            splitByGrapheme: false
         });
         
         // Subtitle - positioned in right text area, using color scheme
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
             left: canvasWidth * 0.75,
             top: canvasHeight * 0.55,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
@@ -678,7 +686,8 @@ class TemplateAdsEditor {
             originX: 'center',
             originY: 'center',
             id: 'subtitle',
-            width: canvasWidth * 0.4
+            width: canvasWidth * 0.35,
+            splitByGrapheme: false
         });
         
         // CTA Button
@@ -728,7 +737,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - positioned in left text area, using color scheme
-        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
             left: canvasWidth * 0.25,
             top: canvasHeight * 0.4,
             fontSize: parseInt(document.getElementById('titleSize').value),
@@ -739,11 +748,12 @@ class TemplateAdsEditor {
             originX: 'center',
             originY: 'center',
             id: 'title',
-            width: canvasWidth * 0.4
+            width: canvasWidth * 0.35,
+            splitByGrapheme: false
         });
         
         // Subtitle - positioned in left text area, using color scheme
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
             left: canvasWidth * 0.25,
             top: canvasHeight * 0.55,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
@@ -753,7 +763,8 @@ class TemplateAdsEditor {
             originX: 'center',
             originY: 'center',
             id: 'subtitle',
-            width: canvasWidth * 0.4
+            width: canvasWidth * 0.35,
+            splitByGrapheme: false
         });
         
         // CTA Button
