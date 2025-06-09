@@ -72,7 +72,6 @@ class TemplateAdsEditor {
         
         document.getElementById('titleSize').addEventListener('input', (e) => {
             this.updateTextStyle('title', 'fontSize', parseInt(e.target.value));
-            this.updateSliderFill(e.target);
         });
         
         document.getElementById('subtitleColor').addEventListener('change', (e) => {
@@ -90,7 +89,10 @@ class TemplateAdsEditor {
         
         document.getElementById('ctaSize').addEventListener('input', (e) => {
             this.updateTextStyle('cta', 'fontSize', parseInt(e.target.value));
-            this.updateSliderFill(e.target);
+        });
+        
+        document.getElementById('fontFamily').addEventListener('change', (e) => {
+            this.updateAllTextFonts(e.target.value);
         });
         
         document.getElementById('backgroundColor').addEventListener('change', (e) => {

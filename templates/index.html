@@ -49,6 +49,18 @@
                             <div class="template-preview template3-preview"></div>
                             <span>Minimal</span>
                         </button>
+                        <button class="template-btn" data-template="template4">
+                            <div class="template-preview template4-preview"></div>
+                            <span>Split Left</span>
+                        </button>
+                        <button class="template-btn" data-template="template5">
+                            <div class="template-preview template5-preview"></div>
+                            <span>Split Right</span>
+                        </button>
+                        <button class="template-btn" data-template="template6">
+                            <div class="template-preview template6-preview"></div>
+                            <span>Split Top</span>
+                        </button>
                     </div>
                 </div>
 
@@ -90,24 +102,38 @@
                     <h6 class="sidebar-title">Style</h6>
                     <div class="style-controls">
                         <div class="style-row">
+                            <label class="input-label">Font Family</label>
+                            <select class="font-select" id="fontFamily">
+                                <option value="Source Sans Pro">Source Sans Pro</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Helvetica">Helvetica</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Lato">Lato</option>
+                                <option value="Montserrat">Montserrat</option>
+                            </select>
+                        </div>
+                        <div class="style-row">
                             <label class="input-label">Title</label>
                             <div class="control-pair">
                                 <input type="color" class="color-input" id="titleColor" value="#000000">
-                                <input type="range" class="size-slider" id="titleSize" min="20" max="80" value="40">
+                                <input type="number" class="size-input" id="titleSize" min="20" max="80" value="40" placeholder="40">
                             </div>
                         </div>
                         <div class="style-row">
                             <label class="input-label">Subtitle</label>
                             <div class="control-pair">
                                 <input type="color" class="color-input" id="subtitleColor" value="#666666">
-                                <input type="range" class="size-slider" id="subtitleSize" min="12" max="40" value="24">
+                                <input type="number" class="size-input" id="subtitleSize" min="12" max="40" value="24" placeholder="24">
                             </div>
                         </div>
                         <div class="style-row">
                             <label class="input-label">Button</label>
                             <div class="control-pair">
                                 <input type="color" class="color-input" id="ctaColor" value="#ffffff">
-                                <input type="range" class="size-slider" id="ctaSize" min="12" max="30" value="18">
+                                <input type="number" class="size-input" id="ctaSize" min="12" max="30" value="18" placeholder="18">
                             </div>
                         </div>
                         <div class="style-row">
