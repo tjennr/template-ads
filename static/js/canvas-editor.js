@@ -189,34 +189,35 @@ class TemplateAdsEditor {
     }
 
     getLogoPositionForTemplate(templateName, canvasWidth, canvasHeight) {
+        const margin = 30; // Consistent margin from edges
         switch(templateName) {
-            case 'template1': // Classic Layout - top right corner
+            case 'template1': // Classic Layout - top right with margin
                 return {
-                    left: canvasWidth - 80,
-                    top: 20,
-                    originX: 'center',
+                    left: canvasWidth - margin,
+                    top: margin,
+                    originX: 'right',
                     originY: 'top'
                 };
-            case 'template2': // Modern Grid - bottom right corner (text is on left)
+            case 'template2': // Modern Grid - bottom right with margin (text is on left)
                 return {
-                    left: canvasWidth - 80,
-                    top: canvasHeight - 80,
-                    originX: 'center',
-                    originY: 'center'
+                    left: canvasWidth - margin,
+                    top: canvasHeight - margin,
+                    originX: 'right',
+                    originY: 'bottom'
                 };
-            case 'template3': // Minimalist - top left corner (centered text)
+            case 'template3': // Minimalist - top left with margin (centered text)
                 return {
-                    left: 40,
-                    top: 40,
-                    originX: 'center',
-                    originY: 'center'
+                    left: margin,
+                    top: margin,
+                    originX: 'left',
+                    originY: 'top'
                 };
             default:
                 return {
-                    left: 40,
-                    top: 40,
-                    originX: 'center',
-                    originY: 'center'
+                    left: margin,
+                    top: margin,
+                    originX: 'left',
+                    originY: 'top'
                 };
         }
     }
