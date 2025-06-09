@@ -9,6 +9,11 @@ class TemplateAdsEditor {
         this.ctaText = null;
         this.background = null;
         
+        // Undo system
+        this.history = [];
+        this.historyStep = -1;
+        this.maxHistorySteps = 20;
+        
         this.init();
     }
     
@@ -21,7 +26,9 @@ class TemplateAdsEditor {
         });
         
         this.setupEventListeners();
+        this.setupCanvasEvents();
         this.loadTemplate(this.currentTemplate);
+        this.saveState();
     }
     
     setupEventListeners() {
@@ -103,12 +110,80 @@ class TemplateAdsEditor {
         });
         
         // Utility buttons
+        document.getElementById('undoCanvas').addEventListener('click', () => {
+            this.undo();
+        });
+        
         document.getElementById('resetCanvas').addEventListener('click', () => {
             this.resetCanvas();
         });
         
         // Initialize slider fills on load
         this.initializeSliderFills();
+    }
+
+    setupCanvasEvents() {
+        // Track canvas changes for undo functionality
+        this.canvas.on('object:added', () => this.saveState());
+        this.canvas.on('object:removed', () => this.saveState());
+        this.canvas.on('object:modified', () => this.saveState());
+        this.canvas.on('path:created', () => this.saveState());
+    }
+
+    saveState() {
+        // Clear redo history when new action is performed
+        if (this.historyStep < this.history.length - 1) {
+            this.history = this.history.slice(0, this.historyStep + 1);
+        }
+        
+        // Add current state to history
+        const state = JSON.stringify(this.canvas.toJSON(['id']));
+        this.history.push(state);
+        
+        // Limit history size
+        if (this.history.length > this.maxHistorySteps) {
+            this.history = this.history.slice(-this.maxHistorySteps);
+        }
+        
+        this.historyStep = this.history.length - 1;
+        this.updateUndoButtonState();
+    }
+
+    undo() {
+        if (this.historyStep > 0) {
+            this.historyStep--;
+            const state = this.history[this.historyStep];
+            
+            // Temporarily disable event listeners to prevent saving state during undo
+            this.canvas.off('object:added');
+            this.canvas.off('object:removed');
+            this.canvas.off('object:modified');
+            
+            this.canvas.loadFromJSON(state, () => {
+                this.canvas.renderAll();
+                // Re-enable event listeners
+                this.setupCanvasEvents();
+                this.updateUndoButtonState();
+                this.updateObjectReferences();
+            });
+        }
+    }
+
+    updateUndoButtonState() {
+        const undoButton = document.getElementById('undoCanvas');
+        if (undoButton) {
+            undoButton.disabled = this.historyStep <= 0;
+        }
+    }
+
+    updateObjectReferences() {
+        // Update object references after undo
+        const objects = this.canvas.getObjects();
+        this.titleText = objects.find(obj => obj.id === 'title');
+        this.subtitleText = objects.find(obj => obj.id === 'subtitle');
+        this.ctaGroup = objects.find(obj => obj.id === 'ctaGroup');
+        this.mainImage = objects.find(obj => obj.id === 'mainImage');
+        this.logo = objects.find(obj => obj.id === 'logo');
     }
     
     initializeSliderFills() {
@@ -224,12 +299,10 @@ class TemplateAdsEditor {
 
     repositionLogoForTemplate(templateName) {
         const logo = this.canvas.getObjects().find(obj => obj.id === 'logo');
-        console.log('Repositioning logo for template:', templateName, 'Logo found:', !!logo);
         if (logo) {
             const canvasWidth = this.canvas.getWidth();
             const canvasHeight = this.canvas.getHeight();
             const logoConfig = this.getLogoPositionForTemplate(templateName, canvasWidth, canvasHeight);
-            console.log('Logo config:', logoConfig);
             
             logo.set({
                 left: logoConfig.left,
@@ -681,6 +754,7 @@ class TemplateAdsEditor {
         if (textObj) {
             textObj.set('text', value);
             this.canvas.renderAll();
+            this.saveState();
         }
     }
     
