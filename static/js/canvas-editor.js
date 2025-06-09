@@ -129,6 +129,18 @@ class TemplateAdsEditor {
         this.canvas.clear();
         this.canvas.setBackgroundColor(document.getElementById('backgroundColor').value, this.canvas.renderAll.bind(this.canvas));
         
+        // Store current template name
+        this.currentTemplate = templateName;
+        
+        // First add any existing images to maintain proper layering
+        if (this.mainImage) {
+            this.addExistingImageToCanvas(this.mainImage, 'main');
+        }
+        if (this.logo) {
+            this.addExistingImageToCanvas(this.logo, 'logo');
+        }
+        
+        // Then create text elements on top
         const templates = {
             template1: this.createTemplate1,
             template2: this.createTemplate2,
@@ -139,13 +151,42 @@ class TemplateAdsEditor {
             templates[templateName].call(this);
         }
         
-        // Re-add existing images if they exist and ensure proper layering
-        if (this.mainImage) {
-            this.addExistingImageToCanvas(this.mainImage, 'main');
-        }
-        if (this.logo) {
-            this.addExistingImageToCanvas(this.logo, 'logo');
-        }
+        // Ensure proper final layering: background images at bottom, text on top
+        this.enforceProperLayering();
+    }
+    
+    enforceProperLayering() {
+        // Get all objects
+        const objects = this.canvas.getObjects();
+        
+        // Send main image and overlay to back
+        objects.forEach(obj => {
+            if (obj.id === 'mainImage') {
+                this.canvas.sendToBack(obj);
+            }
+            if (obj.id === 'imageOverlay') {
+                this.canvas.sendToBack(obj);
+                // Make sure overlay is above main image but below everything else
+                this.canvas.bringForward(obj);
+            }
+        });
+        
+        // Bring text elements to front
+        objects.forEach(obj => {
+            if (obj.id === 'title' || obj.id === 'subtitle' || obj.id === 'ctaGroup' || obj.id === 'cta') {
+                this.canvas.bringToFront(obj);
+            }
+        });
+        
+        // Logo should be above images but can be below or above text (user's choice)
+        objects.forEach(obj => {
+            if (obj.id === 'logo') {
+                // Bring logo above images but allow user to move it
+                this.canvas.bringForward(obj);
+            }
+        });
+        
+        this.canvas.renderAll();
     }
     
     createTemplate1() {
@@ -397,6 +438,17 @@ class TemplateAdsEditor {
                     id: 'mainImage'
                 });
                 
+                // Remove any existing main image and overlay first
+                const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
+                if (existingMain) {
+                    this.canvas.remove(existingMain);
+                }
+                const existingOverlay = this.canvas.getObjects().find(obj => obj.id === 'imageOverlay');
+                if (existingOverlay) {
+                    this.canvas.remove(existingOverlay);
+                }
+                
+                // Add main image
                 this.canvas.add(clonedImg);
                 this.canvas.sendToBack(clonedImg);
                 
@@ -414,19 +466,26 @@ class TemplateAdsEditor {
                     id: 'imageOverlay'
                 });
                 
-                this.canvas.add(clonedImg);
                 this.canvas.add(overlay);
-                this.canvas.sendToBack(clonedImg);
                 this.canvas.sendToBack(overlay);
+                this.canvas.sendToBack(clonedImg);
                 
             } else if (type === 'logo') {
+                // Remove any existing logo first
+                const existingLogo = this.canvas.getObjects().find(obj => obj.id === 'logo');
+                if (existingLogo) {
+                    this.canvas.remove(existingLogo);
+                }
+                
                 // Keep logo in original position
                 clonedImg.set({
                     id: 'logo'
                 });
                 
                 this.canvas.add(clonedImg);
-                if (this.canvas.getObjects().find(obj => obj.id === 'mainImage')) {
+                // Logo should be above main image but below text
+                const mainImage = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
+                if (mainImage) {
                     this.canvas.bringForward(clonedImg);
                 }
             }
