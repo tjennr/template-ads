@@ -224,18 +224,20 @@ class TemplateAdsEditor {
 
     repositionLogoForTemplate(templateName) {
         const logo = this.canvas.getObjects().find(obj => obj.id === 'logo');
+        console.log('Repositioning logo for template:', templateName, 'Logo found:', !!logo);
         if (logo) {
             const canvasWidth = this.canvas.getWidth();
             const canvasHeight = this.canvas.getHeight();
             const logoConfig = this.getLogoPositionForTemplate(templateName, canvasWidth, canvasHeight);
+            console.log('Logo config:', logoConfig);
             
             logo.set({
                 left: logoConfig.left,
                 top: logoConfig.top,
                 originX: logoConfig.originX,
                 originY: logoConfig.originY,
-                scaleX: 0.08,
-                scaleY: 0.08
+                scaleX: 0.05,
+                scaleY: 0.05
             });
             
             this.canvas.renderAll();
@@ -526,7 +528,7 @@ class TemplateAdsEditor {
                 }
                 
                 // Position logo based on current template
-                const currentTemplate = document.querySelector('input[name="template"]:checked')?.value || 'template1';
+                const currentTemplate = this.currentTemplate || 'template1';
                 let logoConfig = this.getLogoPositionForTemplate(currentTemplate, canvasWidth, canvasHeight);
                 
                 clonedImg.set({
@@ -534,8 +536,8 @@ class TemplateAdsEditor {
                     top: logoConfig.top,
                     originX: logoConfig.originX,
                     originY: logoConfig.originY,
-                    scaleX: 0.08,
-                    scaleY: 0.08,
+                    scaleX: 0.05,
+                    scaleY: 0.05,
                     id: 'logo'
                 });
                 
@@ -622,7 +624,7 @@ class TemplateAdsEditor {
                 
             } else if (type === 'logo') {
                 // Determine logo position based on current template
-                const currentTemplate = document.querySelector('input[name="template"]:checked')?.value || 'template1';
+                const currentTemplate = this.currentTemplate || 'template1';
                 let logoConfig = this.getLogoPositionForTemplate(currentTemplate, canvasWidth, canvasHeight);
                 
                 img.set({
@@ -630,8 +632,8 @@ class TemplateAdsEditor {
                     top: logoConfig.top,
                     originX: logoConfig.originX,
                     originY: logoConfig.originY,
-                    scaleX: 0.08,
-                    scaleY: 0.08,
+                    scaleX: 0.05,
+                    scaleY: 0.05,
                     id: 'logo'
                 });
                 
