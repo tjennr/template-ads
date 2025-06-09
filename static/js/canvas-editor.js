@@ -295,6 +295,13 @@ class TemplateAdsEditor {
         // Clone the existing image
         existingImg.clone((clonedImg) => {
             if (type === 'main') {
+                // Apply dark overlay filter for better text readability
+                clonedImg.filters = clonedImg.filters || [];
+                if (!clonedImg.filters.some(filter => filter.type === 'Brightness')) {
+                    clonedImg.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.3 }));
+                    clonedImg.applyFilters();
+                }
+                
                 // Reposition main image based on current template
                 clonedImg.set({
                     left: canvasWidth / 2,
@@ -306,6 +313,24 @@ class TemplateAdsEditor {
                 });
                 
                 this.canvas.add(clonedImg);
+                this.canvas.sendToBack(clonedImg);
+                
+                // Add dark overlay rectangle for even better text contrast
+                const overlay = new fabric.Rect({
+                    left: clonedImg.left,
+                    top: clonedImg.top,
+                    width: clonedImg.getScaledWidth(),
+                    height: clonedImg.getScaledHeight(),
+                    fill: 'rgba(0, 0, 0, 0.2)',
+                    originX: 'center',
+                    originY: 'center',
+                    selectable: false,
+                    evented: false,
+                    id: 'imageOverlay'
+                });
+                
+                this.canvas.add(overlay);
+                this.canvas.sendToBack(overlay);
                 this.canvas.sendToBack(clonedImg);
                 
             } else if (type === 'logo') {
@@ -355,6 +380,10 @@ class TemplateAdsEditor {
             const canvasHeight = this.canvas.getHeight();
             
             if (type === 'main') {
+                // Apply dark overlay filter for better text readability
+                img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.3 }));
+                img.applyFilters();
+                
                 // Main image positioning based on template - adjusted for vertical canvas
                 img.set({
                     left: canvasWidth / 2,
@@ -377,6 +406,30 @@ class TemplateAdsEditor {
                 
                 // Add image and send to back so text appears in front
                 this.canvas.add(img);
+                this.canvas.sendToBack(img);
+                
+                // Add dark overlay rectangle for even better text contrast
+                const overlay = new fabric.Rect({
+                    left: img.left,
+                    top: img.top,
+                    width: img.getScaledWidth(),
+                    height: img.getScaledHeight(),
+                    fill: 'rgba(0, 0, 0, 0.2)',
+                    originX: 'center',
+                    originY: 'center',
+                    selectable: false,
+                    evented: false,
+                    id: 'imageOverlay'
+                });
+                
+                // Remove existing overlay
+                const existingOverlay = this.canvas.getObjects().find(obj => obj.id === 'imageOverlay');
+                if (existingOverlay) {
+                    this.canvas.remove(existingOverlay);
+                }
+                
+                this.canvas.add(overlay);
+                this.canvas.sendToBack(overlay);
                 this.canvas.sendToBack(img);
                 
             } else if (type === 'logo') {
