@@ -15,7 +15,7 @@ class TemplateAdsEditor {
     init() {
         // Initialize Fabric.js canvas
         this.canvas = new fabric.Canvas('designCanvas', {
-            backgroundColor: '#1a1a1a',
+            backgroundColor: '#ffffff',
             selection: true,
             preserveObjectStacking: true
         });
@@ -132,7 +132,7 @@ class TemplateAdsEditor {
         // Title
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.6,
+            top: canvasHeight * 0.65,
             fontSize: parseInt(document.getElementById('titleSize').value),
             fill: document.getElementById('titleColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -146,7 +146,7 @@ class TemplateAdsEditor {
         // Subtitle
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.72,
+            top: canvasHeight * 0.75,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
             fill: document.getElementById('subtitleColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -159,7 +159,7 @@ class TemplateAdsEditor {
         // CTA Button
         this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.85,
+            top: canvasHeight * 0.88,
             fontSize: parseInt(document.getElementById('ctaSize').value),
             fill: document.getElementById('ctaColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -183,8 +183,8 @@ class TemplateAdsEditor {
         
         // Title
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.3,
+            left: canvasWidth * 0.1,
+            top: canvasHeight * 0.6,
             fontSize: parseInt(document.getElementById('titleSize').value),
             fill: document.getElementById('titleColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -197,8 +197,8 @@ class TemplateAdsEditor {
         
         // Subtitle
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.45,
+            left: canvasWidth * 0.1,
+            top: canvasHeight * 0.7,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
             fill: document.getElementById('subtitleColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -210,8 +210,8 @@ class TemplateAdsEditor {
         
         // CTA Button
         this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.65,
+            left: canvasWidth * 0.1,
+            top: canvasHeight * 0.85,
             fontSize: parseInt(document.getElementById('ctaSize').value),
             fill: document.getElementById('ctaColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -236,7 +236,7 @@ class TemplateAdsEditor {
         // Title
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.35,
+            top: canvasHeight * 0.5,
             fontSize: parseInt(document.getElementById('titleSize').value),
             fill: document.getElementById('titleColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -250,7 +250,7 @@ class TemplateAdsEditor {
         // Subtitle
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.5,
+            top: canvasHeight * 0.65,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
             fill: document.getElementById('subtitleColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -263,7 +263,7 @@ class TemplateAdsEditor {
         // CTA Button
         this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.7,
+            top: canvasHeight * 0.8,
             fontSize: parseInt(document.getElementById('ctaSize').value),
             fill: document.getElementById('ctaColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -329,6 +329,11 @@ class TemplateAdsEditor {
                 }
                 
                 this.mainImage = img;
+                
+                // Add image and send to back so text appears in front
+                this.canvas.add(img);
+                this.canvas.sendToBack(img);
+                
             } else if (type === 'logo') {
                 // Logo positioning
                 img.set({
@@ -348,9 +353,14 @@ class TemplateAdsEditor {
                 }
                 
                 this.logo = img;
+                
+                // Add logo and keep it in front of main image but behind text
+                this.canvas.add(img);
+                if (this.mainImage) {
+                    this.canvas.bringForward(img);
+                }
             }
             
-            this.canvas.add(img);
             this.canvas.renderAll();
         });
     }
