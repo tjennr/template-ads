@@ -323,9 +323,10 @@ h1, h2, h3, h4, h5, h6 {
     flex: 1;
     height: 6px;
     border-radius: 3px;
-    background: #e9ecef;
+    background: #f8f9fa;
     outline: none;
     cursor: pointer;
+    border: 1px solid #dee2e6;
 }
 
 .size-slider::-webkit-slider-thumb {
