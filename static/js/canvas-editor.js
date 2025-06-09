@@ -1018,9 +1018,38 @@ class TemplateAdsEditor {
                     originY: imageConfig.originY,
                     scaleX: scale,
                     scaleY: scale,
-                    id: 'mainImage',
-                    clipPath: imageConfig.clipPath
+                    id: 'mainImage'
                 });
+
+                // Add clipping for split templates
+                if (this.currentTemplate === 'template4') {
+                    // Left half clipping
+                    img.clipPath = new fabric.Rect({
+                        left: 0,
+                        top: 0,
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight,
+                        absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template5') {
+                    // Right half clipping
+                    img.clipPath = new fabric.Rect({
+                        left: canvasWidth * 0.5,
+                        top: 0,
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight,
+                        absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template6') {
+                    // Top half clipping
+                    img.clipPath = new fabric.Rect({
+                        left: 0,
+                        top: 0,
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5,
+                        absolutePositioned: true
+                    });
+                }
                 
                 // Remove existing main image
                 const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
