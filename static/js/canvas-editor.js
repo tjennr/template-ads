@@ -147,6 +147,9 @@ class TemplateAdsEditor {
             templates[templateName].call(this);
         }
         
+        // Reposition existing logo for new template
+        this.repositionLogoForTemplate(templateName);
+        
         // Ensure proper final layering: background images at bottom, text on top
         this.enforceProperLayering();
     }
@@ -183,6 +186,59 @@ class TemplateAdsEditor {
         });
         
         this.canvas.renderAll();
+    }
+
+    getLogoPositionForTemplate(templateName, canvasWidth, canvasHeight) {
+        switch(templateName) {
+            case 'template1': // Classic Layout - top right corner
+                return {
+                    left: canvasWidth - 80,
+                    top: 20,
+                    originX: 'center',
+                    originY: 'top'
+                };
+            case 'template2': // Modern Grid - bottom right corner (text is on left)
+                return {
+                    left: canvasWidth - 80,
+                    top: canvasHeight - 80,
+                    originX: 'center',
+                    originY: 'center'
+                };
+            case 'template3': // Minimalist - top left corner (centered text)
+                return {
+                    left: 40,
+                    top: 40,
+                    originX: 'center',
+                    originY: 'center'
+                };
+            default:
+                return {
+                    left: 40,
+                    top: 40,
+                    originX: 'center',
+                    originY: 'center'
+                };
+        }
+    }
+
+    repositionLogoForTemplate(templateName) {
+        const logo = this.canvas.getObjects().find(obj => obj.id === 'logo');
+        if (logo) {
+            const canvasWidth = this.canvas.getWidth();
+            const canvasHeight = this.canvas.getHeight();
+            const logoConfig = this.getLogoPositionForTemplate(templateName, canvasWidth, canvasHeight);
+            
+            logo.set({
+                left: logoConfig.left,
+                top: logoConfig.top,
+                originX: logoConfig.originX,
+                originY: logoConfig.originY,
+                scaleX: 0.08,
+                scaleY: 0.08
+            });
+            
+            this.canvas.renderAll();
+        }
     }
     
     createTemplate1() {
@@ -468,8 +524,17 @@ class TemplateAdsEditor {
                     this.canvas.remove(existingLogo);
                 }
                 
-                // Keep logo in original position
+                // Position logo based on current template
+                const currentTemplate = document.querySelector('input[name="template"]:checked')?.value || 'template1';
+                let logoConfig = this.getLogoPositionForTemplate(currentTemplate, canvasWidth, canvasHeight);
+                
                 clonedImg.set({
+                    left: logoConfig.left,
+                    top: logoConfig.top,
+                    originX: logoConfig.originX,
+                    originY: logoConfig.originY,
+                    scaleX: 0.08,
+                    scaleY: 0.08,
                     id: 'logo'
                 });
                 
@@ -555,14 +620,17 @@ class TemplateAdsEditor {
                 this.canvas.sendToBack(img);
                 
             } else if (type === 'logo') {
-                // Logo positioning
+                // Determine logo position based on current template
+                const currentTemplate = document.querySelector('input[name="template"]:checked')?.value || 'template1';
+                let logoConfig = this.getLogoPositionForTemplate(currentTemplate, canvasWidth, canvasHeight);
+                
                 img.set({
-                    left: 50,
-                    top: 50,
-                    originX: 'left',
-                    originY: 'top',
-                    scaleX: 0.2,
-                    scaleY: 0.2,
+                    left: logoConfig.left,
+                    top: logoConfig.top,
+                    originX: logoConfig.originX,
+                    originY: logoConfig.originY,
+                    scaleX: 0.08,
+                    scaleY: 0.08,
                     id: 'logo'
                 });
                 
