@@ -201,6 +201,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            stroke: '#ffffff',
+            strokeWidth: 3,
+            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
             id: 'title'
         });
         
@@ -214,6 +217,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            stroke: '#ffffff',
+            strokeWidth: 2,
+            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
             id: 'subtitle'
         });
         
@@ -276,6 +282,9 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
+            stroke: '#ffffff',
+            strokeWidth: 3,
+            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
             id: 'title'
         });
         
@@ -289,6 +298,9 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
+            stroke: '#ffffff',
+            strokeWidth: 2,
+            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
             id: 'subtitle'
         });
         
@@ -351,6 +363,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            stroke: '#ffffff',
+            strokeWidth: 3,
+            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
             id: 'title'
         });
         
@@ -364,6 +379,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            stroke: '#ffffff',
+            strokeWidth: 2,
+            shadow: 'rgba(0,0,0,0.8) 2px 2px 4px',
             id: 'subtitle'
         });
         
@@ -449,36 +467,16 @@ class TemplateAdsEditor {
                     id: 'mainImage'
                 });
                 
-                // Remove any existing main image and overlay first
+                // Remove any existing main image first
                 const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
                 if (existingMain) {
                     this.canvas.remove(existingMain);
-                }
-                const existingOverlay = this.canvas.getObjects().find(obj => obj.id === 'imageOverlay');
-                if (existingOverlay) {
-                    this.canvas.remove(existingOverlay);
                 }
                 
                 // Add main image
                 this.canvas.add(clonedImg);
                 this.canvas.sendToBack(clonedImg);
                 
-                // Add light overlay rectangle only on the image
-                const overlay = new fabric.Rect({
-                    left: clonedImg.left,
-                    top: clonedImg.top,
-                    width: clonedImg.getScaledWidth(),
-                    height: clonedImg.getScaledHeight(),
-                    fill: 'rgba(0, 0, 0, 0.1)',
-                    originX: 'center',
-                    originY: 'center',
-                    selectable: false,
-                    evented: false,
-                    id: 'imageOverlay'
-                });
-                
-                this.canvas.add(overlay);
-                this.canvas.sendToBack(overlay);
                 this.canvas.sendToBack(clonedImg);
                 
             } else if (type === 'logo') {
@@ -575,30 +573,6 @@ class TemplateAdsEditor {
                 
                 // Add image and send to back so text appears in front
                 this.canvas.add(img);
-                this.canvas.sendToBack(img);
-                
-                // Add light overlay rectangle only on the image
-                const overlay = new fabric.Rect({
-                    left: img.left,
-                    top: img.top,
-                    width: img.getScaledWidth(),
-                    height: img.getScaledHeight(),
-                    fill: 'rgba(0, 0, 0, 0.1)',
-                    originX: 'center',
-                    originY: 'center',
-                    selectable: false,
-                    evented: false,
-                    id: 'imageOverlay'
-                });
-                
-                // Remove existing overlay
-                const existingOverlay = this.canvas.getObjects().find(obj => obj.id === 'imageOverlay');
-                if (existingOverlay) {
-                    this.canvas.remove(existingOverlay);
-                }
-                
-                this.canvas.add(overlay);
-                this.canvas.sendToBack(overlay);
                 this.canvas.sendToBack(img);
                 
             } else if (type === 'logo') {
