@@ -44,6 +44,93 @@ class TemplateAdsEditor {
         const fontFamilySelect = document.getElementById('fontFamily');
         fontFamilySelect.value = 'Source Sans Pro';
     }
+
+    toggleCTA(enabled) {
+        const ctaSettings = document.getElementById('ctaSettings');
+        const ctaStyleSettings = document.getElementById('ctaStyleSettings');
+        
+        if (enabled) {
+            ctaSettings.style.display = 'block';
+            ctaStyleSettings.style.display = 'block';
+            // Show CTA button on canvas if it exists
+            if (this.ctaGroup) {
+                this.ctaGroup.set('visible', true);
+            }
+        } else {
+            ctaSettings.style.display = 'none';
+            ctaStyleSettings.style.display = 'none';
+            // Hide CTA button on canvas
+            if (this.ctaGroup) {
+                this.ctaGroup.set('visible', false);
+            }
+        }
+        
+        this.canvas.renderAll();
+        this.saveState();
+    }
+
+    updateTextEffect(textType, effectType, enabled) {
+        let textObj = null;
+        
+        switch(textType) {
+            case 'title':
+                textObj = this.titleText;
+                break;
+            case 'subtitle':
+                textObj = this.subtitleText;
+                break;
+        }
+        
+        if (textObj) {
+            const effectColor = document.getElementById('effectColor').value;
+            
+            if (effectType === 'shadow') {
+                if (enabled) {
+                    textObj.set('shadow', `${effectColor} 3px 3px 6px`);
+                } else {
+                    textObj.set('shadow', null);
+                }
+            } else if (effectType === 'outline') {
+                if (enabled) {
+                    textObj.set('stroke', effectColor);
+                    textObj.set('strokeWidth', 2);
+                } else {
+                    textObj.set('stroke', null);
+                    textObj.set('strokeWidth', 0);
+                }
+            }
+            
+            this.canvas.renderAll();
+            this.saveState();
+        }
+    }
+
+    updateEffectColor(color) {
+        // Update shadow and outline colors for currently enabled effects
+        const titleShadow = document.getElementById('titleShadow').checked;
+        const subtitleShadow = document.getElementById('subtitleShadow').checked;
+        const titleOutline = document.getElementById('titleOutline').checked;
+        const subtitleOutline = document.getElementById('subtitleOutline').checked;
+        
+        if (titleShadow && this.titleText) {
+            this.titleText.set('shadow', `${color} 3px 3px 6px`);
+        }
+        
+        if (subtitleShadow && this.subtitleText) {
+            this.subtitleText.set('shadow', `${color} 3px 3px 6px`);
+        }
+        
+        if (titleOutline && this.titleText) {
+            this.titleText.set('stroke', color);
+        }
+        
+        if (subtitleOutline && this.subtitleText) {
+            this.subtitleText.set('stroke', color);
+        }
+        
+        this.canvas.renderAll();
+        this.saveState();
+    }
     
     setupEventListeners() {
         // Template selection
@@ -111,6 +198,32 @@ class TemplateAdsEditor {
         document.getElementById('backgroundColor').addEventListener('change', (e) => {
             this.canvas.setBackgroundColor(e.target.value, this.canvas.renderAll.bind(this.canvas));
             this.saveState();
+        });
+
+        // CTA toggle
+        document.getElementById('ctaEnabled').addEventListener('change', (e) => {
+            this.toggleCTA(e.target.checked);
+        });
+
+        // Text effects
+        document.getElementById('titleShadow').addEventListener('change', (e) => {
+            this.updateTextEffect('title', 'shadow', e.target.checked);
+        });
+
+        document.getElementById('subtitleShadow').addEventListener('change', (e) => {
+            this.updateTextEffect('subtitle', 'shadow', e.target.checked);
+        });
+
+        document.getElementById('titleOutline').addEventListener('change', (e) => {
+            this.updateTextEffect('title', 'outline', e.target.checked);
+        });
+
+        document.getElementById('subtitleOutline').addEventListener('change', (e) => {
+            this.updateTextEffect('subtitle', 'outline', e.target.checked);
+        });
+
+        document.getElementById('effectColor').addEventListener('change', (e) => {
+            this.updateEffectColor(e.target.value);
         });
         
         // Export buttons

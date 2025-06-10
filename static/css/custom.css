@@ -428,6 +428,47 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 0 2px var(--brand-primary-light);
 }
 
+/* Checkbox Labels */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Effect Controls */
+.effect-group {
+    margin-bottom: 1rem;
+}
+
+.effect-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.effects-controls .effect-group:last-child {
+    margin-bottom: 0;
+}
+
+/* CTA Controls */
+.cta-controls .input-group {
+    margin-bottom: 0.75rem;
+}
+
+.cta-controls .style-row {
+    margin-bottom: 0;
+}
+
 /* Export Buttons */
 .export-buttons {
     display: flex;
