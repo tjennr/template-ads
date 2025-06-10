@@ -29,6 +29,7 @@ class TemplateAdsEditor {
         this.setCanvasDimensions();
         this.setupEventListeners();
         this.setupCanvasEvents();
+        this.setupResizeListener();
         this.loadTemplate(this.currentTemplate);
         this.loadDefaultImage();
         this.updateFontFamilyDisplay();
@@ -48,11 +49,37 @@ class TemplateAdsEditor {
     }
 
     setCanvasDimensions() {
+        const canvasContainer = document.querySelector('.canvas-wrapper');
+        const containerWidth = canvasContainer.clientWidth - 40; // Account for padding
+        const containerHeight = window.innerHeight - 200; // Account for header and margins
+        
+        let canvasWidth, canvasHeight;
+        
         if (this.currentOrientation === 'horizontal') {
-            this.canvas.setDimensions({width: 800, height: 500});
+            // Horizontal: 16:10 aspect ratio
+            const aspectRatio = 16 / 10;
+            canvasWidth = Math.min(containerWidth, 800);
+            canvasHeight = canvasWidth / aspectRatio;
+            
+            // If height exceeds container, scale down
+            if (canvasHeight > containerHeight) {
+                canvasHeight = containerHeight;
+                canvasWidth = canvasHeight * aspectRatio;
+            }
         } else {
-            this.canvas.setDimensions({width: 600, height: 800});
+            // Vertical: 3:4 aspect ratio
+            const aspectRatio = 3 / 4;
+            canvasWidth = Math.min(containerWidth * 0.7, 600); // Use 70% of width for vertical
+            canvasHeight = canvasWidth / aspectRatio;
+            
+            // If height exceeds container, scale down
+            if (canvasHeight > containerHeight) {
+                canvasHeight = containerHeight;
+                canvasWidth = canvasHeight * aspectRatio;
+            }
         }
+        
+        this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});
         this.canvas.renderAll();
     }
 
@@ -159,6 +186,18 @@ class TemplateAdsEditor {
         
         this.canvas.renderAll();
         this.saveState();
+    }
+
+    setupResizeListener() {
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.setCanvasDimensions();
+                // Reload current template to adjust element positions for new dimensions
+                this.loadTemplate(this.currentTemplate);
+            }, 250);
+        });
     }
     
     setupEventListeners() {
