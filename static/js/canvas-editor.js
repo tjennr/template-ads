@@ -855,154 +855,288 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Left - Image covers left half, text on right half
+        // Split Layout - Adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
+        const isVertical = this.currentOrientation === 'vertical';
         
-        // Title - positioned in right text area, using color scheme
-        this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
-            left: canvasWidth * 0.75,
-            top: canvasHeight * 0.4,
-            fontSize: parseInt(document.getElementById('titleSize').value),
-            fill: document.getElementById('titleColor').value,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'title',
-            width: canvasWidth * 0.35,
-            splitByGrapheme: false
-        });
-        
-        // Subtitle - positioned in right text area, using color scheme
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
-            left: canvasWidth * 0.75,
-            top: canvasHeight * 0.55,
-            fontSize: parseInt(document.getElementById('subtitleSize').value),
-            fill: document.getElementById('subtitleColor').value,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'subtitle',
-            width: canvasWidth * 0.35,
-            splitByGrapheme: false
-        });
-        
-        // CTA Button
-        const ctaButtonBg = new fabric.Rect({
-            left: canvasWidth * 0.75,
-            top: canvasHeight * 0.7,
-            width: 120,
-            height: 40,
-            fill: '#0077B5',
-            rx: 8,
-            ry: 8,
-            originX: 'center',
-            originY: 'center',
-            selectable: false,
-            evented: false,
-            id: 'ctaBackground'
-        });
+        if (isVertical) {
+            // Vertical: Image top half, text bottom half
+            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.65,
+                fontSize: parseInt(document.getElementById('titleSize').value),
+                fill: document.getElementById('titleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'title',
+                width: canvasWidth * 0.8,
+                splitByGrapheme: false
+            });
+            
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.75,
+                fontSize: parseInt(document.getElementById('subtitleSize').value),
+                fill: document.getElementById('subtitleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'subtitle',
+                width: canvasWidth * 0.8,
+                splitByGrapheme: false
+            });
+            
+            const ctaButtonBg = new fabric.Rect({
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.88,
+                width: 120,
+                height: 40,
+                fill: '#0077B5',
+                rx: 8,
+                ry: 8,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                evented: false,
+                id: 'ctaBackground'
+            });
 
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
-            left: canvasWidth * 0.75,
-            top: canvasHeight * 0.7,
-            fontSize: parseInt(document.getElementById('ctaSize').value),
-            fill: document.getElementById('ctaColor').value,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'cta'
-        });
+            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.88,
+                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fill: document.getElementById('ctaColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'cta'
+            });
 
-        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-            left: canvasWidth * 0.75,
-            top: canvasHeight * 0.7,
-            originX: 'center',
-            originY: 'center',
-            id: 'ctaGroup'
-        });
+            this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.88,
+                originX: 'center',
+                originY: 'center',
+                id: 'ctaGroup'
+            });
+        } else {
+            // Horizontal: Image left half, text right half
+            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.4,
+                fontSize: parseInt(document.getElementById('titleSize').value),
+                fill: document.getElementById('titleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'title',
+                width: canvasWidth * 0.35,
+                splitByGrapheme: false
+            });
+            
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.55,
+                fontSize: parseInt(document.getElementById('subtitleSize').value),
+                fill: document.getElementById('subtitleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'subtitle',
+                width: canvasWidth * 0.35,
+                splitByGrapheme: false
+            });
+            
+            const ctaButtonBg = new fabric.Rect({
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.7,
+                width: 120,
+                height: 40,
+                fill: '#0077B5',
+                rx: 8,
+                ry: 8,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                evented: false,
+                id: 'ctaBackground'
+            });
+
+            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.7,
+                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fill: document.getElementById('ctaColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'cta'
+            });
+
+            this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.7,
+                originX: 'center',
+                originY: 'center',
+                id: 'ctaGroup'
+            });
+        }
         
         this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
     }
 
     createTemplate5() {
-        // Split Right - Image covers right half, text on left half
+        // Split Layout - Adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
+        const isVertical = this.currentOrientation === 'vertical';
         
-        // Title - positioned in left text area, using color scheme
-        this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.4,
-            fontSize: parseInt(document.getElementById('titleSize').value),
-            fill: document.getElementById('titleColor').value,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'title',
-            width: canvasWidth * 0.35,
-            splitByGrapheme: false
-        });
-        
-        // Subtitle - positioned in left text area, using color scheme
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.55,
-            fontSize: parseInt(document.getElementById('subtitleSize').value),
-            fill: document.getElementById('subtitleColor').value,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'subtitle',
-            width: canvasWidth * 0.35,
-            splitByGrapheme: false
-        });
-        
-        // CTA Button
-        const ctaButtonBg = new fabric.Rect({
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.7,
-            width: 120,
-            height: 40,
-            fill: '#0077B5',
-            rx: 8,
-            ry: 8,
-            originX: 'center',
-            originY: 'center',
-            selectable: false,
-            evented: false,
-            id: 'ctaBackground'
-        });
+        if (isVertical) {
+            // Vertical: Image bottom half, text top half
+            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.2,
+                fontSize: parseInt(document.getElementById('titleSize').value),
+                fill: document.getElementById('titleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'title',
+                width: canvasWidth * 0.8,
+                splitByGrapheme: false
+            });
+            
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.32,
+                fontSize: parseInt(document.getElementById('subtitleSize').value),
+                fill: document.getElementById('subtitleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'subtitle',
+                width: canvasWidth * 0.8,
+                splitByGrapheme: false
+            });
+            
+            const ctaButtonBg = new fabric.Rect({
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.45,
+                width: 120,
+                height: 40,
+                fill: '#0077B5',
+                rx: 8,
+                ry: 8,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                evented: false,
+                id: 'ctaBackground'
+            });
 
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.7,
-            fontSize: parseInt(document.getElementById('ctaSize').value),
-            fill: document.getElementById('ctaColor').value,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'cta'
-        });
+            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.45,
+                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fill: document.getElementById('ctaColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'cta'
+            });
 
-        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-            left: canvasWidth * 0.25,
-            top: canvasHeight * 0.7,
-            originX: 'center',
-            originY: 'center',
-            id: 'ctaGroup'
-        });
+            this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.45,
+                originX: 'center',
+                originY: 'center',
+                id: 'ctaGroup'
+            });
+        } else {
+            // Horizontal: Image right half, text left half
+            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+                left: canvasWidth * 0.25,
+                top: canvasHeight * 0.4,
+                fontSize: parseInt(document.getElementById('titleSize').value),
+                fill: document.getElementById('titleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'title',
+                width: canvasWidth * 0.35,
+                splitByGrapheme: false
+            });
+            
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+                left: canvasWidth * 0.25,
+                top: canvasHeight * 0.55,
+                fontSize: parseInt(document.getElementById('subtitleSize').value),
+                fill: document.getElementById('subtitleColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'subtitle',
+                width: canvasWidth * 0.35,
+                splitByGrapheme: false
+            });
+            
+            const ctaButtonBg = new fabric.Rect({
+                left: canvasWidth * 0.25,
+                top: canvasHeight * 0.7,
+                width: 120,
+                height: 40,
+                fill: '#0077B5',
+                rx: 8,
+                ry: 8,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                evented: false,
+                id: 'ctaBackground'
+            });
+
+            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+                left: canvasWidth * 0.25,
+                top: canvasHeight * 0.7,
+                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fill: document.getElementById('ctaColor').value,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'cta'
+            });
+
+            this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+                left: canvasWidth * 0.25,
+                top: canvasHeight * 0.7,
+                originX: 'center',
+                originY: 'center',
+                id: 'ctaGroup'
+            });
+        }
         
         this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
