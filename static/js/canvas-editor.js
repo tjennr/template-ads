@@ -47,6 +47,33 @@ class TemplateAdsEditor {
         fontFamilySelect.value = 'Source Sans Pro';
     }
 
+    setCanvasDimensions() {
+        if (this.currentOrientation === 'horizontal') {
+            this.canvas.setDimensions({width: 800, height: 500});
+        } else {
+            this.canvas.setDimensions({width: 500, height: 800});
+        }
+        this.canvas.renderAll();
+    }
+
+    changeOrientation(orientation) {
+        this.currentOrientation = orientation;
+        
+        // Update button states
+        document.querySelectorAll('.orientation-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-orientation="${orientation}"]`).classList.add('active');
+        
+        // Update canvas dimensions
+        this.setCanvasDimensions();
+        
+        // Reload current template with new dimensions
+        this.loadTemplate(this.currentTemplate);
+        
+        this.saveState();
+    }
+
     toggleCTA(enabled) {
         const ctaSettings = document.getElementById('ctaSettings');
         const ctaStyleSettings = document.getElementById('ctaStyleSettings');
@@ -226,6 +253,15 @@ class TemplateAdsEditor {
 
         document.getElementById('effectColor').addEventListener('change', (e) => {
             this.updateEffectColor(e.target.value);
+        });
+
+        // Orientation buttons
+        document.getElementById('horizontalBtn').addEventListener('click', () => {
+            this.changeOrientation('horizontal');
+        });
+
+        document.getElementById('verticalBtn').addEventListener('click', () => {
+            this.changeOrientation('vertical');
         });
         
         // Export buttons
@@ -500,6 +536,8 @@ class TemplateAdsEditor {
     }
 
     getImageConfigForTemplate(templateName, canvasWidth, canvasHeight) {
+        const isVertical = this.currentOrientation === 'vertical';
+        
         switch(templateName) {
             case 'template1': // Classic - full canvas
             case 'template2': // Modern Grid - full canvas
@@ -512,33 +550,72 @@ class TemplateAdsEditor {
                     width: canvasWidth,
                     height: canvasHeight
                 };
-            case 'template4': // Split Left - left half only
-                return {
-                    left: canvasWidth * 0.25,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
-                    width: canvasWidth * 0.5,
-                    height: canvasHeight
-                };
-            case 'template5': // Split Right - right half only
-                return {
-                    left: canvasWidth * 0.75,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
-                    width: canvasWidth * 0.5,
-                    height: canvasHeight
-                };
-            case 'template6': // Split Top - top half only
-                return {
-                    left: canvasWidth / 2,
-                    top: canvasHeight * 0.25,
-                    originX: 'center',
-                    originY: 'center',
-                    width: canvasWidth,
-                    height: canvasHeight * 0.5
-                };
+            case 'template4': // Split Layout - adapt based on orientation
+                if (isVertical) {
+                    // Vertical: top half for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight * 0.25,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5
+                    };
+                } else {
+                    // Horizontal: left half for image
+                    return {
+                        left: canvasWidth * 0.25,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight
+                    };
+                }
+            case 'template5': // Split Layout - adapt based on orientation
+                if (isVertical) {
+                    // Vertical: bottom half for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight * 0.75,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5
+                    };
+                } else {
+                    // Horizontal: right half for image
+                    return {
+                        left: canvasWidth * 0.75,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight
+                    };
+                }
+            case 'template6': // Split Layout - adapt based on orientation
+                if (isVertical) {
+                    // Vertical: center area for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth * 0.8,
+                        height: canvasHeight * 0.6
+                    };
+                } else {
+                    // Horizontal: top half for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight * 0.25,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5
+                    };
+                }
             default:
                 return {
                     left: canvasWidth / 2,
@@ -552,14 +629,15 @@ class TemplateAdsEditor {
     }
     
     createTemplate1() {
-        // Classic Layout - Image top, text bottom
+        // Classic Layout - Image background with centered text
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
+        const isVertical = this.currentOrientation === 'vertical';
         
-        // Title - white text over image
+        // Title - white text over image, positioned for both orientations
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.65,
+            top: isVertical ? canvasHeight * 0.6 : canvasHeight * 0.65,
             fontSize: parseInt(document.getElementById('titleSize').value),
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -573,7 +651,7 @@ class TemplateAdsEditor {
         // Subtitle - white text over image
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.75,
+            top: isVertical ? canvasHeight * 0.7 : canvasHeight * 0.75,
             fontSize: parseInt(document.getElementById('subtitleSize').value),
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -586,7 +664,7 @@ class TemplateAdsEditor {
         // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
             left: canvasWidth / 2,
-            top: canvasHeight * 0.88,
+            top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
             width: 120,
             height: 40,
             fill: '#0077B5',
@@ -602,7 +680,7 @@ class TemplateAdsEditor {
         // CTA Button Text
         this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.88,
+            top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
             fontSize: parseInt(document.getElementById('ctaSize').value),
             fill: document.getElementById('ctaColor').value,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -616,7 +694,7 @@ class TemplateAdsEditor {
         // Group them together
         this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.88,
+            top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
             originX: 'center',
             originY: 'center',
             id: 'ctaGroup'
