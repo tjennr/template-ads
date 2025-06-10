@@ -49,9 +49,9 @@ class TemplateAdsEditor {
     }
 
     setCanvasDimensions() {
-        const canvasContainer = document.querySelector('.canvas-wrapper');
-        const containerWidth = canvasContainer.clientWidth - 40; // Account for padding
-        const containerHeight = window.innerHeight - 200; // Account for header and margins
+        const canvasContainer = document.querySelector('.canvas-container');
+        const containerWidth = canvasContainer.clientWidth - 20; // Account for margins
+        const containerHeight = window.innerHeight - 180; // Account for header and action buttons
         
         let canvasWidth, canvasHeight;
         

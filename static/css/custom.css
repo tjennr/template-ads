@@ -515,40 +515,84 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
 }
 
-/* Canvas Responsive Styles */
-.canvas-wrapper {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e9ecef;
-    min-height: 400px;
-    overflow: hidden;
+/* Canvas Area Styles */
+.canvas-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     width: 100%;
-    box-sizing: border-box;
+    min-height: 400px;
 }
 
-.canvas-wrapper canvas {
+.canvas-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    color: #495057;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    color: #212529;
+}
+
+.action-btn i {
+    font-size: 0.875rem;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.canvas-container canvas {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    .canvas-wrapper {
+    .canvas-area {
         padding: 1rem;
     }
 }
 
 @media (max-width: 768px) {
-    .canvas-wrapper {
+    .canvas-area {
         padding: 0.75rem;
         margin-top: 1rem;
+    }
+    
+    .canvas-actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .action-btn {
+        justify-content: center;
+        width: 100%;
     }
     
     .row {
