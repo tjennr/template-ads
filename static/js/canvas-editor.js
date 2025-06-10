@@ -51,7 +51,7 @@ class TemplateAdsEditor {
         if (this.currentOrientation === 'horizontal') {
             this.canvas.setDimensions({width: 800, height: 500});
         } else {
-            this.canvas.setDimensions({width: 600, height: 600});
+            this.canvas.setDimensions({width: 600, height: 800});
         }
         this.canvas.renderAll();
     }
