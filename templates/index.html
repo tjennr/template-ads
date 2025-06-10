@@ -95,7 +95,23 @@
                 </div>
 
                 <div class="sidebar-section mb-4">
-                    <h6 class="sidebar-title">Style</h6>
+                    <h6 class="sidebar-title">Orientation</h6>
+                    <div class="orientation-controls">
+                        <div class="orientation-buttons">
+                            <button class="orientation-btn active" id="horizontalBtn" data-orientation="horizontal">
+                                <i class="fas fa-arrows-alt-h"></i>
+                                <span>Horizontal</span>
+                            </button>
+                            <button class="orientation-btn" id="verticalBtn" data-orientation="vertical">
+                                <i class="fas fa-arrows-alt-v"></i>
+                                <span>Vertical</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section mb-4">
+                    <h6 class="sidebar-title">Style & Effects</h6>
                     <div class="style-controls">
                         <div class="style-row">
                             <label class="input-label">Font Family</label>
@@ -130,6 +146,35 @@
                             <label class="input-label">Background</label>
                             <input type="color" class="color-input-full" id="backgroundColor" value="#ffffff">
                         </div>
+
+                        <div class="effect-group">
+                            <label class="input-label">Shadow Effects</label>
+                            <div class="effect-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="titleShadow"> Title
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="subtitleShadow"> Subtitle
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="effect-group">
+                            <label class="input-label">Outline Effects</label>
+                            <div class="effect-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="titleOutline"> Title
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="subtitleOutline"> Subtitle
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="style-row">
+                            <label class="input-label">Effect Color</label>
+                            <input type="color" class="color-input-full" id="effectColor" value="#000000">
+                        </div>
                     </div>
                 </div>
 
@@ -155,37 +200,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-section mb-4">
-                    <h6 class="sidebar-title">Text Effects</h6>
-                    <div class="effects-controls">
-                        <div class="effect-group">
-                            <label class="input-label">Shadow</label>
-                            <div class="effect-options">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="titleShadow"> Title
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="subtitleShadow"> Subtitle
-                                </label>
-                            </div>
-                        </div>
-                        <div class="effect-group">
-                            <label class="input-label">Outline</label>
-                            <div class="effect-options">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="titleOutline"> Title
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="subtitleOutline"> Subtitle
-                                </label>
-                            </div>
-                        </div>
-                        <div class="effect-group">
-                            <label class="input-label">Effect Color</label>
-                            <input type="color" class="color-input-full" id="effectColor" value="#000000">
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="sidebar-section">
                     <h6 class="sidebar-title">Export</h6>

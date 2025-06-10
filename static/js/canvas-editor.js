@@ -2,6 +2,7 @@ class TemplateAdsEditor {
     constructor() {
         this.canvas = null;
         this.currentTemplate = 'template1';
+        this.currentOrientation = 'horizontal';
         this.mainImage = null;
         this.logo = null;
         this.titleText = null;
@@ -25,6 +26,7 @@ class TemplateAdsEditor {
             preserveObjectStacking: true
         });
         
+        this.setCanvasDimensions();
         this.setupEventListeners();
         this.setupCanvasEvents();
         this.loadTemplate(this.currentTemplate);
