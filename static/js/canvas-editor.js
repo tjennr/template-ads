@@ -394,7 +394,7 @@ class TemplateAdsEditor {
         // Shadow toggle
         document.getElementById('toolbarShadow').addEventListener('click', (e) => {
             if (this.selectedTextObject) {
-                const hasshadow = this.selectedTextObject.shadow;
+                const hasShadow = this.selectedTextObject.shadow;
                 if (hasShadow) {
                     this.selectedTextObject.set('shadow', null);
                     e.target.classList.remove('active');
