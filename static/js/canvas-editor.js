@@ -246,10 +246,7 @@ class TemplateAdsEditor {
             this.updateTextStyle('cta', 'fontSize', parseInt(e.target.value));
         });
         
-        document.getElementById('backgroundColor').addEventListener('change', (e) => {
-            this.canvas.setBackgroundColor(e.target.value, this.canvas.renderAll.bind(this.canvas));
-            this.saveState();
-        });
+
 
         // CTA toggle
         document.getElementById('ctaEnabled').addEventListener('change', (e) => {
@@ -617,7 +614,7 @@ class TemplateAdsEditor {
     
     loadTemplate(templateName) {
         this.canvas.clear();
-        this.canvas.setBackgroundColor(document.getElementById('backgroundColor').value, this.canvas.renderAll.bind(this.canvas));
+        this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
         
         // Store current template name
         this.currentTemplate = templateName;
