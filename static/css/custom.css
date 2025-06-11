@@ -435,6 +435,8 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Source Sans Pro', sans-serif;
     margin-bottom: 0.5rem;
     cursor: pointer;
+    color: #212529; /* Dark text color for better visibility */
+    font-weight: 500;
 }
 
 .checkbox-label input[type="checkbox"] {
