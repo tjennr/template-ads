@@ -1956,17 +1956,12 @@ class TemplateAdsEditor {
     }
     
     resetCanvas() {
-        // Clear all stored images
-        this.mainImage = null;
-        this.logo = null;
-        
         // Reset form values to defaults
-        document.getElementById('titleText').value = 'Your Title Here';
-        document.getElementById('subtitleText').value = 'Your subtitle text goes here';
-        document.getElementById('ctaText').value = 'Get Started';
-        document.getElementById('ctaSize').value = '16';
+        document.getElementById('titleText').value = 'Your Amazing Product';
+        document.getElementById('subtitleText').value = 'Premium quality at affordable prices';
+        document.getElementById('ctaText').value = 'Shop Now';
+        document.getElementById('ctaSize').value = '18';
         document.getElementById('ctaColor').value = '#ffffff';
-        document.getElementById('backgroundColor').value = '#ffffff';
         
         // Clear file inputs
         document.getElementById('mainImageUpload').value = '';
@@ -1976,11 +1971,21 @@ class TemplateAdsEditor {
         this.canvas.clear();
         this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
         
+        // Reset image references
+        this.mainImage = null;
+        this.logo = null;
+        
         // Reload current template with default values
         this.loadTemplate(this.currentTemplate || 'template1');
         
+        // Load default images after template is loaded
+        this.loadDefaultImage();
+        
         // Re-initialize slider fills
         this.initializeSliderFills();
+        
+        // Save the reset state
+        this.saveState();
     }
     
 
