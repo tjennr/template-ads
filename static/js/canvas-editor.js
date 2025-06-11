@@ -48,9 +48,7 @@ class TemplateAdsEditor {
     }
 
     updateFontFamilyDisplay() {
-        // Set the font family dropdown to show the current font
-        const fontFamilySelect = document.getElementById('fontFamily');
-        fontFamilySelect.value = 'Source Sans Pro';
+        // This method is no longer needed since font family is handled by the floating toolbar
     }
 
     setCanvasDimensions() {
@@ -239,33 +237,13 @@ class TemplateAdsEditor {
             this.updateText('cta', e.target.value);
         });
         
-        // Color and size controls
-        document.getElementById('titleColor').addEventListener('change', (e) => {
-            this.updateTextStyle('title', 'fill', e.target.value);
-        });
-        
-        document.getElementById('titleSize').addEventListener('input', (e) => {
-            this.updateTextStyle('title', 'fontSize', parseInt(e.target.value));
-        });
-        
-        document.getElementById('subtitleColor').addEventListener('change', (e) => {
-            this.updateTextStyle('subtitle', 'fill', e.target.value);
-        });
-        
-        document.getElementById('subtitleSize').addEventListener('input', (e) => {
-            this.updateTextStyle('subtitle', 'fontSize', parseInt(e.target.value));
-        });
-        
+        // CTA color and size controls (these still exist in the sidebar)
         document.getElementById('ctaColor').addEventListener('change', (e) => {
             this.updateTextStyle('cta', 'fill', e.target.value);
         });
         
         document.getElementById('ctaSize').addEventListener('input', (e) => {
             this.updateTextStyle('cta', 'fontSize', parseInt(e.target.value));
-        });
-        
-        document.getElementById('fontFamily').addEventListener('change', (e) => {
-            this.updateAllTextFonts(e.target.value);
         });
         
         document.getElementById('backgroundColor').addEventListener('change', (e) => {
@@ -276,27 +254,6 @@ class TemplateAdsEditor {
         // CTA toggle
         document.getElementById('ctaEnabled').addEventListener('change', (e) => {
             this.toggleCTA(e.target.checked);
-        });
-
-        // Text effects
-        document.getElementById('titleShadow').addEventListener('change', (e) => {
-            this.updateTextEffect('title', 'shadow', e.target.checked);
-        });
-
-        document.getElementById('subtitleShadow').addEventListener('change', (e) => {
-            this.updateTextEffect('subtitle', 'shadow', e.target.checked);
-        });
-
-        document.getElementById('titleOutline').addEventListener('change', (e) => {
-            this.updateTextEffect('title', 'outline', e.target.checked);
-        });
-
-        document.getElementById('subtitleOutline').addEventListener('change', (e) => {
-            this.updateTextEffect('subtitle', 'outline', e.target.checked);
-        });
-
-        document.getElementById('effectColor').addEventListener('change', (e) => {
-            this.updateEffectColor(e.target.value);
         });
 
         // Orientation buttons
