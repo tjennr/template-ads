@@ -26,9 +26,14 @@ class TemplateAdsEditor {
             preserveObjectStacking: true
         });
         
+        // Floating toolbar properties
+        this.textToolbar = document.getElementById('textToolbar');
+        this.selectedTextObject = null;
+        
         this.setCanvasDimensions();
         this.setupEventListeners();
         this.setupCanvasEvents();
+        this.setupTextToolbarEvents();
         this.setupResizeListener();
         this.loadTemplate(this.currentTemplate);
         this.loadDefaultImage();
@@ -333,8 +338,187 @@ class TemplateAdsEditor {
         // Track canvas changes for undo functionality with debouncing
         this.canvas.on('object:added', () => this.debouncedSaveState());
         this.canvas.on('object:removed', () => this.debouncedSaveState());
-        this.canvas.on('object:modified', () => this.debouncedSaveState());
+        this.canvas.on('object:modified', () => {
+            this.updateToolbarPosition();
+            this.debouncedSaveState();
+        });
         this.canvas.on('path:created', () => this.debouncedSaveState());
+        
+        // Text selection events for floating toolbar
+        this.canvas.on('selection:created', (e) => {
+            this.handleTextSelection(e);
+        });
+
+        this.canvas.on('selection:updated', (e) => {
+            this.handleTextSelection(e);
+        });
+
+        this.canvas.on('selection:cleared', (e) => {
+            this.hideTextToolbar();
+        });
+
+        // Hide toolbar when clicking outside canvas
+        document.addEventListener('click', (e) => {
+            if (!this.canvas.getElement().contains(e.target) && !this.textToolbar.contains(e.target)) {
+                this.hideTextToolbar();
+            }
+        });
+    }
+
+    setupTextToolbarEvents() {
+        // Font family change
+        document.getElementById('toolbarFontFamily').addEventListener('change', (e) => {
+            if (this.selectedTextObject) {
+                this.selectedTextObject.set('fontFamily', e.target.value);
+                this.canvas.renderAll();
+            }
+        });
+
+        // Font size change
+        document.getElementById('toolbarFontSize').addEventListener('input', (e) => {
+            if (this.selectedTextObject && e.target.value) {
+                this.selectedTextObject.set('fontSize', parseInt(e.target.value));
+                this.canvas.renderAll();
+                this.updateToolbarPosition();
+            }
+        });
+
+        // Text color change
+        document.getElementById('toolbarTextColor').addEventListener('change', (e) => {
+            if (this.selectedTextObject) {
+                this.selectedTextObject.set('fill', e.target.value);
+                this.canvas.renderAll();
+            }
+        });
+
+        // Shadow toggle
+        document.getElementById('toolbarShadow').addEventListener('click', (e) => {
+            if (this.selectedTextObject) {
+                const hasshadow = this.selectedTextObject.shadow;
+                if (hasShadow) {
+                    this.selectedTextObject.set('shadow', null);
+                    e.target.classList.remove('active');
+                } else {
+                    const effectColor = document.getElementById('toolbarEffectColor').value;
+                    this.selectedTextObject.set('shadow', {
+                        color: effectColor,
+                        blur: 4,
+                        offsetX: 2,
+                        offsetY: 2
+                    });
+                    e.target.classList.add('active');
+                }
+                this.canvas.renderAll();
+            }
+        });
+
+        // Outline toggle
+        document.getElementById('toolbarOutline').addEventListener('click', (e) => {
+            if (this.selectedTextObject) {
+                const hasStroke = this.selectedTextObject.stroke;
+                if (hasStroke) {
+                    this.selectedTextObject.set('stroke', '');
+                    this.selectedTextObject.set('strokeWidth', 0);
+                    e.target.classList.remove('active');
+                } else {
+                    const effectColor = document.getElementById('toolbarEffectColor').value;
+                    this.selectedTextObject.set('stroke', effectColor);
+                    this.selectedTextObject.set('strokeWidth', 2);
+                    e.target.classList.add('active');
+                }
+                this.canvas.renderAll();
+            }
+        });
+
+        // Effect color change
+        document.getElementById('toolbarEffectColor').addEventListener('change', (e) => {
+            if (this.selectedTextObject) {
+                const shadowBtn = document.getElementById('toolbarShadow');
+                const outlineBtn = document.getElementById('toolbarOutline');
+                
+                if (shadowBtn.classList.contains('active') && this.selectedTextObject.shadow) {
+                    this.selectedTextObject.shadow.color = e.target.value;
+                }
+                
+                if (outlineBtn.classList.contains('active') && this.selectedTextObject.stroke) {
+                    this.selectedTextObject.set('stroke', e.target.value);
+                }
+                
+                this.canvas.renderAll();
+            }
+        });
+    }
+
+    handleTextSelection(e) {
+        const selectedObject = e.selected[0];
+        
+        if (selectedObject && (selectedObject.type === 'text' || selectedObject.type === 'textbox')) {
+            this.selectedTextObject = selectedObject;
+            this.showTextToolbar();
+            this.updateToolbarValues();
+            this.updateToolbarPosition();
+        } else {
+            this.hideTextToolbar();
+        }
+    }
+
+    showTextToolbar() {
+        this.textToolbar.classList.remove('hidden');
+    }
+
+    hideTextToolbar() {
+        this.textToolbar.classList.add('hidden');
+        this.selectedTextObject = null;
+    }
+
+    updateToolbarValues() {
+        if (!this.selectedTextObject) return;
+
+        // Update font family
+        document.getElementById('toolbarFontFamily').value = this.selectedTextObject.fontFamily || 'Source Sans Pro';
+        
+        // Update font size
+        document.getElementById('toolbarFontSize').value = Math.round(this.selectedTextObject.fontSize || 24);
+        
+        // Update text color
+        document.getElementById('toolbarTextColor').value = this.selectedTextObject.fill || '#000000';
+        
+        // Update shadow button state
+        const shadowBtn = document.getElementById('toolbarShadow');
+        if (this.selectedTextObject.shadow) {
+            shadowBtn.classList.add('active');
+            document.getElementById('toolbarEffectColor').value = this.selectedTextObject.shadow.color || '#000000';
+        } else {
+            shadowBtn.classList.remove('active');
+        }
+        
+        // Update outline button state
+        const outlineBtn = document.getElementById('toolbarOutline');
+        if (this.selectedTextObject.stroke) {
+            outlineBtn.classList.add('active');
+            document.getElementById('toolbarEffectColor').value = this.selectedTextObject.stroke || '#000000';
+        } else {
+            outlineBtn.classList.remove('active');
+        }
+    }
+
+    updateToolbarPosition() {
+        if (!this.selectedTextObject || this.textToolbar.classList.contains('hidden')) return;
+
+        const canvasElement = this.canvas.getElement();
+        const canvasRect = canvasElement.getBoundingClientRect();
+        const objectBounds = this.selectedTextObject.getBoundingRect();
+        
+        // Calculate position relative to viewport
+        const left = canvasRect.left + objectBounds.left + (objectBounds.width / 2) - (this.textToolbar.offsetWidth / 2);
+        const top = canvasRect.top + objectBounds.top - this.textToolbar.offsetHeight - 10;
+        
+        // Ensure toolbar stays within viewport
+        const maxLeft = window.innerWidth - this.textToolbar.offsetWidth - 10;
+        const maxTop = window.innerHeight - this.textToolbar.offsetHeight - 10;
+        
+        this.textToolbar.style.left = Math.max(10, Math.min(left, maxLeft)) + 'px';
+        this.textToolbar.style.top = Math.max(10, Math.min(top, maxTop)) + 'px';
     }
 
     debouncedSaveState() {

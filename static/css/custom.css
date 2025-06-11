@@ -602,6 +602,85 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+/* Floating Text Toolbar */
+.text-toolbar {
+    position: fixed;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+.text-toolbar.hidden {
+    display: none;
+}
+
+.toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar-font-select {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background: #ffffff;
+    color: #495057;
+    min-width: 120px;
+}
+
+.toolbar-size-input {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    width: 60px;
+    text-align: center;
+}
+
+.toolbar-color-input {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toolbar-btn {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.toolbar-btn:hover {
+    background: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.toolbar-btn.active {
+    background: var(--brand-primary);
+    color: #ffffff;
+    border-color: var(--brand-primary);
+}
+
 /* Export Buttons */
 .export-buttons {
     display: flex;
