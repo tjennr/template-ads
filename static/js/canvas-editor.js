@@ -323,87 +323,104 @@ class TemplateAdsEditor {
     }
 
     setupTextToolbarEvents() {
+        // Get toolbar elements with null checks
+        const fontFamilySelect = document.getElementById('toolbarFontFamily');
+        const fontSizeInput = document.getElementById('toolbarFontSize');
+        const textColorInput = document.getElementById('toolbarTextColor');
+        const shadowBtn = document.getElementById('toolbarShadow');
+        const outlineBtn = document.getElementById('toolbarOutline');
+        const effectColorInput = document.getElementById('toolbarEffectColor');
+
         // Font family change
-        document.getElementById('toolbarFontFamily').addEventListener('change', (e) => {
-            if (this.selectedTextObject) {
-                this.selectedTextObject.set('fontFamily', e.target.value);
-                this.canvas.renderAll();
-            }
-        });
+        if (fontFamilySelect) {
+            fontFamilySelect.addEventListener('change', (e) => {
+                if (this.selectedTextObject) {
+                    this.selectedTextObject.set('fontFamily', e.target.value);
+                    this.canvas.renderAll();
+                }
+            });
+        }
 
         // Font size change
-        document.getElementById('toolbarFontSize').addEventListener('input', (e) => {
-            if (this.selectedTextObject && e.target.value) {
-                this.selectedTextObject.set('fontSize', parseInt(e.target.value));
-                this.canvas.renderAll();
-                this.updateToolbarPosition();
-            }
-        });
+        if (fontSizeInput) {
+            fontSizeInput.addEventListener('input', (e) => {
+                if (this.selectedTextObject && e.target.value) {
+                    this.selectedTextObject.set('fontSize', parseInt(e.target.value));
+                    this.canvas.renderAll();
+                    this.updateToolbarPosition();
+                }
+            });
+        }
 
         // Text color change
-        document.getElementById('toolbarTextColor').addEventListener('change', (e) => {
-            if (this.selectedTextObject) {
-                this.selectedTextObject.set('fill', e.target.value);
-                this.canvas.renderAll();
-            }
-        });
+        if (textColorInput) {
+            textColorInput.addEventListener('change', (e) => {
+                if (this.selectedTextObject) {
+                    this.selectedTextObject.set('fill', e.target.value);
+                    this.canvas.renderAll();
+                }
+            });
+        }
 
         // Shadow toggle
-        document.getElementById('toolbarShadow').addEventListener('click', (e) => {
-            if (this.selectedTextObject) {
-                const hasShadow = this.selectedTextObject.shadow;
-                if (hasShadow) {
-                    this.selectedTextObject.set('shadow', null);
-                    e.target.classList.remove('active');
-                } else {
-                    const effectColor = document.getElementById('toolbarEffectColor').value;
-                    this.selectedTextObject.set('shadow', {
-                        color: effectColor,
-                        blur: 4,
-                        offsetX: 2,
-                        offsetY: 2
-                    });
-                    e.target.classList.add('active');
+        if (shadowBtn) {
+            shadowBtn.addEventListener('click', (e) => {
+                if (this.selectedTextObject) {
+                    const hasShadow = this.selectedTextObject.shadow;
+                    if (hasShadow) {
+                        this.selectedTextObject.set('shadow', null);
+                        e.target.classList.remove('active');
+                    } else {
+                        const effectColor = effectColorInput ? effectColorInput.value : '#000000';
+                        this.selectedTextObject.set('shadow', {
+                            color: effectColor,
+                            blur: 4,
+                            offsetX: 2,
+                            offsetY: 2
+                        });
+                        e.target.classList.add('active');
+                    }
+                    this.canvas.renderAll();
                 }
-                this.canvas.renderAll();
-            }
-        });
+            });
+        }
 
         // Outline toggle
-        document.getElementById('toolbarOutline').addEventListener('click', (e) => {
-            if (this.selectedTextObject) {
-                const hasStroke = this.selectedTextObject.stroke;
-                if (hasStroke) {
-                    this.selectedTextObject.set('stroke', '');
-                    this.selectedTextObject.set('strokeWidth', 0);
-                    e.target.classList.remove('active');
-                } else {
-                    const effectColor = document.getElementById('toolbarEffectColor').value;
-                    this.selectedTextObject.set('stroke', effectColor);
-                    this.selectedTextObject.set('strokeWidth', 2);
-                    e.target.classList.add('active');
+        if (outlineBtn) {
+            outlineBtn.addEventListener('click', (e) => {
+                if (this.selectedTextObject) {
+                    const hasStroke = this.selectedTextObject.stroke;
+                    if (hasStroke) {
+                        this.selectedTextObject.set('stroke', '');
+                        this.selectedTextObject.set('strokeWidth', 0);
+                        e.target.classList.remove('active');
+                    } else {
+                        const effectColor = effectColorInput ? effectColorInput.value : '#000000';
+                        this.selectedTextObject.set('stroke', effectColor);
+                        this.selectedTextObject.set('strokeWidth', 2);
+                        e.target.classList.add('active');
+                    }
+                    this.canvas.renderAll();
                 }
-                this.canvas.renderAll();
-            }
-        });
+            });
+        }
 
         // Effect color change
-        document.getElementById('toolbarEffectColor').addEventListener('change', (e) => {
-            if (this.selectedTextObject) {
-                const shadowBtn = document.getElementById('toolbarShadow');
-                const outlineBtn = document.getElementById('toolbarOutline');
-                
-                if (shadowBtn.classList.contains('active') && this.selectedTextObject.shadow) {
-                    this.selectedTextObject.shadow.color = e.target.value;
+        if (effectColorInput) {
+            effectColorInput.addEventListener('change', (e) => {
+                if (this.selectedTextObject) {
+                    if (shadowBtn && shadowBtn.classList.contains('active') && this.selectedTextObject.shadow) {
+                        this.selectedTextObject.shadow.color = e.target.value;
+                    }
+                    
+                    if (outlineBtn && outlineBtn.classList.contains('active') && this.selectedTextObject.stroke) {
+                        this.selectedTextObject.set('stroke', e.target.value);
+                    }
+                    
+                    this.canvas.renderAll();
                 }
-                
-                if (outlineBtn.classList.contains('active') && this.selectedTextObject.stroke) {
-                    this.selectedTextObject.set('stroke', e.target.value);
-                }
-                
-                this.canvas.renderAll();
-            }
-        });
+            });
+        }
     }
 
     handleTextSelection(e) {
@@ -431,31 +448,48 @@ class TemplateAdsEditor {
     updateToolbarValues() {
         if (!this.selectedTextObject) return;
 
-        // Update font family
-        document.getElementById('toolbarFontFamily').value = this.selectedTextObject.fontFamily || 'Source Sans Pro';
+        const fontFamilySelect = document.getElementById('toolbarFontFamily');
+        const fontSizeInput = document.getElementById('toolbarFontSize');
+        const textColorInput = document.getElementById('toolbarTextColor');
+        const shadowBtn = document.getElementById('toolbarShadow');
+        const outlineBtn = document.getElementById('toolbarOutline');
+        const effectColorInput = document.getElementById('toolbarEffectColor');
+
+        // Check if elements exist before setting values
+        if (fontFamilySelect) {
+            fontFamilySelect.value = this.selectedTextObject.fontFamily || 'Source Sans Pro';
+        }
         
-        // Update font size
-        document.getElementById('toolbarFontSize').value = Math.round(this.selectedTextObject.fontSize || 24);
+        if (fontSizeInput) {
+            fontSizeInput.value = Math.round(this.selectedTextObject.fontSize || 24);
+        }
         
-        // Update text color
-        document.getElementById('toolbarTextColor').value = this.selectedTextObject.fill || '#000000';
+        if (textColorInput) {
+            textColorInput.value = this.selectedTextObject.fill || '#000000';
+        }
         
         // Update shadow button state
-        const shadowBtn = document.getElementById('toolbarShadow');
-        if (this.selectedTextObject.shadow) {
-            shadowBtn.classList.add('active');
-            document.getElementById('toolbarEffectColor').value = this.selectedTextObject.shadow.color || '#000000';
-        } else {
-            shadowBtn.classList.remove('active');
+        if (shadowBtn) {
+            if (this.selectedTextObject.shadow) {
+                shadowBtn.classList.add('active');
+                if (effectColorInput) {
+                    effectColorInput.value = this.selectedTextObject.shadow.color || '#000000';
+                }
+            } else {
+                shadowBtn.classList.remove('active');
+            }
         }
         
         // Update outline button state
-        const outlineBtn = document.getElementById('toolbarOutline');
-        if (this.selectedTextObject.stroke) {
-            outlineBtn.classList.add('active');
-            document.getElementById('toolbarEffectColor').value = this.selectedTextObject.stroke || '#000000';
-        } else {
-            outlineBtn.classList.remove('active');
+        if (outlineBtn) {
+            if (this.selectedTextObject.stroke) {
+                outlineBtn.classList.add('active');
+                if (effectColorInput) {
+                    effectColorInput.value = this.selectedTextObject.stroke || '#000000';
+                }
+            } else {
+                outlineBtn.classList.remove('active');
+            }
         }
     }
 
