@@ -314,11 +314,38 @@ class TemplateAdsEditor {
             this.hideTextToolbar();
         });
 
-        // Hide toolbar when clicking outside canvas
-        document.addEventListener('click', (e) => {
-            if (!this.canvas.getElement().contains(e.target) && !this.textToolbar.contains(e.target)) {
-                this.hideTextToolbar();
+        // Keep toolbar visible when clicking within the same text element
+        this.canvas.on('mouse:down', (e) => {
+            if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
+                if (this.selectedTextObject === e.target) {
+                    // Clicking on the same text object, keep toolbar visible
+                    this.showTextToolbar();
+                    this.updateToolbarValues();
+                    this.updateToolbarPosition();
+                }
             }
+        });
+
+        // Hide toolbar when clicking outside canvas or text elements
+        document.addEventListener('click', (e) => {
+            // Don't hide if clicking on the toolbar itself
+            if (this.textToolbar.contains(e.target)) {
+                return;
+            }
+            
+            // Don't hide if clicking on the canvas element that's currently selected
+            if (this.canvas.getElement().contains(e.target)) {
+                const pointer = this.canvas.getPointer(e);
+                const clickedObject = this.canvas.findTarget(e, false);
+                
+                // If clicking on a text object, let the selection events handle it
+                if (clickedObject && (clickedObject.type === 'text' || clickedObject.type === 'textbox')) {
+                    return;
+                }
+            }
+            
+            // Hide toolbar if clicking elsewhere
+            this.hideTextToolbar();
         });
     }
 
@@ -457,7 +484,17 @@ class TemplateAdsEditor {
 
         // Check if elements exist before setting values
         if (fontFamilySelect) {
-            fontFamilySelect.value = this.selectedTextObject.fontFamily || 'Source Sans Pro';
+            const currentFont = this.selectedTextObject.fontFamily || 'Source Sans Pro';
+            fontFamilySelect.value = currentFont;
+            
+            // If the current font isn't in the dropdown options, add it temporarily
+            if (!Array.from(fontFamilySelect.options).some(option => option.value === currentFont)) {
+                const option = document.createElement('option');
+                option.value = currentFont;
+                option.textContent = currentFont;
+                fontFamilySelect.appendChild(option);
+                fontFamilySelect.value = currentFont;
+            }
         }
         
         if (fontSizeInput) {
