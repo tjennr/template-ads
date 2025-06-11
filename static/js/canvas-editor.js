@@ -301,15 +301,23 @@ class TemplateAdsEditor {
         });
         this.canvas.on('path:created', () => this.debouncedSaveState());
         
-        // Handle text selection with mouse up events to ensure toolbar persists
-        this.canvas.on('mouse:up', (e) => {
-            if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
-                // Set this text object as selected and show toolbar
-                this.selectedTextObject = e.target;
-                this.showTextToolbar();
-                this.updateToolbarValues();
-                this.updateToolbarPosition();
-            } else {
+        // Handle text selection using selection events but prevent auto-hiding
+        this.canvas.on('selection:created', (e) => {
+            this.handleTextSelection(e);
+        });
+
+        this.canvas.on('selection:updated', (e) => {
+            this.handleTextSelection(e);
+        });
+
+        // Override the default selection clearing behavior
+        this.canvas.on('selection:cleared', (e) => {
+            // Don't automatically hide - let mouse events control this
+        });
+
+        // Handle mouse clicks to control toolbar visibility
+        this.canvas.on('mouse:down', (e) => {
+            if (!e.target || (e.target.type !== 'text' && e.target.type !== 'textbox')) {
                 // Clicked on non-text object or empty area, hide toolbar
                 this.hideTextToolbar();
             }
