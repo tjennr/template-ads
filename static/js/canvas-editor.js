@@ -22,7 +22,7 @@ class TemplateAdsEditor {
         // Initialize Fabric.js canvas
         this.canvas = new fabric.Canvas('designCanvas', {
             backgroundColor: '#ffffff',
-            selection: true,
+            selection: false, // Disable automatic selection to prevent conflicts
             preserveObjectStacking: true
         });
         
@@ -301,26 +301,21 @@ class TemplateAdsEditor {
         });
         this.canvas.on('path:created', () => this.debouncedSaveState());
         
-        // Handle text selection using selection events but prevent auto-hiding
-        this.canvas.on('selection:created', (e) => {
-            this.handleTextSelection(e);
-        });
-
-        this.canvas.on('selection:updated', (e) => {
-            this.handleTextSelection(e);
-        });
-
-        // Override the default selection clearing behavior
-        this.canvas.on('selection:cleared', (e) => {
-            // Don't automatically hide - let mouse events control this
-        });
-
-        // Handle mouse clicks to control toolbar visibility
-        this.canvas.on('mouse:down', (e) => {
-            if (!e.target || (e.target.type !== 'text' && e.target.type !== 'textbox')) {
-                // Clicked on non-text object or empty area, hide toolbar
-                this.hideTextToolbar();
-            }
+        // Simple click-based text selection system
+        this.canvas.on('mouse:up', (e) => {
+            // Small delay to ensure click is registered properly
+            setTimeout(() => {
+                if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
+                    // Show toolbar for text elements
+                    this.selectedTextObject = e.target;
+                    this.showTextToolbar();
+                    this.updateToolbarValues();
+                    this.updateToolbarPosition();
+                } else {
+                    // Hide toolbar for non-text clicks
+                    this.hideTextToolbar();
+                }
+            }, 100);
         });
 
         // Ensure toolbar updates position when text is moved
