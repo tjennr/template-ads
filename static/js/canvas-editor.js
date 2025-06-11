@@ -1468,50 +1468,109 @@ class TemplateAdsEditor {
                 // Get image dimensions and position based on current template
                 const imageConfig = this.getImageConfigForTemplate(this.currentTemplate, canvasWidth, canvasHeight);
                 
-                // Calculate scale to fit the designated area
-                const scaleToFitWidth = imageConfig.width / clonedImg.width;
-                const scaleToFitHeight = imageConfig.height / clonedImg.height;
-                const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                // For split templates, scale to fill entire canvas then clip
+                // For full templates, scale to fit designated area
+                let scale;
+                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                    // Split templates: scale to fill entire canvas for proper coverage
+                    const scaleToFitWidth = canvasWidth / clonedImg.width;
+                    const scaleToFitHeight = canvasHeight / clonedImg.height;
+                    scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                } else {
+                    // Full templates: scale to fit designated area
+                    const scaleToFitWidth = imageConfig.width / clonedImg.width;
+                    const scaleToFitHeight = imageConfig.height / clonedImg.height;
+                    scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                }
                 
-                // Position image in the designated area
-                clonedImg.set({
-                    left: imageConfig.left,
-                    top: imageConfig.top,
-                    originX: imageConfig.originX,
-                    originY: imageConfig.originY,
-                    scaleX: scale,
-                    scaleY: scale,
-                    id: 'mainImage'
-                });
+                // Position image - center for split templates, designated area for full templates
+                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                    // Split templates: center on full canvas then clip
+                    clonedImg.set({
+                        left: canvasWidth / 2,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        scaleX: scale,
+                        scaleY: scale,
+                        id: 'mainImage'
+                    });
+                } else {
+                    // Full templates: position in designated area
+                    clonedImg.set({
+                        left: imageConfig.left,
+                        top: imageConfig.top,
+                        originX: imageConfig.originX,
+                        originY: imageConfig.originY,
+                        scaleX: scale,
+                        scaleY: scale,
+                        id: 'mainImage'
+                    });
+                }
 
-                // Add clipping for split templates
+                // Add clipping for split templates based on orientation
+                const isVertical = this.currentOrientation === 'vertical';
+                
                 if (this.currentTemplate === 'template4') {
-                    // Left half clipping
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: 0,
-                        top: 0,
-                        width: canvasWidth * 0.5,
-                        height: canvasHeight,
-                        absolutePositioned: true
-                    });
+                    if (isVertical) {
+                        // Vertical: top half clipping
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: left half clipping
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth * 0.5,
+                            height: canvasHeight,
+                            absolutePositioned: true
+                        });
+                    }
                 } else if (this.currentTemplate === 'template5') {
-                    // Right half clipping
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: canvasWidth * 0.5,
-                        top: 0,
-                        width: canvasWidth * 0.5,
-                        height: canvasHeight,
-                        absolutePositioned: true
-                    });
+                    if (isVertical) {
+                        // Vertical: bottom half clipping
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: canvasHeight * 0.5,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: right half clipping
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: canvasWidth * 0.5,
+                            top: 0,
+                            width: canvasWidth * 0.5,
+                            height: canvasHeight,
+                            absolutePositioned: true
+                        });
+                    }
                 } else if (this.currentTemplate === 'template6') {
-                    // Top half clipping
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: 0,
-                        top: 0,
-                        width: canvasWidth,
-                        height: canvasHeight * 0.5,
-                        absolutePositioned: true
-                    });
+                    if (isVertical) {
+                        // Vertical: center area clipping
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: canvasWidth * 0.1,
+                            top: canvasHeight * 0.2,
+                            width: canvasWidth * 0.8,
+                            height: canvasHeight * 0.6,
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: top half clipping
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: true
+                        });
+                    }
                 }
                 
                 // Remove any existing main image first
@@ -1593,50 +1652,109 @@ class TemplateAdsEditor {
                 // Get image dimensions and position based on current template
                 const imageConfig = this.getImageConfigForTemplate(this.currentTemplate, canvasWidth, canvasHeight);
                 
-                // Calculate scale to fit the designated area
-                const scaleToFitWidth = imageConfig.width / img.width;
-                const scaleToFitHeight = imageConfig.height / img.height;
-                const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                // For split templates, scale to fill entire canvas then clip
+                // For full templates, scale to fit designated area
+                let scale;
+                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                    // Split templates: scale to fill entire canvas for proper coverage
+                    const scaleToFitWidth = canvasWidth / img.width;
+                    const scaleToFitHeight = canvasHeight / img.height;
+                    scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                } else {
+                    // Full templates: scale to fit designated area
+                    const scaleToFitWidth = imageConfig.width / img.width;
+                    const scaleToFitHeight = imageConfig.height / img.height;
+                    scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                }
                 
-                // Position image in the designated area
-                img.set({
-                    left: imageConfig.left,
-                    top: imageConfig.top,
-                    originX: imageConfig.originX,
-                    originY: imageConfig.originY,
-                    scaleX: scale,
-                    scaleY: scale,
-                    id: 'mainImage'
-                });
+                // Position image - center for split templates, designated area for full templates
+                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                    // Split templates: center on full canvas then clip
+                    img.set({
+                        left: canvasWidth / 2,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        scaleX: scale,
+                        scaleY: scale,
+                        id: 'mainImage'
+                    });
+                } else {
+                    // Full templates: position in designated area
+                    img.set({
+                        left: imageConfig.left,
+                        top: imageConfig.top,
+                        originX: imageConfig.originX,
+                        originY: imageConfig.originY,
+                        scaleX: scale,
+                        scaleY: scale,
+                        id: 'mainImage'
+                    });
+                }
 
-                // Add clipping for split templates
+                // Add clipping for split templates based on orientation
+                const isVertical = this.currentOrientation === 'vertical';
+                
                 if (this.currentTemplate === 'template4') {
-                    // Left half clipping
-                    img.clipPath = new fabric.Rect({
-                        left: 0,
-                        top: 0,
-                        width: canvasWidth * 0.5,
-                        height: canvasHeight,
-                        absolutePositioned: true
-                    });
+                    if (isVertical) {
+                        // Vertical: top half clipping
+                        img.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: left half clipping
+                        img.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth * 0.5,
+                            height: canvasHeight,
+                            absolutePositioned: true
+                        });
+                    }
                 } else if (this.currentTemplate === 'template5') {
-                    // Right half clipping
-                    img.clipPath = new fabric.Rect({
-                        left: canvasWidth * 0.5,
-                        top: 0,
-                        width: canvasWidth * 0.5,
-                        height: canvasHeight,
-                        absolutePositioned: true
-                    });
+                    if (isVertical) {
+                        // Vertical: bottom half clipping
+                        img.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: canvasHeight * 0.5,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: right half clipping
+                        img.clipPath = new fabric.Rect({
+                            left: canvasWidth * 0.5,
+                            top: 0,
+                            width: canvasWidth * 0.5,
+                            height: canvasHeight,
+                            absolutePositioned: true
+                        });
+                    }
                 } else if (this.currentTemplate === 'template6') {
-                    // Top half clipping
-                    img.clipPath = new fabric.Rect({
-                        left: 0,
-                        top: 0,
-                        width: canvasWidth,
-                        height: canvasHeight * 0.5,
-                        absolutePositioned: true
-                    });
+                    if (isVertical) {
+                        // Vertical: center area clipping
+                        img.clipPath = new fabric.Rect({
+                            left: canvasWidth * 0.1,
+                            top: canvasHeight * 0.2,
+                            width: canvasWidth * 0.8,
+                            height: canvasHeight * 0.6,
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: top half clipping
+                        img.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: true
+                        });
+                    }
                 }
                 
                 // Remove existing main image
