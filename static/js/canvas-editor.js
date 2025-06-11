@@ -311,41 +311,57 @@ class TemplateAdsEditor {
         });
 
         this.canvas.on('selection:cleared', (e) => {
-            this.hideTextToolbar();
+            // Add a small delay to prevent toolbar from hiding when user is just clicking within the same text
+            setTimeout(() => {
+                // Only hide if no text object is currently selected
+                const activeObject = this.canvas.getActiveObject();
+                if (!activeObject || (activeObject.type !== 'text' && activeObject.type !== 'textbox')) {
+                    this.hideTextToolbar();
+                }
+            }, 50);
         });
 
         // Keep toolbar visible when clicking within the same text element
         this.canvas.on('mouse:down', (e) => {
             if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
-                if (this.selectedTextObject === e.target) {
-                    // Clicking on the same text object, keep toolbar visible
-                    this.showTextToolbar();
-                    this.updateToolbarValues();
-                    this.updateToolbarPosition();
-                }
+                // Set this text object as selected
+                this.selectedTextObject = e.target;
+                this.showTextToolbar();
+                this.updateToolbarValues();
+                this.updateToolbarPosition();
+            }
+        });
+
+        // Ensure toolbar updates position when text is moved
+        this.canvas.on('object:moving', (e) => {
+            if (e.target === this.selectedTextObject) {
+                this.updateToolbarPosition();
             }
         });
 
         // Hide toolbar when clicking outside canvas or text elements
+        this.canvas.on('mouse:down', (e) => {
+            // If clicking on empty canvas area (not on any object), hide toolbar
+            if (!e.target) {
+                this.hideTextToolbar();
+            }
+            // If clicking on non-text object, hide toolbar
+            else if (e.target.type !== 'text' && e.target.type !== 'textbox') {
+                this.hideTextToolbar();
+            }
+        });
+
+        // Hide toolbar when clicking completely outside the canvas
         document.addEventListener('click', (e) => {
             // Don't hide if clicking on the toolbar itself
             if (this.textToolbar.contains(e.target)) {
                 return;
             }
             
-            // Don't hide if clicking on the canvas element that's currently selected
-            if (this.canvas.getElement().contains(e.target)) {
-                const pointer = this.canvas.getPointer(e);
-                const clickedObject = this.canvas.findTarget(e, false);
-                
-                // If clicking on a text object, let the selection events handle it
-                if (clickedObject && (clickedObject.type === 'text' || clickedObject.type === 'textbox')) {
-                    return;
-                }
+            // Hide if clicking outside the canvas entirely
+            if (!this.canvas.getElement().contains(e.target)) {
+                this.hideTextToolbar();
             }
-            
-            // Hide toolbar if clicking elsewhere
-            this.hideTextToolbar();
         });
     }
 
