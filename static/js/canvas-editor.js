@@ -141,7 +141,7 @@ class TemplateAdsEditor {
         }
         
         if (textObj) {
-            const effectColor = document.getElementById('effectColor').value;
+            const effectColor = '#000000'; // Default effect color since effectColor input was removed
             
             if (effectType === 'shadow') {
                 if (enabled) {
@@ -852,7 +852,7 @@ class TemplateAdsEditor {
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.6 : canvasHeight * 0.65,
-            fontSize: parseInt(document.getElementById('titleSize').value),
+            fontSize: 40,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
@@ -866,7 +866,7 @@ class TemplateAdsEditor {
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.7 : canvasHeight * 0.75,
-            fontSize: parseInt(document.getElementById('subtitleSize').value),
+            fontSize: 24,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'center',
@@ -927,7 +927,7 @@ class TemplateAdsEditor {
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.6,
-            fontSize: parseInt(document.getElementById('titleSize').value),
+            fontSize: 40,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
@@ -941,7 +941,7 @@ class TemplateAdsEditor {
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.7,
-            fontSize: parseInt(document.getElementById('subtitleSize').value),
+            fontSize: 24,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'left',
@@ -1002,7 +1002,7 @@ class TemplateAdsEditor {
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.5,
-            fontSize: parseInt(document.getElementById('titleSize').value),
+            fontSize: 40,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
@@ -1016,7 +1016,7 @@ class TemplateAdsEditor {
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
-            fontSize: parseInt(document.getElementById('subtitleSize').value),
+            fontSize: 24,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'center',
@@ -1079,8 +1079,8 @@ class TemplateAdsEditor {
             this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.65,
-                fontSize: parseInt(document.getElementById('titleSize').value),
-                fill: document.getElementById('titleColor').value,
+                fontSize: 40,
+                fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1094,8 +1094,8 @@ class TemplateAdsEditor {
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.75,
-                fontSize: parseInt(document.getElementById('subtitleSize').value),
-                fill: document.getElementById('subtitleColor').value,
+                fontSize: 24,
+                fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
@@ -1145,8 +1145,8 @@ class TemplateAdsEditor {
             this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.4,
-                fontSize: parseInt(document.getElementById('titleSize').value),
-                fill: document.getElementById('titleColor').value,
+                fontSize: 40,
+                fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1160,8 +1160,8 @@ class TemplateAdsEditor {
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.55,
-                fontSize: parseInt(document.getElementById('subtitleSize').value),
-                fill: document.getElementById('subtitleColor').value,
+                fontSize: 24,
+                fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
@@ -1223,8 +1223,8 @@ class TemplateAdsEditor {
             this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.2,
-                fontSize: parseInt(document.getElementById('titleSize').value),
-                fill: document.getElementById('titleColor').value,
+                fontSize: 40,
+                fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1238,8 +1238,8 @@ class TemplateAdsEditor {
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.32,
-                fontSize: parseInt(document.getElementById('subtitleSize').value),
-                fill: document.getElementById('subtitleColor').value,
+                fontSize: 24,
+                fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
@@ -1289,8 +1289,8 @@ class TemplateAdsEditor {
             this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.4,
-                fontSize: parseInt(document.getElementById('titleSize').value),
-                fill: document.getElementById('titleColor').value,
+                fontSize: 40,
+                fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1304,8 +1304,8 @@ class TemplateAdsEditor {
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.55,
-                fontSize: parseInt(document.getElementById('subtitleSize').value),
-                fill: document.getElementById('subtitleColor').value,
+                fontSize: 24,
+                fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
@@ -1365,8 +1365,8 @@ class TemplateAdsEditor {
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
-            fontSize: parseInt(document.getElementById('titleSize').value),
-            fill: document.getElementById('titleColor').value,
+            fontSize: 40,
+            fill: '#333333',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
@@ -1379,8 +1379,8 @@ class TemplateAdsEditor {
         this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.78,
-            fontSize: parseInt(document.getElementById('subtitleSize').value),
-            fill: document.getElementById('subtitleColor').value,
+            fontSize: 24,
+            fill: '#666666',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'center',
             originX: 'center',
@@ -1820,11 +1820,7 @@ class TemplateAdsEditor {
         document.getElementById('titleText').value = 'Your Title Here';
         document.getElementById('subtitleText').value = 'Your subtitle text goes here';
         document.getElementById('ctaText').value = 'Get Started';
-        document.getElementById('titleSize').value = '48';
-        document.getElementById('subtitleSize').value = '24';
         document.getElementById('ctaSize').value = '16';
-        document.getElementById('titleColor').value = '#333333';
-        document.getElementById('subtitleColor').value = '#666666';
         document.getElementById('ctaColor').value = '#ffffff';
         document.getElementById('backgroundColor').value = '#ffffff';
         
