@@ -95,12 +95,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sidebar-title {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--brand-primary);
     margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 /* Template Grid */
