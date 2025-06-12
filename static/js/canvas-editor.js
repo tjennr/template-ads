@@ -948,11 +948,8 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
-        // Calculate responsive button width based on text
-        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        
         // CTA Button Text
-        this.ctaText = new fabric.Text(ctaTextValue, {
+        this.ctaText = new fabric.Text('Shop Now', {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
             fontSize: 18,
@@ -1089,7 +1086,7 @@ class TemplateAdsEditor {
         });
         
         // Calculate responsive button width based on text
-        const ctaTextValue = document.getElementById('ctaText').value || 'Shop Now';
+        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
         const tempText = new fabric.Text(ctaTextValue, {
             fontSize: 18,
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -1193,10 +1190,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            // Calculate responsive button width based on text
-            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-            
-            this.ctaText = new fabric.Text(ctaTextValue, {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.88,
                 fontSize: 18,
@@ -1271,7 +1265,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(ctaTextValue, {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.7,
                 fontSize: 18,
@@ -1349,10 +1343,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            // Calculate responsive button width based on text
-            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-            
-            this.ctaText = new fabric.Text(ctaTextValue, {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.45,
                 fontSize: 18,
@@ -1510,10 +1501,7 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
-        // Calculate responsive button width based on text  
-        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        
-        this.ctaText = new fabric.Text(ctaTextValue, {
+        this.ctaText = new fabric.Text('Shop Now', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.9,
             fontSize: 18,
