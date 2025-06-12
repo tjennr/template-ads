@@ -44,11 +44,45 @@ class TemplateAdsEditor {
         this.setupResizeListener();
         
         // Initialize canvas with default content
-        this.loadDefaultImage();
+        this.initializeDefaultContent();
+    }
+
+    initializeDefaultContent() {
+        // Create initial template content without waiting for image load
         this.loadTemplate(this.currentTemplate);
+        
+        // Load default image in background
+        const defaultImagePath = '/static/images/default-office.jpg';
+        fabric.Image.fromURL(defaultImagePath, (img) => {
+            const canvasWidth = this.canvas.width;
+            const canvasHeight = this.canvas.height;
+            
+            // Scale and position the main image
+            const scaleX = canvasWidth / img.width;
+            const scaleY = canvasHeight / img.height;
+            const scale = Math.max(scaleX, scaleY);
+            
+            img.set({
+                left: canvasWidth / 2,
+                top: canvasHeight / 2,
+                originX: 'center',
+                originY: 'center',
+                scaleX: scale,
+                scaleY: scale,
+                selectable: false,
+                evented: false,
+                id: 'mainImage'
+            });
+            
+            this.canvas.add(img);
+            this.canvas.sendToBack(img);
+            this.mainImage = img;
+            this.canvas.renderAll();
+            this.saveState();
+        });
+        
         this.updateFontFamilyDisplay();
         this.applyZoom();
-        this.saveState();
     }
 
     loadDefaultImage() {
@@ -1027,7 +1061,7 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Text(ctaTextValue, {
+        this.ctaText = new fabric.Text('Shop Now', {
             left: canvasWidth * 0.1 + 60,
             top: canvasHeight * 0.85,
             fontSize: 18,
@@ -1418,7 +1452,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(ctaTextValue, {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.7,
                 fontSize: 18,
