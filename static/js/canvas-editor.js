@@ -112,18 +112,18 @@ class TemplateAdsEditor {
 
     toggleCTA(enabled) {
         const ctaSettings = document.getElementById('ctaSettings');
-        const ctaStyleSettings = document.getElementById('ctaStyleSettings');
+        const ctaStyleSettings = document.querySelectorAll('#ctaStyleSettings');
         
         if (enabled) {
             ctaSettings.style.display = 'block';
-            ctaStyleSettings.style.display = 'block';
+            ctaStyleSettings.forEach(setting => setting.style.display = 'block');
             // Show CTA button on canvas if it exists
             if (this.ctaGroup) {
                 this.ctaGroup.set('visible', true);
             }
         } else {
             ctaSettings.style.display = 'none';
-            ctaStyleSettings.style.display = 'none';
+            ctaStyleSettings.forEach(setting => setting.style.display = 'none');
             // Hide CTA button on canvas
             if (this.ctaGroup) {
                 this.ctaGroup.set('visible', false);
@@ -241,6 +241,7 @@ class TemplateAdsEditor {
         
         document.getElementById('ctaText').addEventListener('input', (e) => {
             this.updateText('cta', e.target.value);
+            this.updateCtaButtonSize();
         });
         
         // CTA color and size controls (these still exist in the sidebar)
@@ -248,8 +249,13 @@ class TemplateAdsEditor {
             this.updateTextStyle('cta', 'fill', e.target.value);
         });
         
+        document.getElementById('ctaBackgroundColor').addEventListener('change', (e) => {
+            this.updateCtaBackgroundColor(e.target.value);
+        });
+        
         document.getElementById('ctaSize').addEventListener('input', (e) => {
             this.updateTextStyle('cta', 'fontSize', parseInt(e.target.value));
+            this.updateCtaButtonSize();
         });
         
 
@@ -1089,13 +1095,23 @@ class TemplateAdsEditor {
             id: 'subtitle'
         });
         
+        // Calculate responsive button width based on text
+        const ctaTextValue = document.getElementById('ctaText').value;
+        const tempText = new fabric.Text(ctaTextValue, {
+            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold'
+        });
+        const textWidth = tempText.width;
+        const buttonWidth = Math.max(80, textWidth + 32); // 16px padding each side
+
         // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
             left: canvasWidth / 2,
             top: canvasHeight * 0.8,
-            width: 120,
+            width: buttonWidth,
             height: 40,
-            fill: '#0077B5',
+            fill: document.getElementById('ctaBackgroundColor').value,
             rx: 8,
             ry: 8,
             originX: 'center',
@@ -1235,12 +1251,21 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
+            // Calculate responsive button width
+            const ctaTextValue = document.getElementById('ctaText').value;
+            const tempText = new fabric.Text(ctaTextValue, {
+                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold'
+            });
+            const buttonWidth = Math.max(80, tempText.width + 32);
+
             const ctaButtonBg = new fabric.Rect({
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.7,
-                width: 120,
+                width: buttonWidth,
                 height: 40,
-                fill: '#0077B5',
+                fill: document.getElementById('ctaBackgroundColor').value,
                 rx: 8,
                 ry: 8,
                 originX: 'center',
@@ -2202,6 +2227,43 @@ class TemplateAdsEditor {
             
             // Remove clipping for full coverage
             imageObj.clipPath = null;
+        }
+    }
+
+    // CTA Button methods
+    updateCtaBackgroundColor(color) {
+        if (this.ctaGroup) {
+            const objects = this.ctaGroup.getObjects();
+            const background = objects.find(obj => obj.id === 'ctaBackground');
+            if (background) {
+                background.set('fill', color);
+                this.canvas.renderAll();
+                this.saveState();
+            }
+        }
+    }
+
+    updateCtaButtonSize() {
+        if (this.ctaGroup && this.ctaText) {
+            const objects = this.ctaGroup.getObjects();
+            const background = objects.find(obj => obj.id === 'ctaBackground');
+            
+            if (background && this.ctaText) {
+                // Calculate responsive width based on text
+                const textWidth = this.ctaText.width * this.ctaText.scaleX;
+                const padding = 32; // 16px padding on each side
+                const minWidth = 80;
+                const newWidth = Math.max(minWidth, textWidth + padding);
+                
+                // Update background size
+                background.set({
+                    width: newWidth,
+                    height: Math.max(40, this.ctaText.height * this.ctaText.scaleY + 16)
+                });
+                
+                this.canvas.renderAll();
+                this.saveState();
+            }
         }
     }
 
