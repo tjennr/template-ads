@@ -30,14 +30,22 @@ class TemplateAdsEditor {
         this.textToolbar = document.getElementById('textToolbar');
         this.selectedTextObject = null;
         
+        // Zoom properties
+        this.zoomLevel = 1;
+        this.minZoom = 0.25;
+        this.maxZoom = 3;
+        this.zoomStep = 0.25;
+        
         this.setCanvasDimensions();
         this.setupEventListeners();
         this.setupCanvasEvents();
         this.setupTextToolbarEvents();
+        this.setupZoomEvents();
         this.setupResizeListener();
         this.loadTemplate(this.currentTemplate);
         this.loadDefaultImage();
         this.updateFontFamilyDisplay();
+        this.applyZoom(); // Initialize zoom display
         this.saveState();
     }
 
@@ -273,6 +281,19 @@ class TemplateAdsEditor {
         
         document.getElementById('exportPdf').addEventListener('click', () => {
             this.exportPdf();
+        });
+        
+        // Zoom controls
+        document.getElementById('zoomIn').addEventListener('click', () => {
+            this.zoomIn();
+        });
+        
+        document.getElementById('zoomOut').addEventListener('click', () => {
+            this.zoomOut();
+        });
+        
+        document.getElementById('zoomFit').addEventListener('click', () => {
+            this.zoomToFit();
         });
         
         // Utility buttons
@@ -1988,6 +2009,47 @@ class TemplateAdsEditor {
         this.saveState();
     }
     
+    // Zoom functionality
+    zoomIn() {
+        if (this.zoomLevel < this.maxZoom) {
+            this.zoomLevel = Math.min(this.maxZoom, this.zoomLevel + this.zoomStep);
+            this.applyZoom();
+        }
+    }
+    
+    zoomOut() {
+        if (this.zoomLevel > this.minZoom) {
+            this.zoomLevel = Math.max(this.minZoom, this.zoomLevel - this.zoomStep);
+            this.applyZoom();
+        }
+    }
+    
+    zoomToFit() {
+        const container = document.querySelector('.canvas-container-centered');
+        const containerWidth = container.clientWidth - 40; // Account for padding
+        const containerHeight = container.clientHeight - 40;
+        
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        const scaleX = containerWidth / canvasWidth;
+        const scaleY = containerHeight / canvasHeight;
+        
+        this.zoomLevel = Math.min(scaleX, scaleY, 1); // Don't zoom in beyond 100%
+        this.applyZoom();
+    }
+    
+    applyZoom() {
+        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
+        canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
+        
+        // Update zoom level display
+        document.getElementById('zoomLevel').textContent = Math.round(this.zoomLevel * 100) + '%';
+        
+        // Update zoom button states
+        document.getElementById('zoomIn').disabled = this.zoomLevel >= this.maxZoom;
+        document.getElementById('zoomOut').disabled = this.zoomLevel <= this.minZoom;
+    }
 
 }
 
