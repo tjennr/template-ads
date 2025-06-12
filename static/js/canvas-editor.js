@@ -352,6 +352,10 @@ class TemplateAdsEditor {
                     this.showTextToolbar();
                     this.updateToolbarValues();
                     this.updateToolbarPosition();
+                } else if (e.target && e.target.id === 'ctaBackground') {
+                    // Handle CTA background click - open color picker
+                    const colorInput = document.getElementById('ctaBackgroundColor');
+                    colorInput.click();
                 } else {
                     // Hide toolbar for non-text clicks
                     this.hideTextToolbar();
@@ -1116,8 +1120,8 @@ class TemplateAdsEditor {
             ry: 8,
             originX: 'center',
             originY: 'center',
-            selectable: false,
-            evented: false,
+            selectable: true,
+            evented: true,
             id: 'ctaBackground'
         });
 
@@ -1404,12 +1408,21 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
+            // Calculate responsive button width
+            const ctaTextValue = document.getElementById('ctaText').value;
+            const tempText = new fabric.Text(ctaTextValue, {
+                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold'
+            });
+            const buttonWidth = Math.max(80, tempText.width + 32);
+
             const ctaButtonBg = new fabric.Rect({
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.7,
-                width: 120,
+                width: buttonWidth,
                 height: 40,
-                fill: '#0077B5',
+                fill: document.getElementById('ctaBackgroundColor').value,
                 rx: 8,
                 ry: 8,
                 originX: 'center',
@@ -1477,13 +1490,22 @@ class TemplateAdsEditor {
             id: 'subtitle'
         });
         
+        // Calculate responsive button width
+        const ctaTextValue = document.getElementById('ctaText').value;
+        const tempText = new fabric.Text(ctaTextValue, {
+            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold'
+        });
+        const buttonWidth = Math.max(80, tempText.width + 32);
+
         // CTA Button
         const ctaButtonBg = new fabric.Rect({
             left: canvasWidth / 2,
             top: canvasHeight * 0.9,
-            width: 120,
+            width: buttonWidth,
             height: 40,
-            fill: '#0077B5',
+            fill: document.getElementById('ctaBackgroundColor').value,
             rx: 8,
             ry: 8,
             originX: 'center',
