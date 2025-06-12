@@ -43,12 +43,11 @@ class TemplateAdsEditor {
         this.setupZoomEvents();
         this.setupResizeListener();
         
-        // Load default image and template
+        // Initialize canvas with default content
         this.loadDefaultImage();
         this.loadTemplate(this.currentTemplate);
-        this.loadDefaultImage();
         this.updateFontFamilyDisplay();
-        this.applyZoom(); // Initialize zoom display
+        this.applyZoom();
         this.saveState();
     }
 
@@ -240,24 +239,21 @@ class TemplateAdsEditor {
         document.getElementById('ctaEnabled').addEventListener('change', (e) => {
             this.toggleCTA(e.target.checked);
         });
-        
-
-        
-
-
-        // CTA toggle
-        document.getElementById('ctaEnabled').addEventListener('change', (e) => {
-            this.toggleCTA(e.target.checked);
-        });
 
         // Orientation buttons
         document.getElementById('horizontalBtn').addEventListener('click', () => {
             this.changeOrientation('horizontal');
         });
 
+        document.getElementById('squareBtn').addEventListener('click', () => {
+            this.changeOrientation('square');
+        });
+
         document.getElementById('verticalBtn').addEventListener('click', () => {
             this.changeOrientation('vertical');
         });
+
+
         
         // Export dropdown functionality
         const exportMainBtn = document.getElementById('exportMainBtn');
@@ -953,11 +949,11 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+        this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
-            fontSize: parseInt(document.getElementById('ctaSize').value),
-            fill: document.getElementById('ctaColor').value,
+            fontSize: 18,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
@@ -1028,11 +1024,11 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+        this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth * 0.1 + 60,
             top: canvasHeight * 0.85,
-            fontSize: parseInt(document.getElementById('ctaSize').value),
-            fill: document.getElementById('ctaColor').value,
+            fontSize: 18,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
@@ -1344,11 +1340,11 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            this.ctaText = new fabric.Text(ctaTextValue, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.45,
-                fontSize: parseInt(document.getElementById('ctaSize').value),
-                fill: document.getElementById('ctaColor').value,
+                fontSize: 18,
+                fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
