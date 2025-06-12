@@ -143,19 +143,26 @@
 
                 <div class="sidebar-section">
                     <h6 class="sidebar-title">Export</h6>
-                    <div class="export-buttons">
-                        <button class="export-btn" id="exportPng">
-                            <i class="fas fa-file-image"></i>
-                            <span>PNG</span>
+                    <div class="export-container">
+                        <button class="export-main-btn" id="exportMainBtn">
+                            <i class="fas fa-download"></i>
+                            <span>Export Design</span>
+                            <i class="fas fa-chevron-down export-chevron"></i>
                         </button>
-                        <button class="export-btn" id="exportJpg">
-                            <i class="fas fa-file-image"></i>
-                            <span>JPG</span>
-                        </button>
-                        <button class="export-btn" id="exportPdf">
-                            <i class="fas fa-file-pdf"></i>
-                            <span>PDF</span>
-                        </button>
+                        <div class="export-dropdown hidden" id="exportDropdown">
+                            <button class="export-option" id="exportPng">
+                                <i class="fas fa-file-image"></i>
+                                <span>PNG</span>
+                            </button>
+                            <button class="export-option" id="exportJpg">
+                                <i class="fas fa-file-image"></i>
+                                <span>JPG</span>
+                            </button>
+                            <button class="export-option" id="exportPdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>PDF</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

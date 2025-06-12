@@ -268,17 +268,36 @@ class TemplateAdsEditor {
             this.changeOrientation('vertical');
         });
         
+        // Export dropdown functionality
+        const exportMainBtn = document.getElementById('exportMainBtn');
+        const exportDropdown = document.getElementById('exportDropdown');
+        
+        exportMainBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleExportDropdown();
+        });
+        
         // Export buttons
         document.getElementById('exportPng').addEventListener('click', () => {
             this.exportImage('png');
+            this.hideExportDropdown();
         });
         
         document.getElementById('exportJpg').addEventListener('click', () => {
             this.exportImage('jpg');
+            this.hideExportDropdown();
         });
         
         document.getElementById('exportPdf').addEventListener('click', () => {
             this.exportPdf();
+            this.hideExportDropdown();
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!document.querySelector('.export-container').contains(e.target)) {
+                this.hideExportDropdown();
+            }
         });
         
         // Zoom controls
@@ -2184,6 +2203,34 @@ class TemplateAdsEditor {
             // Remove clipping for full coverage
             imageObj.clipPath = null;
         }
+    }
+
+    // Export dropdown methods
+    toggleExportDropdown() {
+        const dropdown = document.getElementById('exportDropdown');
+        const mainBtn = document.getElementById('exportMainBtn');
+        
+        if (dropdown.classList.contains('hidden')) {
+            this.showExportDropdown();
+        } else {
+            this.hideExportDropdown();
+        }
+    }
+
+    showExportDropdown() {
+        const dropdown = document.getElementById('exportDropdown');
+        const mainBtn = document.getElementById('exportMainBtn');
+        
+        dropdown.classList.remove('hidden');
+        mainBtn.classList.add('active');
+    }
+
+    hideExportDropdown() {
+        const dropdown = document.getElementById('exportDropdown');
+        const mainBtn = document.getElementById('exportMainBtn');
+        
+        dropdown.classList.add('hidden');
+        mainBtn.classList.remove('active');
     }
 
 }
