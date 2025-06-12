@@ -1087,9 +1087,9 @@ class TemplateAdsEditor {
         });
         
         // Calculate responsive button width based on text
-        const ctaTextValue = document.getElementById('ctaText').value;
+        const ctaTextValue = document.getElementById('ctaText').value || 'Shop Now';
         const tempText = new fabric.Text(ctaTextValue, {
-            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fontSize: 18,
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold'
         });
@@ -1102,7 +1102,7 @@ class TemplateAdsEditor {
             top: canvasHeight * 0.8,
             width: buttonWidth,
             height: 40,
-            fill: document.getElementById('ctaBackgroundColor').value,
+            fill: '#0077B5',
             rx: 8,
             ry: 8,
             originX: 'center',
@@ -1113,11 +1113,11 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+        this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.8,
-            fontSize: parseInt(document.getElementById('ctaSize').value),
-            fill: document.getElementById('ctaColor').value,
+            fontSize: 18,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
@@ -1191,11 +1191,11 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            this.ctaText = new fabric.Text(ctaTextValue, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.88,
-                fontSize: parseInt(document.getElementById('ctaSize').value),
-                fill: document.getElementById('ctaColor').value,
+                fontSize: 18,
+                fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1243,9 +1243,9 @@ class TemplateAdsEditor {
             });
             
             // Calculate responsive button width
-            const ctaTextValue = document.getElementById('ctaText').value;
+            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
             const tempText = new fabric.Text(ctaTextValue, {
-                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fontSize: 18,
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold'
             });
@@ -1256,21 +1256,21 @@ class TemplateAdsEditor {
                 top: canvasHeight * 0.7,
                 width: buttonWidth,
                 height: 40,
-                fill: document.getElementById('ctaBackgroundColor').value,
+                fill: '#0077B5',
                 rx: 8,
                 ry: 8,
                 originX: 'center',
                 originY: 'center',
-                selectable: false,
-                evented: false,
+                selectable: true,
+                evented: true,
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            this.ctaText = new fabric.Text(ctaTextValue, {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.7,
-                fontSize: parseInt(document.getElementById('ctaSize').value),
-                fill: document.getElementById('ctaColor').value,
+                fontSize: 18,
+                fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1396,9 +1396,9 @@ class TemplateAdsEditor {
             });
             
             // Calculate responsive button width
-            const ctaTextValue = document.getElementById('ctaText').value;
+            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
             const tempText = new fabric.Text(ctaTextValue, {
-                fontSize: parseInt(document.getElementById('ctaSize').value),
+                fontSize: 18,
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold'
             });
@@ -1409,21 +1409,21 @@ class TemplateAdsEditor {
                 top: canvasHeight * 0.7,
                 width: buttonWidth,
                 height: 40,
-                fill: document.getElementById('ctaBackgroundColor').value,
+                fill: '#0077B5',
                 rx: 8,
                 ry: 8,
                 originX: 'center',
                 originY: 'center',
-                selectable: false,
-                evented: false,
+                selectable: true,
+                evented: true,
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+            this.ctaText = new fabric.Text(ctaTextValue, {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.7,
-                fontSize: parseInt(document.getElementById('ctaSize').value),
-                fill: document.getElementById('ctaColor').value,
+                fontSize: 18,
+                fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
                 textAlign: 'center',
@@ -1492,21 +1492,21 @@ class TemplateAdsEditor {
             top: canvasHeight * 0.9,
             width: buttonWidth,
             height: 40,
-            fill: document.getElementById('ctaBackgroundColor').value,
+            fill: '#0077B5',
             rx: 8,
             ry: 8,
             originX: 'center',
             originY: 'center',
-            selectable: false,
-            evented: false,
+            selectable: true,
+            evented: true,
             id: 'ctaBackground'
         });
 
-        this.ctaText = new fabric.Text(document.getElementById('ctaText').value, {
+        this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.9,
-            fontSize: parseInt(document.getElementById('ctaSize').value),
-            fill: document.getElementById('ctaColor').value,
+            fontSize: 18,
+            fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
