@@ -34,9 +34,9 @@
             </div>
         </header>
 
-        <div class="row">
+        <div class="row fixed-layout">
             <!-- Left Sidebar - Controls -->
-            <div class="col-lg-3 col-md-4">
+            <div class="col-lg-3 col-md-4 sidebar-container">
                 <div class="sidebar-section mb-4">
                     <h6 class="sidebar-title">Orientation</h6>
                     <div class="orientation-controls">
@@ -161,7 +161,7 @@
             </div>
 
             <!-- Main Canvas Area -->
-            <div class="col-lg-9 col-md-8">
+            <div class="col-lg-9 col-md-8 canvas-main-area">
                 <div class="canvas-area">
                     <div class="canvas-actions">
                         <button class="action-btn" id="undoCanvas">
@@ -173,7 +173,7 @@
                             Reset
                         </button>
                     </div>
-                    <div class="canvas-container">
+                    <div class="canvas-container-centered">
                         <canvas id="designCanvas" width="600" height="800"></canvas>
                     </div>
                 </div>
