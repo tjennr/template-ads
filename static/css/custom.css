@@ -22,23 +22,15 @@ body {
     padding-left: 15px;
 }
 
-/* Custom scrollbar for sidebar */
+/* Hide sidebar scrollbar while keeping functionality */
 .sidebar-container::-webkit-scrollbar {
-    width: 8px;
+    width: 0px;
+    background: transparent;
 }
 
-.sidebar-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.sidebar-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
-}
-
-.sidebar-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+.sidebar-container {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
 
 .canvas-main-area {
