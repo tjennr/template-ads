@@ -60,34 +60,16 @@ class TemplateAdsEditor {
     }
 
     setCanvasDimensions() {
-        const canvasContainer = document.querySelector('.canvas-container');
-        const containerWidth = canvasContainer.clientWidth - 20; // Account for margins
-        const containerHeight = window.innerHeight - 180; // Account for header and action buttons
-        
         let canvasWidth, canvasHeight;
         
         if (this.currentOrientation === 'horizontal') {
-            // Horizontal: 16:10 aspect ratio
-            const aspectRatio = 16 / 10;
-            canvasWidth = Math.min(containerWidth, 800);
-            canvasHeight = canvasWidth / aspectRatio;
-            
-            // If height exceeds container, scale down
-            if (canvasHeight > containerHeight) {
-                canvasHeight = containerHeight;
-                canvasWidth = canvasHeight * aspectRatio;
-            }
+            // Horizontal: Fixed dimensions for consistency
+            canvasWidth = 1000;
+            canvasHeight = 600;
         } else {
-            // Vertical: 3:4 aspect ratio
-            const aspectRatio = 3 / 4;
-            canvasWidth = Math.min(containerWidth * 0.7, 600); // Use 70% of width for vertical
-            canvasHeight = canvasWidth / aspectRatio;
-            
-            // If height exceeds container, scale down
-            if (canvasHeight > containerHeight) {
-                canvasHeight = containerHeight;
-                canvasWidth = canvasHeight * aspectRatio;
-            }
+            // Vertical: Fixed dimensions for consistency
+            canvasWidth = 600;
+            canvasHeight = 800;
         }
         
         this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});
@@ -103,12 +85,28 @@ class TemplateAdsEditor {
         });
         document.querySelector(`[data-orientation="${orientation}"]`).classList.add('active');
         
+        // Store current state before changing dimensions
+        const currentObjects = this.canvas.getObjects();
+        const currentMainImage = currentObjects.find(obj => obj.id === 'mainImage');
+        const currentLogo = currentObjects.find(obj => obj.id === 'logo');
+        
         // Update canvas dimensions
         this.setCanvasDimensions();
         
-        // Reload current template with new dimensions
-        this.loadTemplate(this.currentTemplate);
+        // Reposition existing elements for new orientation
+        this.repositionElementsForOrientation();
         
+        // Update main image positioning and clipping if it exists
+        if (currentMainImage) {
+            this.repositionImageForOrientation(currentMainImage);
+        }
+        
+        // Update logo positioning if it exists
+        if (currentLogo) {
+            this.repositionLogoForTemplate(this.currentTemplate);
+        }
+        
+        this.canvas.renderAll();
         this.saveState();
     }
 
@@ -2053,6 +2051,139 @@ class TemplateAdsEditor {
         // Update zoom button states
         document.getElementById('zoomIn').disabled = this.zoomLevel >= this.maxZoom;
         document.getElementById('zoomOut').disabled = this.zoomLevel <= this.minZoom;
+    }
+
+    repositionElementsForOrientation() {
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        const objects = this.canvas.getObjects();
+
+        objects.forEach(obj => {
+            if (obj.id === 'title' || obj.id === 'subtitle' || obj.id === 'ctaGroup') {
+                this.repositionTextElementForOrientation(obj, canvasWidth, canvasHeight);
+            }
+        });
+    }
+
+    repositionTextElementForOrientation(textObj, canvasWidth, canvasHeight) {
+        const templateName = this.currentTemplate;
+        const isVertical = this.currentOrientation === 'vertical';
+
+        // Get new positioning based on template and orientation
+        if (templateName === 'template4') {
+            if (isVertical) {
+                // Vertical: text on bottom half
+                if (textObj.id === 'title') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.65 });
+                } else if (textObj.id === 'subtitle') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.75 });
+                } else if (textObj.id === 'ctaGroup') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.88 });
+                }
+            } else {
+                // Horizontal: text on right half
+                if (textObj.id === 'title') {
+                    textObj.set({ left: canvasWidth * 0.75, top: canvasHeight * 0.4 });
+                } else if (textObj.id === 'subtitle') {
+                    textObj.set({ left: canvasWidth * 0.75, top: canvasHeight * 0.55 });
+                } else if (textObj.id === 'ctaGroup') {
+                    textObj.set({ left: canvasWidth * 0.75, top: canvasHeight * 0.7 });
+                }
+            }
+        } else if (templateName === 'template5') {
+            if (isVertical) {
+                // Vertical: text on top half
+                if (textObj.id === 'title') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.25 });
+                } else if (textObj.id === 'subtitle') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.35 });
+                } else if (textObj.id === 'ctaGroup') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.45 });
+                }
+            } else {
+                // Horizontal: text on left half
+                if (textObj.id === 'title') {
+                    textObj.set({ left: canvasWidth * 0.25, top: canvasHeight * 0.4 });
+                } else if (textObj.id === 'subtitle') {
+                    textObj.set({ left: canvasWidth * 0.25, top: canvasHeight * 0.55 });
+                } else if (textObj.id === 'ctaGroup') {
+                    textObj.set({ left: canvasWidth * 0.25, top: canvasHeight * 0.7 });
+                }
+            }
+        } else {
+            // Full coverage templates - center positioning
+            if (textObj.id === 'title') {
+                textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.7 });
+            } else if (textObj.id === 'subtitle') {
+                textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.8 });
+            } else if (textObj.id === 'ctaGroup') {
+                textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.9 });
+            }
+        }
+    }
+
+    repositionImageForOrientation(imageObj) {
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        const imageConfig = this.getImageConfigForTemplate(this.currentTemplate, canvasWidth, canvasHeight);
+
+        // Update image positioning and clipping
+        if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+            // Split templates: recalculate scale and clipping
+            const scaleToFitWidth = canvasWidth / imageObj.width;
+            const scaleToFitHeight = canvasHeight / imageObj.height;
+            const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+
+            imageObj.set({
+                left: canvasWidth / 2,
+                top: canvasHeight / 2,
+                originX: 'center',
+                originY: 'center',
+                scaleX: scale,
+                scaleY: scale
+            });
+
+            // Update clipping based on new orientation
+            const isVertical = this.currentOrientation === 'vertical';
+            if (this.currentTemplate === 'template4') {
+                if (isVertical) {
+                    imageObj.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                    });
+                } else {
+                    imageObj.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                }
+            } else if (this.currentTemplate === 'template5') {
+                if (isVertical) {
+                    imageObj.clipPath = new fabric.Rect({
+                        left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                    });
+                } else {
+                    imageObj.clipPath = new fabric.Rect({
+                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                }
+            }
+        } else {
+            // Full coverage templates
+            const scaleToFitWidth = canvasWidth / imageObj.width;
+            const scaleToFitHeight = canvasHeight / imageObj.height;
+            const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+
+            imageObj.set({
+                left: canvasWidth / 2,
+                top: canvasHeight / 2,
+                originX: 'center',
+                originY: 'center',
+                scaleX: scale,
+                scaleY: scale
+            });
+            
+            // Remove clipping for full coverage
+            imageObj.clipPath = null;
+        }
     }
 
 }
