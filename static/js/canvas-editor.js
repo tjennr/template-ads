@@ -63,12 +63,16 @@ class TemplateAdsEditor {
         let canvasWidth, canvasHeight;
         
         if (this.currentOrientation === 'horizontal') {
-            // Horizontal: Fixed dimensions for consistency
+            // Horizontal: 5:4 aspect ratio
             canvasWidth = 1000;
-            canvasHeight = 600;
+            canvasHeight = 800;
+        } else if (this.currentOrientation === 'square') {
+            // Square: 1:1 aspect ratio
+            canvasWidth = 800;
+            canvasHeight = 800;
         } else {
-            // Vertical: Fixed dimensions for consistency
-            canvasWidth = 600;
+            // Vertical: 4:5 aspect ratio
+            canvasWidth = 640;
             canvasHeight = 800;
         }
         
@@ -249,13 +253,9 @@ class TemplateAdsEditor {
             this.updateTextStyle('cta', 'fill', e.target.value);
         });
         
-        document.getElementById('ctaBackgroundColor').addEventListener('change', (e) => {
-            this.updateCtaBackgroundColor(e.target.value);
-        });
-        
-        document.getElementById('ctaSize').addEventListener('input', (e) => {
-            this.updateTextStyle('cta', 'fontSize', parseInt(e.target.value));
-            this.updateCtaButtonSize();
+        // Square orientation button
+        document.getElementById('squareBtn').addEventListener('click', () => {
+            this.changeOrientation('square');
         });
         
 
@@ -352,10 +352,12 @@ class TemplateAdsEditor {
                     this.showTextToolbar();
                     this.updateToolbarValues();
                     this.updateToolbarPosition();
-                } else if (e.target && e.target.id === 'ctaBackground') {
-                    // Handle CTA background click - open color picker
-                    const colorInput = document.getElementById('ctaBackgroundColor');
-                    colorInput.click();
+                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta')) {
+                    // Handle CTA click - show CTA toolbar
+                    this.selectedCtaObject = this.ctaGroup;
+                    this.showCtaToolbar();
+                    this.updateCtaToolbarValues();
+                    this.updateCtaToolbarPosition();
                 } else {
                     // Hide toolbar for non-text clicks
                     this.hideTextToolbar();
@@ -2134,6 +2136,7 @@ class TemplateAdsEditor {
     repositionTextElementForOrientation(textObj, canvasWidth, canvasHeight) {
         const templateName = this.currentTemplate;
         const isVertical = this.currentOrientation === 'vertical';
+        const isSquare = this.currentOrientation === 'square';
 
         // Get new positioning based on template and orientation
         if (templateName === 'template4') {
@@ -2145,6 +2148,15 @@ class TemplateAdsEditor {
                     textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.75 });
                 } else if (textObj.id === 'ctaGroup') {
                     textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.88 });
+                }
+            } else if (isSquare) {
+                // Square: text on bottom half
+                if (textObj.id === 'title') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.7 });
+                } else if (textObj.id === 'subtitle') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.8 });
+                } else if (textObj.id === 'ctaGroup') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.9 });
                 }
             } else {
                 // Horizontal: text on right half
@@ -2159,6 +2171,15 @@ class TemplateAdsEditor {
         } else if (templateName === 'template5') {
             if (isVertical) {
                 // Vertical: text on top half
+                if (textObj.id === 'title') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.25 });
+                } else if (textObj.id === 'subtitle') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.35 });
+                } else if (textObj.id === 'ctaGroup') {
+                    textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.45 });
+                }
+            } else if (isSquare) {
+                // Square: text on top half
                 if (textObj.id === 'title') {
                     textObj.set({ left: canvasWidth / 2, top: canvasHeight * 0.25 });
                 } else if (textObj.id === 'subtitle') {
@@ -2211,8 +2232,10 @@ class TemplateAdsEditor {
 
             // Update clipping based on new orientation
             const isVertical = this.currentOrientation === 'vertical';
+            const isSquare = this.currentOrientation === 'square';
+            
             if (this.currentTemplate === 'template4') {
-                if (isVertical) {
+                if (isVertical || isSquare) {
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
@@ -2222,7 +2245,7 @@ class TemplateAdsEditor {
                     });
                 }
             } else if (this.currentTemplate === 'template5') {
-                if (isVertical) {
+                if (isVertical || isSquare) {
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
