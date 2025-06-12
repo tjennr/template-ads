@@ -3,7 +3,7 @@
 /* Global font styling */
 body {
     font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #ffffff !important;
+    background-color: #fdfaf5 !important;
     height: 100vh;
     overflow: hidden;
 }
