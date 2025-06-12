@@ -948,6 +948,9 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
+        // Calculate responsive button width based on text
+        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
+        
         // CTA Button Text
         this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth / 2,
@@ -1006,6 +1009,9 @@ class TemplateAdsEditor {
             originY: 'center',
             id: 'subtitle'
         });
+        
+        // Calculate responsive button width based on text
+        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
         
         // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
@@ -1187,6 +1193,9 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
+            // Calculate responsive button width based on text
+            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
+            
             this.ctaText = new fabric.Text(ctaTextValue, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.88,
@@ -1340,6 +1349,9 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
+            // Calculate responsive button width based on text
+            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
+            
             this.ctaText = new fabric.Text(ctaTextValue, {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.45,
@@ -1498,6 +1510,9 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
+        // Calculate responsive button width based on text  
+        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
+        
         this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.9,
