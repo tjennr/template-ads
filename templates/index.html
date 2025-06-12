@@ -42,12 +42,16 @@
                     <div class="orientation-controls">
                         <div class="orientation-buttons">
                             <button class="orientation-btn active" id="horizontalBtn" data-orientation="horizontal">
-                                <i class="fas fa-arrows-alt-h"></i>
-                                <span>Horizontal</span>
+                                <i class="fas fa-rectangle-landscape"></i>
+                                <span>5:4</span>
+                            </button>
+                            <button class="orientation-btn" id="squareBtn" data-orientation="square">
+                                <i class="fas fa-square"></i>
+                                <span>1:1</span>
                             </button>
                             <button class="orientation-btn" id="verticalBtn" data-orientation="vertical">
-                                <i class="fas fa-arrows-alt-v"></i>
-                                <span>Vertical</span>
+                                <i class="fas fa-rectangle-portrait"></i>
+                                <span>4:5</span>
                             </button>
                         </div>
                     </div>
@@ -110,39 +114,22 @@
                             <label class="input-label">Subtitle</label>
                             <input type="text" class="clean-input" id="subtitleText" placeholder="Enter subtitle" value="Premium quality at affordable prices">
                         </div>
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="sidebar-section mb-4">
-                    <h6 class="sidebar-title">Call to Action</h6>
-                    <div class="cta-controls">
                         <div class="input-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="ctaEnabled" checked> Enable Button
-                            </label>
-                        </div>
-                        <div class="input-group" id="ctaSettings">
-                            <label class="input-label">Button Text</label>
-                            <input type="text" class="clean-input" id="ctaText" placeholder="Call to action" value="Shop Now">
-                        </div>
-                        <div class="style-row" id="ctaStyleSettings">
-                            <label class="input-label">Text Color</label>
-                            <input type="color" class="color-input-full" id="ctaColor" value="#ffffff">
-                        </div>
-                        <div class="style-row" id="ctaStyleSettings">
-                            <label class="input-label">Background Color</label>
-                            <input type="color" class="color-input-full" id="ctaBackgroundColor" value="#0077B5">
-                        </div>
-                        <div class="style-row" id="ctaStyleSettings">
-                            <label class="input-label">Font Size</label>
-                            <input type="number" class="size-input" id="ctaSize" min="12" max="30" value="18" placeholder="18">
+                            <div class="cta-inline-control">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="ctaEnabled" checked> Enable Button
+                                </label>
+                                <input type="text" class="clean-input cta-text-inline" id="ctaText" placeholder="Call to action" value="Shop Now">
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
+
+
+
+
 
 
 

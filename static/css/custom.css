@@ -621,12 +621,19 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
 }
 
-/* CTA Controls */
-.cta-controls .input-group {
-    margin-bottom: 0.75rem;
+/* CTA Inline Controls */
+.cta-inline-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.cta-controls .style-row {
+.cta-text-inline {
+    flex: 1;
+}
+
+.cta-inline-control .checkbox-label {
+    white-space: nowrap;
     margin-bottom: 0;
 }
 
