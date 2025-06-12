@@ -42,6 +42,9 @@ class TemplateAdsEditor {
         this.setupTextToolbarEvents();
         this.setupZoomEvents();
         this.setupResizeListener();
+        
+        // Load default image and template
+        this.loadDefaultImage();
         this.loadTemplate(this.currentTemplate);
         this.loadDefaultImage();
         this.updateFontFamilyDisplay();
@@ -115,27 +118,12 @@ class TemplateAdsEditor {
     }
 
     toggleCTA(enabled) {
-        const ctaSettings = document.getElementById('ctaSettings');
-        const ctaStyleSettings = document.querySelectorAll('#ctaStyleSettings');
-        
-        if (enabled) {
-            ctaSettings.style.display = 'block';
-            ctaStyleSettings.forEach(setting => setting.style.display = 'block');
-            // Show CTA button on canvas if it exists
-            if (this.ctaGroup) {
-                this.ctaGroup.set('visible', true);
-            }
-        } else {
-            ctaSettings.style.display = 'none';
-            ctaStyleSettings.forEach(setting => setting.style.display = 'none');
-            // Hide CTA button on canvas
-            if (this.ctaGroup) {
-                this.ctaGroup.set('visible', false);
-            }
+        // Show/hide CTA button on canvas
+        if (this.ctaGroup) {
+            this.ctaGroup.set('visible', enabled);
+            this.canvas.renderAll();
+            this.saveState();
         }
-        
-        this.canvas.renderAll();
-        this.saveState();
     }
 
     updateTextEffect(textType, effectType, enabled) {
@@ -248,15 +236,12 @@ class TemplateAdsEditor {
             this.updateCtaButtonSize();
         });
         
-        // CTA color and size controls (these still exist in the sidebar)
-        document.getElementById('ctaColor').addEventListener('change', (e) => {
-            this.updateTextStyle('cta', 'fill', e.target.value);
+        // CTA toggle
+        document.getElementById('ctaEnabled').addEventListener('change', (e) => {
+            this.toggleCTA(e.target.checked);
         });
         
-        // Square orientation button
-        document.getElementById('squareBtn').addEventListener('click', () => {
-            this.changeOrientation('square');
-        });
+
         
 
 
