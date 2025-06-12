@@ -2009,6 +2009,22 @@ class TemplateAdsEditor {
         this.saveState();
     }
     
+    setupZoomEvents() {
+        // Mouse wheel zoom on canvas
+        const canvasContainer = document.querySelector('.canvas-container-centered');
+        canvasContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            if (e.deltaY < 0) {
+                // Scroll up - zoom in
+                this.zoomIn();
+            } else {
+                // Scroll down - zoom out
+                this.zoomOut();
+            }
+        });
+    }
+
     // Zoom functionality
     zoomIn() {
         if (this.zoomLevel < this.maxZoom) {
