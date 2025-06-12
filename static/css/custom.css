@@ -204,9 +204,9 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 2rem;
     padding: 1.5rem;
     background: #ffffff;
-    border: 1px solid #e9ecef;
+    border: none;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .sidebar-title {
