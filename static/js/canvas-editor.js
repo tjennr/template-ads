@@ -43,6 +43,7 @@ class TemplateAdsEditor {
         this.setupCanvasEvents();
         this.setupTextToolbarEvents();
         this.setupCtaToolbarEvents();
+        this.setupBackgroundToolbarEvents();
         this.setupZoomEvents();
         this.setupResizeListener();
         

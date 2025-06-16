@@ -798,6 +798,19 @@ h1, h2, h3, h4, h5, h6 {
     border-color: #adb5bd;
 }
 
+/* Background toolbar specific styling */
+#backgroundToolbar {
+    min-width: 280px;
+}
+
+#backgroundToolbar .toolbar-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
 .toolbar-btn.active {
     background: var(--brand-primary);
     color: #ffffff;
