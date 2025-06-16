@@ -441,10 +441,11 @@ class TemplateAdsEditor {
 
         // Text color change
         if (textColorInput) {
-            textColorInput.addEventListener('change', (e) => {
+            textColorInput.addEventListener('input', (e) => {
                 if (this.selectedTextObject) {
                     this.selectedTextObject.set('fill', e.target.value);
                     this.canvas.renderAll();
+                    this.saveState();
                 }
             });
         }
@@ -547,7 +548,7 @@ class TemplateAdsEditor {
 
         // Text color change
         if (textColorInput) {
-            textColorInput.addEventListener('change', (e) => {
+            textColorInput.addEventListener('input', (e) => {
                 if (this.selectedCtaObject) {
                     const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
                     if (ctaText) {
@@ -561,7 +562,7 @@ class TemplateAdsEditor {
 
         // Button color change
         if (buttonColorInput) {
-            buttonColorInput.addEventListener('change', (e) => {
+            buttonColorInput.addEventListener('input', (e) => {
                 if (this.selectedCtaObject) {
                     const ctaBackground = this.selectedCtaObject.getObjects().find(obj => obj.id === 'ctaBackground');
                     if (ctaBackground) {
@@ -1727,15 +1728,14 @@ class TemplateAdsEditor {
                     if (this.currentTemplate === 'template4') {
                         // Split Top template positioning
                         if (isVertical) {
-                            // Vertical: scale image to fill top half area, position at center of top half
-                            const topHalfScale = Math.max(canvasWidth / clonedImg.width, (canvasHeight * 0.5) / clonedImg.height);
+                            // Vertical: position image to fill and be clipped to top half
                             clonedImg.set({
                                 left: canvasWidth / 2,
-                                top: canvasHeight * 0.25, // Center of top half
+                                top: canvasHeight / 2, // Center on full canvas, will be clipped
                                 originX: 'center',
                                 originY: 'center',
-                                scaleX: topHalfScale,
-                                scaleY: topHalfScale,
+                                scaleX: scale,
+                                scaleY: scale,
                                 id: 'mainImage'
                             });
                         } else {
@@ -1943,15 +1943,14 @@ class TemplateAdsEditor {
                     if (this.currentTemplate === 'template4') {
                         // Split Top template positioning
                         if (isVertical) {
-                            // Vertical: scale image to fill top half area, position at center of top half
-                            const topHalfScale = Math.max(canvasWidth / img.width, (canvasHeight * 0.5) / img.height);
+                            // Vertical: position image to fill and be clipped to top half
                             img.set({
                                 left: canvasWidth / 2,
-                                top: canvasHeight * 0.25, // Center of top half
+                                top: canvasHeight / 2, // Center on full canvas, will be clipped
                                 originX: 'center',
                                 originY: 'center',
-                                scaleX: topHalfScale,
-                                scaleY: topHalfScale,
+                                scaleX: scale,
+                                scaleY: scale,
                                 id: 'mainImage'
                             });
                         } else {
@@ -1997,22 +1996,22 @@ class TemplateAdsEditor {
                 
                 if (this.currentTemplate === 'template4') {
                     if (isVertical) {
-                        // Vertical: top half clipping
+                        // Vertical: top half clipping - position image properly within clip area
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
+                            left: -img.left + canvasWidth / 2,
+                            top: -img.top + canvasHeight / 2,
                             width: canvasWidth,
                             height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            absolutePositioned: false
                         });
                     } else {
                         // Horizontal: left half clipping
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
+                            left: -img.left + canvasWidth / 2,
+                            top: -img.top + canvasHeight / 2,
                             width: canvasWidth * 0.5,
                             height: canvasHeight,
-                            absolutePositioned: true
+                            absolutePositioned: false
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
