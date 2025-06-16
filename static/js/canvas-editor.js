@@ -31,6 +31,7 @@ class TemplateAdsEditor {
         this.selectedTextObject = null;
         this.ctaToolbar = document.getElementById('ctaToolbar');
         this.selectedCtaObject = null;
+        this.backgroundToolbar = document.getElementById('backgroundToolbar');
         
         // Zoom properties
         this.zoomLevel = 1;
@@ -356,6 +357,7 @@ class TemplateAdsEditor {
                     this.showTextToolbar();
                     this.updateToolbarValues();
                     this.updateToolbarPosition();
+                    this.hideBackgroundToolbar();
                 } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
                     // Handle CTA click - show CTA toolbar
                     if (e.target.id === 'ctaGroup') {
@@ -364,6 +366,17 @@ class TemplateAdsEditor {
                         // Find the parent CTA group
                         this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
                     }
+                    this.hideBackgroundToolbar();
+                } else if (!e.target) {
+                    // Clicked on background (empty canvas area)
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.showBackgroundToolbar(e.pointer);
+                } else {
+                    // Clicked on other objects (images, etc.)
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
                     
                     if (this.selectedCtaObject) {
                         this.hideTextToolbar(); // Hide text toolbar first
@@ -402,10 +415,16 @@ class TemplateAdsEditor {
                 return;
             }
             
+            // Don't hide if clicking on background toolbar
+            if (this.backgroundToolbar && this.backgroundToolbar.contains(e.target)) {
+                return;
+            }
+            
             // Hide if clicking outside the canvas entirely
             if (!this.canvas.getElement().contains(e.target)) {
                 this.hideTextToolbar();
                 this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
             }
         });
     }
@@ -2431,6 +2450,72 @@ class TemplateAdsEditor {
         
         dropdown.classList.add('hidden');
         mainBtn.classList.remove('active');
+    }
+
+    showBackgroundToolbar(pointer) {
+        if (!this.backgroundToolbar) return;
+        
+        this.backgroundToolbar.classList.remove('hidden');
+        
+        // Position the toolbar near the click point
+        const canvasContainer = this.canvas.getElement().parentElement;
+        const rect = canvasContainer.getBoundingClientRect();
+        
+        let left = pointer.x + rect.left + 20;
+        let top = pointer.y + rect.top - 50;
+        
+        // Keep toolbar within viewport
+        const toolbarWidth = 280;
+        const toolbarHeight = 60;
+        
+        if (left + toolbarWidth > window.innerWidth) {
+            left = window.innerWidth - toolbarWidth - 20;
+        }
+        if (top < 20) {
+            top = 20;
+        }
+        if (top + toolbarHeight > window.innerHeight) {
+            top = window.innerHeight - toolbarHeight - 20;
+        }
+        
+        this.backgroundToolbar.style.left = left + 'px';
+        this.backgroundToolbar.style.top = top + 'px';
+        
+        // Update color picker to current background color
+        const backgroundColorPicker = document.getElementById('backgroundColorPicker');
+        if (backgroundColorPicker) {
+            backgroundColorPicker.value = this.canvas.backgroundColor || '#ffffff';
+        }
+    }
+
+    hideBackgroundToolbar() {
+        if (this.backgroundToolbar) {
+            this.backgroundToolbar.classList.add('hidden');
+        }
+    }
+
+    setupBackgroundToolbarEvents() {
+        const backgroundColorPicker = document.getElementById('backgroundColorPicker');
+        const resetBackgroundButton = document.getElementById('resetBackgroundColor');
+
+        // Background color change
+        if (backgroundColorPicker) {
+            backgroundColorPicker.addEventListener('input', (e) => {
+                this.canvas.setBackgroundColor(e.target.value, this.canvas.renderAll.bind(this.canvas));
+                this.saveState();
+            });
+        }
+
+        // Reset background color to white
+        if (resetBackgroundButton) {
+            resetBackgroundButton.addEventListener('click', () => {
+                this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+                if (backgroundColorPicker) {
+                    backgroundColorPicker.value = '#ffffff';
+                }
+                this.saveState();
+            });
+        }
     }
 
 }
