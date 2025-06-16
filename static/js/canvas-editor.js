@@ -43,6 +43,7 @@ class TemplateAdsEditor {
         this.setupCanvasEvents();
         this.setupTextToolbarEvents();
         this.setupCtaToolbarEvents();
+        this.setupBackgroundToolbarEvents();
         this.setupZoomEvents();
         this.setupResizeListener();
         
@@ -370,10 +371,16 @@ class TemplateAdsEditor {
                         this.updateCtaToolbarValues();
                         this.updateCtaToolbarPosition();
                     }
-                } else {
-                    // Hide toolbars for non-text/non-CTA clicks
+                } else if (!e.target) {
+                    // Clicked on canvas background
                     this.hideTextToolbar();
                     this.hideCtaToolbar();
+                    this.showBackgroundToolbar(e);
+                } else {
+                    // Hide toolbars for other object clicks
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
                 }
             }, 100);
         });

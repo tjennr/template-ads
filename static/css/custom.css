@@ -291,15 +291,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--brand-primary);
 }
 
-.template-preview {
-    width: 32px;
-    height: 24px;
-    border: 1px solid #dee2e6;
-    border-radius: 3px;
-    position: relative;
-    background: #ffffff;
-    margin-bottom: 0.5rem;
-}
+/* Template preview styling removed - using text-only buttons */
 
 /* Template preview graphics removed - using text-only template buttons */
 
