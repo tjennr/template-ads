@@ -39,7 +39,7 @@ body {
     flex-direction: column;
     padding: 0;
     z-index: 1; /* Lower z-index for canvas area */
-    overflow: hidden; /* Prevent main area from scrolling */
+    overflow: visible; /* Allow canvas to overflow behind sidebar */
 }
 
 .sidebar-container {
@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     align-items: center;
     height: 100%;
-    overflow: auto; /* Allow scrolling when content is larger */
+    overflow: visible; /* Allow canvas to extend behind other elements */
     padding: 2rem 1rem;
     position: relative;
 }
@@ -139,6 +139,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    overflow: visible; /* Allow canvas to overflow behind other elements */
 }
 
 .canvas-actions {
@@ -211,7 +212,7 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
     padding: 0;
     margin: 0;
-    overflow: auto;
+    overflow: visible; /* Allow canvas to overflow behind other elements */
     min-height: 0;
 }
 
@@ -220,12 +221,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0;
     margin: 0;
     position: relative;
+    overflow: visible; /* Allow canvas to extend beyond container */
 }
 
 #designCanvas {
-    max-width: 100%;
     height: auto;
-    /* Remove border and container styling for cleaner look */
+    /* Removed max-width constraint to allow overflow behind sidebar */
 }
 
 /* Minimalist Sidebar Sections */
