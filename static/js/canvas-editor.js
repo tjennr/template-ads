@@ -1231,6 +1231,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: 100,
+            selectable: true,
+            editable: true,
             id: 'cta'
         });
 
@@ -1266,6 +1269,7 @@ class TemplateAdsEditor {
             width: canvasWidth * 0.35,
             selectable: true,
             editable: true,
+            splitByGrapheme: false,
             id: 'title'
         });
         
