@@ -20,6 +20,11 @@ def index():
     """Main page with the template ads designer"""
     return render_template('index.html')
 
+@app.route('/zoom-solutions')
+def zoom_solutions():
+    """Demo page showing different zoom solution options"""
+    return render_template('zoom-solutions.html')
+
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
     """Handle image upload for user photos and logos"""
