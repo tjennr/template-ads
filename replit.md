@@ -102,12 +102,12 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 ```
 
 ## Recent Changes
-- June 16, 2025: Removed canvas overflow constraints to allow ads to extend behind sidebar and controls when zoomed
-- June 16, 2025: Fixed floating controls layering with z-index 1000 and fixed positioning for accessibility
-- June 16, 2025: Removed template preview graphics that didn't match actual layouts, using text-only buttons
-- June 16, 2025: Fixed Split Top template for 4:5 vertical orientation to properly show image in top half only
-- June 16, 2025: Enhanced floating controls with glassmorphism effects and backdrop blur
+- June 16, 2025: Implemented always-visible floating controls for undo, reset, and zoom buttons positioned in top-right corner
+- June 16, 2025: Removed canvas border container for cleaner interface with direct canvas access
+- June 16, 2025: Added responsive floating controls that move to bottom on mobile devices with icon-only display
+- June 16, 2025: Enhanced floating controls with glassmorphism effect using backdrop-filter and hover animations
 - June 16, 2025: Implemented immediate toolbar changes using 'input' events for real-time color and font feedback
+- June 16, 2025: Fixed Split Top template image positioning with proper clipping logic for vertical orientation
 - June 16, 2025: Added "Call to Action" subheader to content sidebar for better organization
 - June 16, 2025: Created floating CTA toolbar with font family, size, text color, and button color controls
 - June 16, 2025: Created SVG graphics for all orientation buttons (5:4, 1:1, 4:5) replacing basic icons

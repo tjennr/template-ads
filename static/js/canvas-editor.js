@@ -1821,12 +1821,12 @@ class TemplateAdsEditor {
                     }
                 } else if (this.currentTemplate === 'template6') {
                     if (isVertical) {
-                        // Vertical: top half clipping for Split Top
+                        // Vertical: center area clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
+                            left: canvasWidth * 0.1,
+                            top: canvasHeight * 0.2,
+                            width: canvasWidth * 0.8,
+                            height: canvasHeight * 0.6,
                             absolutePositioned: true
                         });
                     } else {
