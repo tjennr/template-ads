@@ -1575,18 +1575,48 @@ class TemplateAdsEditor {
                     scale = Math.max(scaleToFitWidth, scaleToFitHeight);
                 }
                 
-                // Position image - center for split templates, designated area for full templates
+                // Position image based on template and orientation
                 if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
-                    // Split templates: center on full canvas then clip
-                    clonedImg.set({
-                        left: canvasWidth / 2,
-                        top: canvasHeight / 2,
-                        originX: 'center',
-                        originY: 'center',
-                        scaleX: scale,
-                        scaleY: scale,
-                        id: 'mainImage'
-                    });
+                    // Split templates: position based on orientation and template type
+                    const isVertical = this.currentOrientation === 'vertical';
+                    
+                    if (this.currentTemplate === 'template4') {
+                        // Split Top template positioning
+                        if (isVertical) {
+                            // Vertical: position image to fill top half properly
+                            clonedImg.set({
+                                left: canvasWidth / 2,
+                                top: canvasHeight * 0.25, // Center of top half
+                                originX: 'center',
+                                originY: 'center',
+                                scaleX: scale,
+                                scaleY: scale,
+                                id: 'mainImage'
+                            });
+                        } else {
+                            // Horizontal: position image to fill left half properly
+                            clonedImg.set({
+                                left: canvasWidth * 0.25, // Center of left half
+                                top: canvasHeight / 2,
+                                originX: 'center',
+                                originY: 'center',
+                                scaleX: scale,
+                                scaleY: scale,
+                                id: 'mainImage'
+                            });
+                        }
+                    } else {
+                        // Other split templates: center on full canvas then clip
+                        clonedImg.set({
+                            left: canvasWidth / 2,
+                            top: canvasHeight / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            scaleX: scale,
+                            scaleY: scale,
+                            id: 'mainImage'
+                        });
+                    }
                 } else {
                     // Full templates: position in designated area
                     clonedImg.set({
@@ -1759,18 +1789,48 @@ class TemplateAdsEditor {
                     scale = Math.max(scaleToFitWidth, scaleToFitHeight);
                 }
                 
-                // Position image - center for split templates, designated area for full templates
+                // Position image based on template and orientation
                 if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
-                    // Split templates: center on full canvas then clip
-                    img.set({
-                        left: canvasWidth / 2,
-                        top: canvasHeight / 2,
-                        originX: 'center',
-                        originY: 'center',
-                        scaleX: scale,
-                        scaleY: scale,
-                        id: 'mainImage'
-                    });
+                    // Split templates: position based on orientation and template type
+                    const isVertical = this.currentOrientation === 'vertical';
+                    
+                    if (this.currentTemplate === 'template4') {
+                        // Split Top template positioning
+                        if (isVertical) {
+                            // Vertical: position image to fill top half properly
+                            img.set({
+                                left: canvasWidth / 2,
+                                top: canvasHeight * 0.25, // Center of top half
+                                originX: 'center',
+                                originY: 'center',
+                                scaleX: scale,
+                                scaleY: scale,
+                                id: 'mainImage'
+                            });
+                        } else {
+                            // Horizontal: position image to fill left half properly
+                            img.set({
+                                left: canvasWidth * 0.25, // Center of left half
+                                top: canvasHeight / 2,
+                                originX: 'center',
+                                originY: 'center',
+                                scaleX: scale,
+                                scaleY: scale,
+                                id: 'mainImage'
+                            });
+                        }
+                    } else {
+                        // Other split templates: center on full canvas then clip
+                        img.set({
+                            left: canvasWidth / 2,
+                            top: canvasHeight / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            scaleX: scale,
+                            scaleY: scale,
+                            id: 'mainImage'
+                        });
+                    }
                 } else {
                     // Full templates: position in designated area
                     img.set({
