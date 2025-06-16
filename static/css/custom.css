@@ -71,7 +71,7 @@ h1, h2, h3, h4, h5, h6 {
     overflow: visible; /* Allow canvas to extend behind other elements */
     padding: 2rem 1rem;
     position: relative;
-    z-index: 1; /* Lower z-index to stay behind floating controls */
+    /* Removed z-index to allow proper canvas interaction */
 }
 
 .canvas-header {
@@ -230,12 +230,12 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
     position: relative;
     overflow: visible; /* Allow canvas to extend beyond container */
-    z-index: 1; /* Lower z-index to stay behind floating controls */
+    /* Removed z-index to allow proper canvas interaction */
 }
 
 #designCanvas {
     height: auto;
-    z-index: 1; /* Lower z-index to stay behind floating controls */
+    /* Removed z-index constraint to allow proper element selection */
     /* Removed max-width constraint to allow overflow behind sidebar */
 }
 

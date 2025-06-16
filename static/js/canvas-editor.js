@@ -22,7 +22,7 @@ class TemplateAdsEditor {
         // Initialize Fabric.js canvas
         this.canvas = new fabric.Canvas('designCanvas', {
             backgroundColor: '#ffffff',
-            selection: false, // Disable automatic selection to prevent conflicts
+            selection: true, // Enable selection for text editing
             preserveObjectStacking: true
         });
         
