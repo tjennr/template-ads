@@ -301,76 +301,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0.5rem;
 }
 
-.template1-preview::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 3px;
-    right: 3px;
-    height: 8px;
-    background: var(--brand-primary);
-    border-radius: 1px;
-}
-
-.template1-preview::after {
-    content: '━━━\A━━━';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--bs-light);
-    font-size: 4px;
-    line-height: 1;
-    white-space: pre;
-    text-align: center;
-}
-
-.template2-preview::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 12px;
-    height: 8px;
-    background: var(--brand-primary);
-    border-radius: 1px;
-}
-
-.template2-preview::after {
-    content: '━━━\A━━━';
-    position: absolute;
-    top: 3px;
-    left: 2px;
-    color: var(--bs-light);
-    font-size: 4px;
-    line-height: 1;
-    white-space: pre;
-}
-
-.template3-preview::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 6px;
-    background: var(--brand-primary);
-    border-radius: 1px;
-}
-
-.template3-preview::after {
-    content: '━━━\A━━━';
-    position: absolute;
-    bottom: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--bs-light);
-    font-size: 4px;
-    line-height: 1;
-    white-space: pre;
-    text-align: center;
-}
+/* Template preview graphics removed - using text-only template buttons */
 
 /* Upload Area */
 .upload-area {
