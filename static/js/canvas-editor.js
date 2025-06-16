@@ -1015,7 +1015,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - white text over image
-        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.6,
             fontSize: 40,
@@ -1029,7 +1029,7 @@ class TemplateAdsEditor {
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.7,
             fontSize: 24,
@@ -1093,7 +1093,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - white text over image
-        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.5,
             fontSize: 40,
@@ -1107,7 +1107,7 @@ class TemplateAdsEditor {
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: 24,
@@ -1333,7 +1333,7 @@ class TemplateAdsEditor {
         
         if (isVertical) {
             // Vertical: Image bottom half, text top half
-            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.2,
                 fontSize: 40,
@@ -1348,7 +1348,7 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
-            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.32,
                 fontSize: 24,
@@ -1484,7 +1484,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - positioned in bottom text area, using color scheme
-        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: 40,
@@ -1498,7 +1498,7 @@ class TemplateAdsEditor {
         });
         
         // Subtitle - positioned in bottom text area, using color scheme
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.78,
             fontSize: 24,
@@ -1511,9 +1511,9 @@ class TemplateAdsEditor {
         });
         
         // Calculate responsive button width
-        const ctaTextValue = document.getElementById('ctaText').value;
+        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
         const tempText = new fabric.Text(ctaTextValue, {
-            fontSize: parseInt(document.getElementById('ctaSize').value),
+            fontSize: 18,
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold'
         });
