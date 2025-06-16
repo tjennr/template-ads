@@ -1180,7 +1180,7 @@ class TemplateAdsEditor {
         
         if (isVertical) {
             // Vertical: Image top half, text bottom half
-            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.65,
                 fontSize: 40,
@@ -1195,7 +1195,7 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
-            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.75,
                 fontSize: 24,
@@ -1246,7 +1246,7 @@ class TemplateAdsEditor {
             });
         } else {
             // Horizontal: Image left half, text right half
-            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.4,
                 fontSize: 40,
@@ -1261,7 +1261,7 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
-            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.55,
                 fontSize: 24,
