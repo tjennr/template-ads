@@ -125,26 +125,11 @@ class TemplateAdsEditor {
         });
         document.querySelector(`[data-orientation="${orientation}"]`).classList.add('active');
         
-        // Store current state before changing dimensions
-        const currentObjects = this.canvas.getObjects();
-        const currentMainImage = currentObjects.find(obj => obj.id === 'mainImage');
-        const currentLogo = currentObjects.find(obj => obj.id === 'logo');
-        
         // Update canvas dimensions
         this.setCanvasDimensions();
         
-        // Reposition existing elements for new orientation
-        this.repositionElementsForOrientation();
-        
-        // Update main image positioning and clipping if it exists
-        if (currentMainImage) {
-            this.repositionImageForOrientation(currentMainImage);
-        }
-        
-        // Update logo positioning if it exists
-        if (currentLogo) {
-            this.repositionLogoForTemplate(this.currentTemplate);
-        }
+        // Reload current template to ensure proper layout for new orientation
+        this.loadTemplate(this.currentTemplate);
         
         this.canvas.renderAll();
         this.saveState();
@@ -678,21 +663,20 @@ class TemplateAdsEditor {
     }
     
     loadTemplate(templateName) {
+        // Clear canvas completely to prevent formatting issues
         this.canvas.clear();
         this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
         
         // Store current template name
         this.currentTemplate = templateName;
         
-        // First add any existing images to maintain proper layering
-        if (this.mainImage) {
-            this.addExistingImageToCanvas(this.mainImage, 'main');
-        }
-        if (this.logo) {
-            this.addExistingImageToCanvas(this.logo, 'logo');
-        }
+        // Clear object references to prevent stale references
+        this.titleText = null;
+        this.subtitleText = null;
+        this.ctaGroup = null;
+        this.ctaText = null;
         
-        // Then create text elements on top
+        // Create template first to establish proper layout
         const templates = {
             template1: this.createTemplate1,
             template2: this.createTemplate2,
@@ -706,11 +690,17 @@ class TemplateAdsEditor {
             templates[templateName].call(this);
         }
         
-        // Reposition existing logo for new template
-        this.repositionLogoForTemplate(templateName);
+        // Then add existing images with proper positioning
+        if (this.mainImage) {
+            this.addExistingImageToCanvas(this.mainImage, 'main');
+        }
+        if (this.logo) {
+            this.addExistingImageToCanvas(this.logo, 'logo');
+        }
         
         // Ensure proper final layering: background images at bottom, text on top
         this.enforceProperLayering();
+        this.canvas.renderAll();
     }
     
     enforceProperLayering() {

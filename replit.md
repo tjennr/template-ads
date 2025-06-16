@@ -101,6 +101,12 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 └── pyproject.toml     # Python dependencies
 ```
 
+## Recent Changes
+- June 16, 2025: Fixed JavaScript null value errors in all template methods by adding safe null checks
+- June 16, 2025: Improved canvas initialization and template switching to prevent formatting issues when changing orientations
+- June 16, 2025: Simplified orientation change functionality by reloading templates completely instead of repositioning elements
+- June 16, 2025: Split Top template now works correctly in all orientations without console errors
+
 ## Changelog
 - June 16, 2025. Initial setup
 
