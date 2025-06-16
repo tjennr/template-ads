@@ -111,6 +111,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 16, 2025: Added "Call to Action" subheader to content sidebar for better organization
 - June 16, 2025: Created floating CTA toolbar with font family, size, text color, and button color controls
 - June 16, 2025: Created SVG graphics for all orientation buttons (5:4, 1:1, 4:5) replacing basic icons
+- June 16, 2025: Fixed all split template clipping logic for 4:5 vertical orientation - Split Left shows image in top half, Split Right in bottom half, Split Top in center area
+- June 16, 2025: Standardized Split Left text sizing and positioning to match Split Right in horizontal orientation for consistency
 
 ## Changelog
 - June 16, 2025. Initial setup
