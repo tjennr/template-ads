@@ -1761,10 +1761,10 @@ class TemplateAdsEditor {
                         targetTop = targetHeight / 2;
                     }
                     
-                    // Recalculate scale for the target area
+                    // Recalculate scale to fill the target area
                     const scaleToFitWidth = targetWidth / clonedImg.width;
                     const scaleToFitHeight = targetHeight / clonedImg.height;
-                    const splitScale = Math.min(scaleToFitWidth, scaleToFitHeight);
+                    const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
                     clonedImg.set({
                         left: targetLeft,
@@ -1788,8 +1788,23 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // No clipping needed since image is properly sized and positioned
-                clonedImg.clipPath = null;
+                // Add clipping to contain image within its designated area
+                if (this.currentTemplate === 'template4') {
+                    // Split Left: Clip to left half
+                    clonedImg.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template5') {
+                    // Split Right: Clip to right half
+                    clonedImg.clipPath = new fabric.Rect({
+                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template6') {
+                    // Split Top: Clip to top half
+                    clonedImg.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                    });
+                }
                 
                 // Remove any existing main image first
                 const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
@@ -1910,10 +1925,10 @@ class TemplateAdsEditor {
                         targetTop = targetHeight / 2;
                     }
                     
-                    // Recalculate scale for the target area
+                    // Recalculate scale to fill the target area
                     const scaleToFitWidth = targetWidth / img.width;
                     const scaleToFitHeight = targetHeight / img.height;
-                    const splitScale = Math.min(scaleToFitWidth, scaleToFitHeight);
+                    const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
                     img.set({
                         left: targetLeft,
@@ -1937,8 +1952,23 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // No clipping needed since image is properly sized and positioned
-                img.clipPath = null;
+                // Add clipping to contain image within its designated area
+                if (this.currentTemplate === 'template4') {
+                    // Split Left: Clip to left half
+                    img.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template5') {
+                    // Split Right: Clip to right half
+                    img.clipPath = new fabric.Rect({
+                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template6') {
+                    // Split Top: Clip to top half
+                    img.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                    });
+                }
                 
                 // Remove existing main image
                 const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
@@ -2338,10 +2368,10 @@ class TemplateAdsEditor {
                 targetTop = targetHeight / 2;
             }
             
-            // Scale image to fit within the target area (not exceed it)
+            // Scale image to fill the target area completely
             const scaleToFitWidth = targetWidth / imageObj.width;
             const scaleToFitHeight = targetHeight / imageObj.height;
-            const scale = Math.min(scaleToFitWidth, scaleToFitHeight);
+            const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
 
             imageObj.set({
                 left: targetLeft,
@@ -2352,8 +2382,23 @@ class TemplateAdsEditor {
                 scaleY: scale
             });
             
-            // Remove clipping since image is now properly sized and positioned
-            imageObj.clipPath = null;
+            // Add clipping to contain image within its designated area
+            if (this.currentTemplate === 'template4') {
+                // Split Left: Clip to left half
+                imageObj.clipPath = new fabric.Rect({
+                    left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                });
+            } else if (this.currentTemplate === 'template5') {
+                // Split Right: Clip to right half
+                imageObj.clipPath = new fabric.Rect({
+                    left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                });
+            } else if (this.currentTemplate === 'template6') {
+                // Split Top: Clip to top half
+                imageObj.clipPath = new fabric.Rect({
+                    left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                });
+            }
         } else {
             // Full coverage templates
             const scaleToFitWidth = canvasWidth / imageObj.width;
