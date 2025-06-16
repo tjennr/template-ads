@@ -1172,8 +1172,8 @@ class TemplateAdsEditor {
             // Vertical: Image top half, text bottom half
             this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
                 left: canvasWidth / 2,
-                top: canvasHeight * 0.65,
-                fontSize: 40,
+                top: canvasHeight * 0.58,
+                fontSize: 32,
                 fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
@@ -1181,27 +1181,27 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'title',
-                width: canvasWidth * 0.8,
+                width: canvasWidth * 0.85,
                 splitByGrapheme: false
             });
             
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
                 left: canvasWidth / 2,
-                top: canvasHeight * 0.75,
-                fontSize: 24,
+                top: canvasHeight * 0.7,
+                fontSize: 20,
                 fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
                 originY: 'center',
                 id: 'subtitle',
-                width: canvasWidth * 0.8,
+                width: canvasWidth * 0.85,
                 splitByGrapheme: false
             });
             
             const ctaButtonBg = new fabric.Rect({
                 left: canvasWidth / 2,
-                top: canvasHeight * 0.88,
+                top: canvasHeight * 0.85,
                 width: 120,
                 height: 40,
                 fill: '#0077B5',
@@ -1209,14 +1209,14 @@ class TemplateAdsEditor {
                 ry: 8,
                 originX: 'center',
                 originY: 'center',
-                selectable: false,
-                evented: false,
+                selectable: true,
+                evented: true,
                 id: 'ctaBackground'
             });
 
             this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth / 2,
-                top: canvasHeight * 0.88,
+                top: canvasHeight * 0.85,
                 fontSize: 18,
                 fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -1229,7 +1229,7 @@ class TemplateAdsEditor {
 
             this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
                 left: canvasWidth / 2,
-                top: canvasHeight * 0.88,
+                top: canvasHeight * 0.85,
                 originX: 'center',
                 originY: 'center',
                 id: 'ctaGroup'
