@@ -42,6 +42,7 @@ class TemplateAdsEditor {
         this.setupEventListeners();
         this.setupCanvasEvents();
         this.setupTextToolbarEvents();
+        this.setupCtaToolbarEvents();
         this.setupZoomEvents();
         this.setupResizeListener();
         
@@ -368,10 +369,12 @@ class TemplateAdsEditor {
             }, 100);
         });
 
-        // Ensure toolbar updates position when text is moved
+        // Ensure toolbar updates position when text or CTA is moved
         this.canvas.on('object:moving', (e) => {
             if (e.target === this.selectedTextObject) {
                 this.updateToolbarPosition();
+            } else if (e.target === this.selectedCtaObject) {
+                this.updateCtaToolbarPosition();
             }
         });
 
@@ -498,6 +501,70 @@ class TemplateAdsEditor {
         }
     }
 
+    setupCtaToolbarEvents() {
+        // Get CTA toolbar elements
+        const fontFamilySelect = document.getElementById('ctaToolbarFontFamily');
+        const fontSizeInput = document.getElementById('ctaToolbarFontSize');
+        const textColorInput = document.getElementById('ctaToolbarTextColor');
+        const buttonColorInput = document.getElementById('ctaToolbarButtonColor');
+
+        // Font family change
+        if (fontFamilySelect) {
+            fontFamilySelect.addEventListener('change', (e) => {
+                if (this.selectedCtaObject) {
+                    const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
+                    if (ctaText) {
+                        ctaText.set('fontFamily', e.target.value);
+                        this.canvas.renderAll();
+                        this.saveState();
+                    }
+                }
+            });
+        }
+
+        // Font size change
+        if (fontSizeInput) {
+            fontSizeInput.addEventListener('input', (e) => {
+                if (this.selectedCtaObject) {
+                    const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
+                    if (ctaText) {
+                        ctaText.set('fontSize', parseInt(e.target.value) || 18);
+                        this.canvas.renderAll();
+                        this.saveState();
+                    }
+                }
+            });
+        }
+
+        // Text color change
+        if (textColorInput) {
+            textColorInput.addEventListener('change', (e) => {
+                if (this.selectedCtaObject) {
+                    const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
+                    if (ctaText) {
+                        ctaText.set('fill', e.target.value);
+                        this.canvas.renderAll();
+                        this.saveState();
+                    }
+                }
+            });
+        }
+
+        // Button color change
+        if (buttonColorInput) {
+            buttonColorInput.addEventListener('change', (e) => {
+                if (this.selectedCtaObject) {
+                    const ctaBackground = this.selectedCtaObject.getObjects().find(obj => obj.id === 'ctaBackground');
+                    if (ctaBackground) {
+                        ctaBackground.set('fill', e.target.value);
+                        this.canvas.renderAll();
+                        this.saveState();
+                    }
+                }
+            });
+        }
+    }
+
     handleTextSelection(e) {
         const selectedObject = e.selected[0];
         
@@ -518,6 +585,58 @@ class TemplateAdsEditor {
     hideTextToolbar() {
         this.textToolbar.classList.add('hidden');
         this.selectedTextObject = null;
+    }
+
+    showCtaToolbar() {
+        this.ctaToolbar.classList.remove('hidden');
+    }
+
+    hideCtaToolbar() {
+        this.ctaToolbar.classList.add('hidden');
+        this.selectedCtaObject = null;
+    }
+
+    updateCtaToolbarValues() {
+        if (!this.selectedCtaObject) return;
+
+        const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
+        const ctaBackground = this.selectedCtaObject.getObjects().find(obj => obj.id === 'ctaBackground');
+
+        const fontFamilySelect = document.getElementById('ctaToolbarFontFamily');
+        const fontSizeInput = document.getElementById('ctaToolbarFontSize');
+        const textColorInput = document.getElementById('ctaToolbarTextColor');
+        const buttonColorInput = document.getElementById('ctaToolbarButtonColor');
+
+        if (ctaText && fontFamilySelect) {
+            fontFamilySelect.value = ctaText.fontFamily || 'Source Sans Pro, sans-serif';
+        }
+        
+        if (ctaText && fontSizeInput) {
+            fontSizeInput.value = Math.round(ctaText.fontSize || 18);
+        }
+        
+        if (ctaText && textColorInput) {
+            textColorInput.value = ctaText.fill || '#ffffff';
+        }
+        
+        if (ctaBackground && buttonColorInput) {
+            buttonColorInput.value = ctaBackground.fill || '#0077B5';
+        }
+    }
+
+    updateCtaToolbarPosition() {
+        if (!this.selectedCtaObject) return;
+
+        const canvasContainer = this.canvas.getElement().parentElement;
+        const canvasRect = canvasContainer.getBoundingClientRect();
+        const ctaRect = this.selectedCtaObject.getBoundingRect();
+
+        const zoom = this.canvas.getZoom();
+        const ctaScreenX = canvasRect.left + (ctaRect.left + ctaRect.width / 2) * zoom;
+        const ctaScreenY = canvasRect.top + ctaRect.top * zoom - 10;
+
+        this.ctaToolbar.style.left = `${ctaScreenX - this.ctaToolbar.offsetWidth / 2}px`;
+        this.ctaToolbar.style.top = `${ctaScreenY - this.ctaToolbar.offsetHeight}px`;
     }
 
     updateToolbarValues() {
