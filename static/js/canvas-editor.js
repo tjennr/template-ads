@@ -384,10 +384,6 @@ class TemplateAdsEditor {
                         this.updateCtaToolbarValues();
                         this.updateCtaToolbarPosition();
                     }
-                } else {
-                    // Hide toolbars for non-text/non-CTA clicks
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
                 }
             }, 100);
         });
