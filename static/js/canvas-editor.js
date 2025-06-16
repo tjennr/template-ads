@@ -355,12 +355,21 @@ class TemplateAdsEditor {
                     this.showTextToolbar();
                     this.updateToolbarValues();
                     this.updateToolbarPosition();
-                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta')) {
+                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
                     // Handle CTA click - show CTA toolbar
-                    this.selectedCtaObject = this.ctaGroup;
-                    this.showCtaToolbar();
-                    this.updateCtaToolbarValues();
-                    this.updateCtaToolbarPosition();
+                    if (e.target.id === 'ctaGroup') {
+                        this.selectedCtaObject = e.target;
+                    } else {
+                        // Find the parent CTA group
+                        this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
+                    }
+                    
+                    if (this.selectedCtaObject) {
+                        this.hideTextToolbar(); // Hide text toolbar first
+                        this.showCtaToolbar();
+                        this.updateCtaToolbarValues();
+                        this.updateCtaToolbarPosition();
+                    }
                 } else {
                     // Hide toolbars for non-text/non-CTA clicks
                     this.hideTextToolbar();
@@ -628,15 +637,22 @@ class TemplateAdsEditor {
         if (!this.selectedCtaObject) return;
 
         const canvasContainer = this.canvas.getElement().parentElement;
-        const canvasRect = canvasContainer.getBoundingClientRect();
         const ctaRect = this.selectedCtaObject.getBoundingRect();
-
         const zoom = this.canvas.getZoom();
-        const ctaScreenX = canvasRect.left + (ctaRect.left + ctaRect.width / 2) * zoom;
-        const ctaScreenY = canvasRect.top + ctaRect.top * zoom - 10;
+        
+        // Position relative to canvas container
+        const ctaX = (ctaRect.left + ctaRect.width / 2) * zoom;
+        const ctaY = ctaRect.top * zoom - 10;
 
-        this.ctaToolbar.style.left = `${ctaScreenX - this.ctaToolbar.offsetWidth / 2}px`;
-        this.ctaToolbar.style.top = `${ctaScreenY - this.ctaToolbar.offsetHeight}px`;
+        // Ensure toolbar is positioned relative to canvas container
+        this.ctaToolbar.style.position = 'absolute';
+        this.ctaToolbar.style.left = `${ctaX - this.ctaToolbar.offsetWidth / 2}px`;
+        this.ctaToolbar.style.top = `${ctaY - this.ctaToolbar.offsetHeight}px`;
+        
+        // Append to canvas container for proper positioning
+        if (this.ctaToolbar.parentElement !== canvasContainer) {
+            canvasContainer.appendChild(this.ctaToolbar);
+        }
     }
 
     updateToolbarValues() {
@@ -1711,25 +1727,27 @@ class TemplateAdsEditor {
                     if (this.currentTemplate === 'template4') {
                         // Split Top template positioning
                         if (isVertical) {
-                            // Vertical: position image higher to fill top half when clipped
+                            // Vertical: scale image to fill top half area, position at center of top half
+                            const topHalfScale = Math.max(canvasWidth / clonedImg.width, (canvasHeight * 0.5) / clonedImg.height);
                             clonedImg.set({
                                 left: canvasWidth / 2,
-                                top: 0, // Position at top edge
+                                top: canvasHeight * 0.25, // Center of top half
                                 originX: 'center',
-                                originY: 'top',
-                                scaleX: scale,
-                                scaleY: scale,
+                                originY: 'center',
+                                scaleX: topHalfScale,
+                                scaleY: topHalfScale,
                                 id: 'mainImage'
                             });
                         } else {
-                            // Horizontal: position image at left edge to fill left half when clipped
+                            // Horizontal: scale image to fill left half area, position at center of left half
+                            const leftHalfScale = Math.max((canvasWidth * 0.5) / clonedImg.width, canvasHeight / clonedImg.height);
                             clonedImg.set({
-                                left: 0, // Position at left edge
+                                left: canvasWidth * 0.25, // Center of left half
                                 top: canvasHeight / 2,
-                                originX: 'left',
+                                originX: 'center',
                                 originY: 'center',
-                                scaleX: scale,
-                                scaleY: scale,
+                                scaleX: leftHalfScale,
+                                scaleY: leftHalfScale,
                                 id: 'mainImage'
                             });
                         }
@@ -1925,25 +1943,27 @@ class TemplateAdsEditor {
                     if (this.currentTemplate === 'template4') {
                         // Split Top template positioning
                         if (isVertical) {
-                            // Vertical: position image higher to fill top half when clipped
+                            // Vertical: scale image to fill top half area, position at center of top half
+                            const topHalfScale = Math.max(canvasWidth / img.width, (canvasHeight * 0.5) / img.height);
                             img.set({
                                 left: canvasWidth / 2,
-                                top: 0, // Position at top edge
+                                top: canvasHeight * 0.25, // Center of top half
                                 originX: 'center',
-                                originY: 'top',
-                                scaleX: scale,
-                                scaleY: scale,
+                                originY: 'center',
+                                scaleX: topHalfScale,
+                                scaleY: topHalfScale,
                                 id: 'mainImage'
                             });
                         } else {
-                            // Horizontal: position image at left edge to fill left half when clipped
+                            // Horizontal: scale image to fill left half area, position at center of left half
+                            const leftHalfScale = Math.max((canvasWidth * 0.5) / img.width, canvasHeight / img.height);
                             img.set({
-                                left: 0, // Position at left edge
+                                left: canvasWidth * 0.25, // Center of left half
                                 top: canvasHeight / 2,
-                                originX: 'left',
+                                originX: 'center',
                                 originY: 'center',
-                                scaleX: scale,
-                                scaleY: scale,
+                                scaleX: leftHalfScale,
+                                scaleY: leftHalfScale,
                                 id: 'mainImage'
                             });
                         }

@@ -712,7 +712,27 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Floating Text Toolbar */
+/* Floating Toolbars */
+.floating-toolbar {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 1000;
+    transition: all 0.2s ease;
+    top: -9999px; /* Hide by default until positioned */
+    left: -9999px;
+}
+
+.floating-toolbar.hidden {
+    display: none !important;
+}
+
 .text-toolbar {
     position: fixed;
     background: #ffffff;
