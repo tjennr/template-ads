@@ -29,6 +29,8 @@ class TemplateAdsEditor {
         // Floating toolbar properties
         this.textToolbar = document.getElementById('textToolbar');
         this.selectedTextObject = null;
+        this.ctaToolbar = document.getElementById('ctaToolbar');
+        this.selectedCtaObject = null;
         
         // Zoom properties
         this.zoomLevel = 1;
@@ -359,8 +361,9 @@ class TemplateAdsEditor {
                     this.updateCtaToolbarValues();
                     this.updateCtaToolbarPosition();
                 } else {
-                    // Hide toolbar for non-text clicks
+                    // Hide toolbars for non-text/non-CTA clicks
                     this.hideTextToolbar();
+                    this.hideCtaToolbar();
                 }
             }, 100);
         });
@@ -381,9 +384,15 @@ class TemplateAdsEditor {
                 return;
             }
             
+            // Don't hide if clicking on CTA toolbar
+            if (this.ctaToolbar && this.ctaToolbar.contains(e.target)) {
+                return;
+            }
+            
             // Hide if clicking outside the canvas entirely
             if (!this.canvas.getElement().contains(e.target)) {
                 this.hideTextToolbar();
+                this.hideCtaToolbar();
             }
         });
     }
@@ -1583,22 +1592,22 @@ class TemplateAdsEditor {
                     if (this.currentTemplate === 'template4') {
                         // Split Top template positioning
                         if (isVertical) {
-                            // Vertical: position image to fill top half properly
+                            // Vertical: position image higher to fill top half when clipped
                             clonedImg.set({
                                 left: canvasWidth / 2,
-                                top: canvasHeight * 0.25, // Center of top half
+                                top: 0, // Position at top edge
                                 originX: 'center',
-                                originY: 'center',
+                                originY: 'top',
                                 scaleX: scale,
                                 scaleY: scale,
                                 id: 'mainImage'
                             });
                         } else {
-                            // Horizontal: position image to fill left half properly
+                            // Horizontal: position image at left edge to fill left half when clipped
                             clonedImg.set({
-                                left: canvasWidth * 0.25, // Center of left half
+                                left: 0, // Position at left edge
                                 top: canvasHeight / 2,
-                                originX: 'center',
+                                originX: 'left',
                                 originY: 'center',
                                 scaleX: scale,
                                 scaleY: scale,
@@ -1797,22 +1806,22 @@ class TemplateAdsEditor {
                     if (this.currentTemplate === 'template4') {
                         // Split Top template positioning
                         if (isVertical) {
-                            // Vertical: position image to fill top half properly
+                            // Vertical: position image higher to fill top half when clipped
                             img.set({
                                 left: canvasWidth / 2,
-                                top: canvasHeight * 0.25, // Center of top half
+                                top: 0, // Position at top edge
                                 originX: 'center',
-                                originY: 'center',
+                                originY: 'top',
                                 scaleX: scale,
                                 scaleY: scale,
                                 id: 'mainImage'
                             });
                         } else {
-                            // Horizontal: position image to fill left half properly
+                            // Horizontal: position image at left edge to fill left half when clipped
                             img.set({
-                                left: canvasWidth * 0.25, // Center of left half
+                                left: 0, // Position at left edge
                                 top: canvasHeight / 2,
-                                originX: 'center',
+                                originX: 'left',
                                 originY: 'center',
                                 scaleX: scale,
                                 scaleY: scale,

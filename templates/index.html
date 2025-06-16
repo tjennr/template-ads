@@ -115,6 +115,7 @@
                             <input type="text" class="clean-input" id="subtitleText" placeholder="Enter subtitle" value="Premium quality at affordable prices">
                         </div>
                         <div class="input-group">
+                            <label class="input-label">Call to Action</label>
                             <div class="cta-inline-control">
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="ctaEnabled" checked> Enable Button
@@ -226,6 +227,35 @@
         
         <div class="toolbar-section">
             <input type="color" class="toolbar-color-input" id="toolbarEffectColor" title="Effect Color">
+        </div>
+    </div>
+
+    <!-- CTA Button Floating Toolbar -->
+    <div class="floating-toolbar hidden" id="ctaToolbar">
+        <div class="toolbar-section">
+            <select class="toolbar-font-select" id="ctaToolbarFontFamily">
+                <option value="Source Sans Pro, sans-serif">Source Sans Pro</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Open Sans">Open Sans</option>
+                <option value="Lato">Lato</option>
+                <option value="Montserrat">Montserrat</option>
+            </select>
+        </div>
+        
+        <div class="toolbar-section">
+            <input type="number" class="toolbar-size-input" id="ctaToolbarFontSize" min="12" max="30" placeholder="Size">
+        </div>
+        
+        <div class="toolbar-section">
+            <input type="color" class="toolbar-color-input" id="ctaToolbarTextColor" title="Text Color">
+        </div>
+        
+        <div class="toolbar-section">
+            <input type="color" class="toolbar-color-input" id="ctaToolbarButtonColor" title="Button Color">
         </div>
     </div>
 
