@@ -72,8 +72,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 scaleX: scale,
                 scaleY: scale,
-                selectable: false,
-                evented: false,
+                selectable: true,
+                evented: true,
                 id: 'mainImage'
             });
             

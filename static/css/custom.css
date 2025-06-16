@@ -265,8 +265,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .template-btn {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 0.75rem 0.5rem;
     border: 2px solid #e9ecef;
     border-radius: 8px;
@@ -274,8 +274,9 @@ h1, h2, h3, h4, h5, h6 {
     color: #495057;
     transition: all 0.2s ease;
     cursor: pointer;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 500;
+    text-align: center;
 }
 
 .template-btn:hover {
@@ -291,86 +292,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--brand-primary);
 }
 
-.template-preview {
-    width: 32px;
-    height: 24px;
-    border: 1px solid #dee2e6;
-    border-radius: 3px;
-    position: relative;
-    background: #ffffff;
-    margin-bottom: 0.5rem;
-}
-
-.template1-preview::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 3px;
-    right: 3px;
-    height: 8px;
-    background: var(--brand-primary);
-    border-radius: 1px;
-}
-
-.template1-preview::after {
-    content: '━━━\A━━━';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--bs-light);
-    font-size: 4px;
-    line-height: 1;
-    white-space: pre;
-    text-align: center;
-}
-
-.template2-preview::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 12px;
-    height: 8px;
-    background: var(--brand-primary);
-    border-radius: 1px;
-}
-
-.template2-preview::after {
-    content: '━━━\A━━━';
-    position: absolute;
-    top: 3px;
-    left: 2px;
-    color: var(--bs-light);
-    font-size: 4px;
-    line-height: 1;
-    white-space: pre;
-}
-
-.template3-preview::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 6px;
-    background: var(--brand-primary);
-    border-radius: 1px;
-}
-
-.template3-preview::after {
-    content: '━━━\A━━━';
-    position: absolute;
-    bottom: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--bs-light);
-    font-size: 4px;
-    line-height: 1;
-    white-space: pre;
-    text-align: center;
-}
+/* Template preview CSS removed - using text-only buttons */
 
 /* Upload Area */
 .upload-area {
