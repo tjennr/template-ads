@@ -146,7 +146,10 @@ h1, h2, h3, h4, h5, h6 {
 .canvas-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 20px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
     justify-content: center;
     align-items: center;
 }
@@ -156,10 +159,14 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.95);
     border: 1px solid #dee2e6;
     border-radius: 8px;
     padding: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+    position: relative;
 }
 
 .zoom-btn {
@@ -677,7 +684,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: #f8f9fa;
+    background: rgba(255, 255, 255, 0.95);
     border: 1px solid #dee2e6;
     border-radius: 6px;
     color: #495057;
@@ -685,6 +692,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+    position: relative;
 }
 
 .action-btn:hover {
