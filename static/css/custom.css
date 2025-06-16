@@ -702,10 +702,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .canvas-container canvas {
-    max-width: 100%;
-    max-height: 100%;
     object-fit: contain;
-    /* Removed border styling for cleaner look */
+    /* Removed all size constraints to allow overflow behind sidebar */
 }
 
 /* Responsive adjustments */
