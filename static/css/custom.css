@@ -39,6 +39,7 @@ body {
     flex-direction: column;
     padding: 0;
     z-index: 1; /* Lower z-index for canvas area */
+    overflow: hidden; /* Prevent main area from scrolling */
 }
 
 .sidebar-container {
@@ -66,14 +67,23 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    height: 100%;
+    overflow: auto; /* Allow scrolling when content is larger */
     padding: 2rem 1rem;
+    position: relative;
 }
 
 .canvas-header {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    position: sticky; /* Keep header visible when scrolling */
+    top: 2rem;
+    z-index: 100;
+    background: #fdfaf5;
+    padding: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .canvas-action-btn {
@@ -191,13 +201,17 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 12px;
     padding: 0;
     margin: 0;
+    overflow: auto; /* Allow scrolling when canvas is larger than container */
+    min-height: 0; /* Prevent flex item from growing beyond container */
 }
 
 .canvas-container {
     background: transparent;
     border-radius: 12px;
-    padding: 0;
+    padding: 2rem; /* Add padding to ensure zoomed content has space */
     margin: 0;
+    position: relative;
+    min-width: fit-content; /* Allow container to grow with zoomed content */
 }
 
 #designCanvas {
