@@ -1781,22 +1781,22 @@ class TemplateAdsEditor {
                 
                 if (this.currentTemplate === 'template4') {
                     if (isVertical) {
-                        // Vertical: top half clipping
+                        // Vertical: top half clipping - position image properly within clip area
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
+                            left: -clonedImg.left + canvasWidth / 2,
+                            top: -clonedImg.top + canvasHeight / 2,
                             width: canvasWidth,
                             height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            absolutePositioned: false
                         });
                     } else {
                         // Horizontal: left half clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
+                            left: -clonedImg.left + canvasWidth / 2,
+                            top: -clonedImg.top + canvasHeight / 2,
                             width: canvasWidth * 0.5,
                             height: canvasHeight,
-                            absolutePositioned: true
+                            absolutePositioned: false
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
