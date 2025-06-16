@@ -1382,9 +1382,9 @@ class TemplateAdsEditor {
         } else {
             // Horizontal: Image left half, text right half
             this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
-                left: canvasWidth * 0.625, // Center of right half (0.5 + 0.25/2)
+                left: canvasWidth * 0.75, // Match Split Right positioning
                 top: canvasHeight * 0.4,
-                fontSize: 32,
+                fontSize: 40, // Match Split Right font size
                 fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
@@ -1392,21 +1392,21 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'title',
-                width: canvasWidth * 0.4,
+                width: canvasWidth * 0.35, // Match Split Right width
                 splitByGrapheme: false
             });
             
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-                left: canvasWidth * 0.625, // Center of right half
+                left: canvasWidth * 0.75, // Match Split Right positioning
                 top: canvasHeight * 0.55,
-                fontSize: 18,
+                fontSize: 24, // Match Split Right font size
                 fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
                 originY: 'center',
                 id: 'subtitle',
-                width: canvasWidth * 0.4,
+                width: canvasWidth * 0.35, // Match Split Right width
                 splitByGrapheme: false
             });
             
@@ -1420,7 +1420,7 @@ class TemplateAdsEditor {
             const buttonWidth = Math.max(80, tempText.width + 32);
 
             const ctaButtonBg = new fabric.Rect({
-                left: canvasWidth * 0.625, // Center of right half
+                left: canvasWidth * 0.75, // Match Split Right positioning
                 top: canvasHeight * 0.7,
                 width: buttonWidth,
                 height: 40,
@@ -1435,7 +1435,7 @@ class TemplateAdsEditor {
             });
 
             this.ctaText = new fabric.Text('Shop Now', {
-                left: canvasWidth * 0.625, // Center of right half
+                left: canvasWidth * 0.75, // Match Split Right positioning
                 top: canvasHeight * 0.7,
                 fontSize: 18,
                 fill: '#ffffff',
@@ -1448,7 +1448,7 @@ class TemplateAdsEditor {
             });
 
             this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-                left: canvasWidth * 0.625, // Center of right half
+                left: canvasWidth * 0.75, // Match Split Right positioning
                 top: canvasHeight * 0.7,
                 originX: 'center',
                 originY: 'center',
@@ -1766,63 +1766,36 @@ class TemplateAdsEditor {
                 const isVertical = this.currentOrientation === 'vertical';
                 
                 if (this.currentTemplate === 'template4') {
+                    // Split Left: Left half in horizontal, Top half in vertical
                     if (isVertical) {
-                        // Vertical: top half clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                         });
                     } else {
-                        // Horizontal: left half clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth * 0.5,
-                            height: canvasHeight,
-                            absolutePositioned: true
+                            left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
+                    // Split Right: Right half in horizontal, Bottom half in vertical
                     if (isVertical) {
-                        // Vertical: bottom half clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: canvasHeight * 0.5,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                         });
                     } else {
-                        // Horizontal: right half clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: canvasWidth * 0.5,
-                            top: 0,
-                            width: canvasWidth * 0.5,
-                            height: canvasHeight,
-                            absolutePositioned: true
+                            left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                         });
                     }
                 } else if (this.currentTemplate === 'template6') {
+                    // Split Top: Top half in horizontal, Center area in vertical
                     if (isVertical) {
-                        // Vertical: center area clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: canvasWidth * 0.1,
-                            top: canvasHeight * 0.2,
-                            width: canvasWidth * 0.8,
-                            height: canvasHeight * 0.6,
-                            absolutePositioned: true
+                            left: canvasWidth * 0.1, top: canvasHeight * 0.2, width: canvasWidth * 0.8, height: canvasHeight * 0.4, absolutePositioned: true
                         });
                     } else {
-                        // Horizontal: top half clipping
                         clonedImg.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                         });
                     }
                 }
@@ -1967,63 +1940,36 @@ class TemplateAdsEditor {
                 const isVertical = this.currentOrientation === 'vertical';
                 
                 if (this.currentTemplate === 'template4') {
+                    // Split Left: Left half in horizontal, Top half in vertical
                     if (isVertical) {
-                        // Vertical: top half clipping
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                         });
                     } else {
-                        // Horizontal: left half clipping
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth * 0.5,
-                            height: canvasHeight,
-                            absolutePositioned: true
+                            left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
+                    // Split Right: Right half in horizontal, Bottom half in vertical
                     if (isVertical) {
-                        // Vertical: bottom half clipping
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: canvasHeight * 0.5,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                         });
                     } else {
-                        // Horizontal: right half clipping
                         img.clipPath = new fabric.Rect({
-                            left: canvasWidth * 0.5,
-                            top: 0,
-                            width: canvasWidth * 0.5,
-                            height: canvasHeight,
-                            absolutePositioned: true
+                            left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                         });
                     }
                 } else if (this.currentTemplate === 'template6') {
+                    // Split Top: Top half in horizontal, Center area in vertical
                     if (isVertical) {
-                        // Vertical: center area clipping
                         img.clipPath = new fabric.Rect({
-                            left: canvasWidth * 0.1,
-                            top: canvasHeight * 0.2,
-                            width: canvasWidth * 0.8,
-                            height: canvasHeight * 0.6,
-                            absolutePositioned: true
+                            left: canvasWidth * 0.1, top: canvasHeight * 0.2, width: canvasWidth * 0.8, height: canvasHeight * 0.4, absolutePositioned: true
                         });
                     } else {
-                        // Horizontal: top half clipping
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: true
+                            left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                         });
                     }
                 }
@@ -2422,18 +2368,18 @@ class TemplateAdsEditor {
             const isSquare = this.currentOrientation === 'square';
             
             if (this.currentTemplate === 'template4') {
+                // Split Left: Left half in horizontal, Top half in vertical
                 if (isVertical || isSquare) {
-                    // Vertical/Square: top half clipping for Split Left
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
                 } else {
-                    // Horizontal: left half clipping for Split Left
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                     });
                 }
             } else if (this.currentTemplate === 'template5') {
+                // Split Right: Right half in horizontal, Bottom half in vertical
                 if (isVertical || isSquare) {
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
@@ -2441,6 +2387,17 @@ class TemplateAdsEditor {
                 } else {
                     imageObj.clipPath = new fabric.Rect({
                         left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                }
+            } else if (this.currentTemplate === 'template6') {
+                // Split Top: Top half in horizontal, Center area in vertical
+                if (isVertical || isSquare) {
+                    imageObj.clipPath = new fabric.Rect({
+                        left: canvasWidth * 0.1, top: canvasHeight * 0.2, width: canvasWidth * 0.8, height: canvasHeight * 0.4, absolutePositioned: true
+                    });
+                } else {
+                    imageObj.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
                 }
             }
