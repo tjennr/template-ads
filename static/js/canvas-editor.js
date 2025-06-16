@@ -1764,7 +1764,7 @@ class TemplateAdsEditor {
                     // Recalculate scale for the target area
                     const scaleToFitWidth = targetWidth / clonedImg.width;
                     const scaleToFitHeight = targetHeight / clonedImg.height;
-                    const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                    const splitScale = Math.min(scaleToFitWidth, scaleToFitHeight);
                     
                     clonedImg.set({
                         left: targetLeft,
@@ -1913,7 +1913,7 @@ class TemplateAdsEditor {
                     // Recalculate scale for the target area
                     const scaleToFitWidth = targetWidth / img.width;
                     const scaleToFitHeight = targetHeight / img.height;
-                    const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                    const splitScale = Math.min(scaleToFitWidth, scaleToFitHeight);
                     
                     img.set({
                         left: targetLeft,
@@ -2338,10 +2338,10 @@ class TemplateAdsEditor {
                 targetTop = targetHeight / 2;
             }
             
-            // Scale image to fit the target area
+            // Scale image to fit within the target area (not exceed it)
             const scaleToFitWidth = targetWidth / imageObj.width;
             const scaleToFitHeight = targetHeight / imageObj.height;
-            const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
+            const scale = Math.min(scaleToFitWidth, scaleToFitHeight);
 
             imageObj.set({
                 left: targetLeft,
