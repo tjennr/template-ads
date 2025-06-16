@@ -1738,33 +1738,43 @@ class TemplateAdsEditor {
                 
                 // Position image based on template and orientation
                 if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
-                    // Split templates: position based on orientation and template type
-                    const isVertical = this.currentOrientation === 'vertical';
+                    // Split templates: size and position to only occupy visible area
+                    let targetWidth, targetHeight, targetLeft, targetTop;
                     
                     if (this.currentTemplate === 'template4') {
-                        // Split Left template positioning
-                        // Always center on full canvas and let clipping handle visibility
-                        clonedImg.set({
-                            left: canvasWidth / 2,
-                            top: canvasHeight / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            scaleX: scale,
-                            scaleY: scale,
-                            id: 'mainImage'
-                        });
-                    } else {
-                        // Other split templates: center on full canvas then clip
-                        clonedImg.set({
-                            left: canvasWidth / 2,
-                            top: canvasHeight / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            scaleX: scale,
-                            scaleY: scale,
-                            id: 'mainImage'
-                        });
+                        // Split Left: Image only on left half
+                        targetWidth = canvasWidth * 0.5;
+                        targetHeight = canvasHeight;
+                        targetLeft = targetWidth / 2;
+                        targetTop = canvasHeight / 2;
+                    } else if (this.currentTemplate === 'template5') {
+                        // Split Right: Image only on right half
+                        targetWidth = canvasWidth * 0.5;
+                        targetHeight = canvasHeight;
+                        targetLeft = canvasWidth * 0.75;
+                        targetTop = canvasHeight / 2;
+                    } else if (this.currentTemplate === 'template6') {
+                        // Split Top: Image only on top half
+                        targetWidth = canvasWidth;
+                        targetHeight = canvasHeight * 0.5;
+                        targetLeft = canvasWidth / 2;
+                        targetTop = targetHeight / 2;
                     }
+                    
+                    // Recalculate scale for the target area
+                    const scaleToFitWidth = targetWidth / clonedImg.width;
+                    const scaleToFitHeight = targetHeight / clonedImg.height;
+                    const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                    
+                    clonedImg.set({
+                        left: targetLeft,
+                        top: targetTop,
+                        originX: 'center',
+                        originY: 'center',
+                        scaleX: splitScale,
+                        scaleY: splitScale,
+                        id: 'mainImage'
+                    });
                 } else {
                     // Full templates: position in designated area
                     clonedImg.set({
@@ -1778,25 +1788,8 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // Add clipping for split templates based on orientation
-                const isVertical = this.currentOrientation === 'vertical';
-                
-                if (this.currentTemplate === 'template4') {
-                    // Split Left: Image always on left half
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
-                } else if (this.currentTemplate === 'template5') {
-                    // Split Right: Image always on right half
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
-                } else if (this.currentTemplate === 'template6') {
-                    // Split Top: Image always on top half
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                    });
-                }
+                // No clipping needed since image is properly sized and positioned
+                clonedImg.clipPath = null;
                 
                 // Remove any existing main image first
                 const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
@@ -1894,33 +1887,43 @@ class TemplateAdsEditor {
                 
                 // Position image based on template and orientation
                 if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
-                    // Split templates: position based on orientation and template type
-                    const isVertical = this.currentOrientation === 'vertical';
+                    // Split templates: size and position to only occupy visible area
+                    let targetWidth, targetHeight, targetLeft, targetTop;
                     
                     if (this.currentTemplate === 'template4') {
-                        // Split Left template positioning
-                        // Always center on full canvas and let clipping handle visibility
-                        img.set({
-                            left: canvasWidth / 2,
-                            top: canvasHeight / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            scaleX: scale,
-                            scaleY: scale,
-                            id: 'mainImage'
-                        });
-                    } else {
-                        // Other split templates: center on full canvas then clip
-                        img.set({
-                            left: canvasWidth / 2,
-                            top: canvasHeight / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            scaleX: scale,
-                            scaleY: scale,
-                            id: 'mainImage'
-                        });
+                        // Split Left: Image only on left half
+                        targetWidth = canvasWidth * 0.5;
+                        targetHeight = canvasHeight;
+                        targetLeft = targetWidth / 2;
+                        targetTop = canvasHeight / 2;
+                    } else if (this.currentTemplate === 'template5') {
+                        // Split Right: Image only on right half
+                        targetWidth = canvasWidth * 0.5;
+                        targetHeight = canvasHeight;
+                        targetLeft = canvasWidth * 0.75;
+                        targetTop = canvasHeight / 2;
+                    } else if (this.currentTemplate === 'template6') {
+                        // Split Top: Image only on top half
+                        targetWidth = canvasWidth;
+                        targetHeight = canvasHeight * 0.5;
+                        targetLeft = canvasWidth / 2;
+                        targetTop = targetHeight / 2;
                     }
+                    
+                    // Recalculate scale for the target area
+                    const scaleToFitWidth = targetWidth / img.width;
+                    const scaleToFitHeight = targetHeight / img.height;
+                    const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
+                    
+                    img.set({
+                        left: targetLeft,
+                        top: targetTop,
+                        originX: 'center',
+                        originY: 'center',
+                        scaleX: splitScale,
+                        scaleY: splitScale,
+                        id: 'mainImage'
+                    });
                 } else {
                     // Full templates: position in designated area
                     img.set({
@@ -1934,25 +1937,8 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // Add clipping for split templates based on orientation
-                const isVertical = this.currentOrientation === 'vertical';
-                
-                if (this.currentTemplate === 'template4') {
-                    // Split Left: Image always on left half
-                    img.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
-                } else if (this.currentTemplate === 'template5') {
-                    // Split Right: Image always on right half
-                    img.clipPath = new fabric.Rect({
-                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
-                } else if (this.currentTemplate === 'template6') {
-                    // Split Top: Image always on top half
-                    img.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                    });
-                }
+                // No clipping needed since image is properly sized and positioned
+                img.clipPath = null;
                 
                 // Remove existing main image
                 const existingMain = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
@@ -2327,42 +2313,47 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         const imageConfig = this.getImageConfigForTemplate(this.currentTemplate, canvasWidth, canvasHeight);
 
-        // Update image positioning and clipping
+        // Update image positioning and sizing for split templates
         if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
-            // Split templates: recalculate scale and clipping
-            const scaleToFitWidth = canvasWidth / imageObj.width;
-            const scaleToFitHeight = canvasHeight / imageObj.height;
+            // Split templates: resize and position image to only occupy visible area
+            let targetWidth, targetHeight, targetLeft, targetTop;
+            
+            if (this.currentTemplate === 'template4') {
+                // Split Left: Image only on left half
+                targetWidth = canvasWidth * 0.5;
+                targetHeight = canvasHeight;
+                targetLeft = targetWidth / 2;
+                targetTop = canvasHeight / 2;
+            } else if (this.currentTemplate === 'template5') {
+                // Split Right: Image only on right half
+                targetWidth = canvasWidth * 0.5;
+                targetHeight = canvasHeight;
+                targetLeft = canvasWidth * 0.75; // Center of right half
+                targetTop = canvasHeight / 2;
+            } else if (this.currentTemplate === 'template6') {
+                // Split Top: Image only on top half
+                targetWidth = canvasWidth;
+                targetHeight = canvasHeight * 0.5;
+                targetLeft = canvasWidth / 2;
+                targetTop = targetHeight / 2;
+            }
+            
+            // Scale image to fit the target area
+            const scaleToFitWidth = targetWidth / imageObj.width;
+            const scaleToFitHeight = targetHeight / imageObj.height;
             const scale = Math.max(scaleToFitWidth, scaleToFitHeight);
 
             imageObj.set({
-                left: canvasWidth / 2,
-                top: canvasHeight / 2,
+                left: targetLeft,
+                top: targetTop,
                 originX: 'center',
                 originY: 'center',
                 scaleX: scale,
                 scaleY: scale
             });
-
-            // Update clipping based on new orientation
-            const isVertical = this.currentOrientation === 'vertical';
-            const isSquare = this.currentOrientation === 'square';
             
-            if (this.currentTemplate === 'template4') {
-                // Split Left: Image always on left half
-                imageObj.clipPath = new fabric.Rect({
-                    left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                });
-            } else if (this.currentTemplate === 'template5') {
-                // Split Right: Image always on right half
-                imageObj.clipPath = new fabric.Rect({
-                    left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                });
-            } else if (this.currentTemplate === 'template6') {
-                // Split Top: Image always on top half
-                imageObj.clipPath = new fabric.Rect({
-                    left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                });
-            }
+            // Remove clipping since image is now properly sized and positioned
+            imageObj.clipPath = null;
         } else {
             // Full coverage templates
             const scaleToFitWidth = canvasWidth / imageObj.width;
