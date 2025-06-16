@@ -22,7 +22,7 @@ class TemplateAdsEditor {
         // Initialize Fabric.js canvas
         this.canvas = new fabric.Canvas('designCanvas', {
             backgroundColor: '#ffffff',
-            selection: false, // Disable automatic selection to prevent conflicts
+            selection: true, // Enable selection for text editing
             preserveObjectStacking: true
         });
         
@@ -31,6 +31,7 @@ class TemplateAdsEditor {
         this.selectedTextObject = null;
         this.ctaToolbar = document.getElementById('ctaToolbar');
         this.selectedCtaObject = null;
+        this.backgroundToolbar = document.getElementById('backgroundToolbar');
         
         // Zoom properties
         this.zoomLevel = 1;
@@ -346,43 +347,59 @@ class TemplateAdsEditor {
         });
         this.canvas.on('path:created', () => this.debouncedSaveState());
         
-        // Simple click-based text selection system
-        this.canvas.on('mouse:up', (e) => {
-            // Small delay to ensure click is registered properly
-            setTimeout(() => {
-                if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
-                    // Show toolbar for text elements
-                    this.selectedTextObject = e.target;
-                    this.showTextToolbar();
-                    this.updateToolbarValues();
-                    this.updateToolbarPosition();
-                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
-                    // Handle CTA click - show CTA toolbar
-                    if (e.target.id === 'ctaGroup') {
-                        this.selectedCtaObject = e.target;
-                    } else {
-                        // Find the parent CTA group
-                        this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
-                    }
-                    
-                    if (this.selectedCtaObject) {
-                        this.hideTextToolbar(); // Hide text toolbar first
-                        this.showCtaToolbar();
-                        this.updateCtaToolbarValues();
-                        this.updateCtaToolbarPosition();
-                    }
-                } else if (!e.target) {
-                    // Clicked on canvas background
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
-                    this.showBackgroundToolbar(e);
+        // Handle object selection events
+        this.canvas.on('selection:created', (e) => {
+            const selectedObject = e.selected[0];
+            if (selectedObject && (selectedObject.type === 'text' || selectedObject.type === 'textbox')) {
+                this.selectedTextObject = selectedObject;
+                this.showTextToolbar();
+                this.updateToolbarValues();
+                this.updateToolbarPosition();
+                this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
+            } else if (selectedObject && (selectedObject.id === 'ctaBackground' || selectedObject.id === 'cta' || selectedObject.id === 'ctaGroup')) {
+                if (selectedObject.id === 'ctaGroup') {
+                    this.selectedCtaObject = selectedObject;
                 } else {
-                    // Hide toolbars for other object clicks
+                    this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
+                }
+                
+                if (this.selectedCtaObject) {
                     this.hideTextToolbar();
-                    this.hideCtaToolbar();
+                    this.showCtaToolbar();
+                    this.updateCtaToolbarValues();
+                    this.updateCtaToolbarPosition();
                     this.hideBackgroundToolbar();
                 }
-            }, 100);
+            }
+        });
+
+        this.canvas.on('selection:updated', (e) => {
+            const selectedObject = e.selected[0];
+            if (selectedObject && (selectedObject.type === 'text' || selectedObject.type === 'textbox')) {
+                this.selectedTextObject = selectedObject;
+                this.showTextToolbar();
+                this.updateToolbarValues();
+                this.updateToolbarPosition();
+                this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
+            }
+        });
+
+        this.canvas.on('selection:cleared', () => {
+            this.hideTextToolbar();
+            this.hideCtaToolbar();
+            this.hideBackgroundToolbar();
+        });
+
+        // Handle background clicks
+        this.canvas.on('mouse:down', (e) => {
+            if (!e.target) {
+                // Clicked on canvas background
+                this.hideTextToolbar();
+                this.hideCtaToolbar();
+                this.showBackgroundToolbar(e);
+            }
         });
 
         // Ensure toolbar updates position when text or CTA is moved
@@ -398,13 +415,16 @@ class TemplateAdsEditor {
 
         // Hide toolbar when clicking completely outside the canvas
         document.addEventListener('click', (e) => {
-            // Don't hide if clicking on the toolbar itself
-            if (this.textToolbar.contains(e.target)) {
+            // Don't hide if clicking on any toolbar
+            if (this.textToolbar && this.textToolbar.contains(e.target)) {
                 return;
             }
             
-            // Don't hide if clicking on CTA toolbar
             if (this.ctaToolbar && this.ctaToolbar.contains(e.target)) {
+                return;
+            }
+            
+            if (this.backgroundToolbar && this.backgroundToolbar.contains(e.target)) {
                 return;
             }
             
@@ -412,6 +432,7 @@ class TemplateAdsEditor {
             if (!this.canvas.getElement().contains(e.target)) {
                 this.hideTextToolbar();
                 this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
             }
         });
     }
@@ -2072,22 +2093,22 @@ class TemplateAdsEditor {
                 
                 if (this.currentTemplate === 'template4') {
                     if (isVertical) {
-                        // Vertical: top half clipping - position image properly within clip area
+                        // Vertical: left half clipping for Split Left
                         img.clipPath = new fabric.Rect({
-                            left: -img.left + canvasWidth / 2,
-                            top: -img.top + canvasHeight / 2,
-                            width: canvasWidth,
-                            height: canvasHeight * 0.5,
-                            absolutePositioned: false
-                        });
-                    } else {
-                        // Horizontal: left half clipping
-                        img.clipPath = new fabric.Rect({
-                            left: -img.left + canvasWidth / 2,
-                            top: -img.top + canvasHeight / 2,
+                            left: 0,
+                            top: 0,
                             width: canvasWidth * 0.5,
                             height: canvasHeight,
-                            absolutePositioned: false
+                            absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: left half clipping for Split Left
+                        img.clipPath = new fabric.Rect({
+                            left: 0,
+                            top: 0,
+                            width: canvasWidth * 0.5,
+                            height: canvasHeight,
+                            absolutePositioned: true
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
