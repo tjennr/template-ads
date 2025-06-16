@@ -1941,31 +1941,17 @@ class TemplateAdsEditor {
                     const isVertical = this.currentOrientation === 'vertical';
                     
                     if (this.currentTemplate === 'template4') {
-                        // Split Top template positioning
-                        if (isVertical) {
-                            // Vertical: position image to fill and be clipped to top half
-                            img.set({
-                                left: canvasWidth / 2,
-                                top: canvasHeight / 2, // Center on full canvas, will be clipped
-                                originX: 'center',
-                                originY: 'center',
-                                scaleX: scale,
-                                scaleY: scale,
-                                id: 'mainImage'
-                            });
-                        } else {
-                            // Horizontal: scale image to fill left half area, position at center of left half
-                            const leftHalfScale = Math.max((canvasWidth * 0.5) / img.width, canvasHeight / img.height);
-                            img.set({
-                                left: canvasWidth * 0.25, // Center of left half
-                                top: canvasHeight / 2,
-                                originX: 'center',
-                                originY: 'center',
-                                scaleX: leftHalfScale,
-                                scaleY: leftHalfScale,
-                                id: 'mainImage'
-                            });
-                        }
+                        // Split Left template positioning
+                        // Always center on full canvas and let clipping handle visibility
+                        img.set({
+                            left: canvasWidth / 2,
+                            top: canvasHeight / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            scaleX: scale,
+                            scaleY: scale,
+                            id: 'mainImage'
+                        });
                     } else {
                         // Other split templates: center on full canvas then clip
                         img.set({
@@ -1996,22 +1982,22 @@ class TemplateAdsEditor {
                 
                 if (this.currentTemplate === 'template4') {
                     if (isVertical) {
-                        // Vertical: top half clipping - position image properly within clip area
+                        // Vertical: top half clipping
                         img.clipPath = new fabric.Rect({
-                            left: -img.left + canvasWidth / 2,
-                            top: -img.top + canvasHeight / 2,
+                            left: 0,
+                            top: 0,
                             width: canvasWidth,
                             height: canvasHeight * 0.5,
-                            absolutePositioned: false
+                            absolutePositioned: true
                         });
                     } else {
                         // Horizontal: left half clipping
                         img.clipPath = new fabric.Rect({
-                            left: -img.left + canvasWidth / 2,
-                            top: -img.top + canvasHeight / 2,
+                            left: 0,
+                            top: 0,
                             width: canvasWidth * 0.5,
                             height: canvasHeight,
-                            absolutePositioned: false
+                            absolutePositioned: true
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
@@ -2451,10 +2437,12 @@ class TemplateAdsEditor {
             
             if (this.currentTemplate === 'template4') {
                 if (isVertical || isSquare) {
+                    // Vertical/Square: top half clipping for Split Left
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
                 } else {
+                    // Horizontal: left half clipping for Split Left
                     imageObj.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                     });
