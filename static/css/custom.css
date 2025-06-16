@@ -291,7 +291,15 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--brand-primary);
 }
 
-/* Template preview styling removed - using text-only buttons */
+.template-preview {
+    width: 32px;
+    height: 24px;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    position: relative;
+    background: #ffffff;
+    margin-bottom: 0.5rem;
+}
 
 /* Template preview graphics removed - using text-only template buttons */
 
@@ -979,25 +987,4 @@ h1, h2, h3, h4, h5, h6 {
 
 .canvas-container canvas:active {
     cursor: grabbing;
-}
-
-/* Background toolbar button styling */
-.toolbar-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: #495057;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.875rem;
-}
-
-.toolbar-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #212529;
 }

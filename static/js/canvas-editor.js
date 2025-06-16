@@ -22,7 +22,7 @@ class TemplateAdsEditor {
         // Initialize Fabric.js canvas
         this.canvas = new fabric.Canvas('designCanvas', {
             backgroundColor: '#ffffff',
-            selection: true, // Enable selection for text editing
+            selection: false, // Disable automatic selection to prevent conflicts
             preserveObjectStacking: true
         });
         
@@ -31,7 +31,6 @@ class TemplateAdsEditor {
         this.selectedTextObject = null;
         this.ctaToolbar = document.getElementById('ctaToolbar');
         this.selectedCtaObject = null;
-        this.backgroundToolbar = document.getElementById('backgroundToolbar');
         
         // Zoom properties
         this.zoomLevel = 1;
@@ -44,7 +43,6 @@ class TemplateAdsEditor {
         this.setupCanvasEvents();
         this.setupTextToolbarEvents();
         this.setupCtaToolbarEvents();
-        this.setupBackgroundToolbarEvents();
         this.setupZoomEvents();
         this.setupResizeListener();
         
@@ -347,59 +345,37 @@ class TemplateAdsEditor {
         });
         this.canvas.on('path:created', () => this.debouncedSaveState());
         
-        // Handle object selection events
-        this.canvas.on('selection:created', (e) => {
-            const selectedObject = e.selected[0];
-            if (selectedObject && (selectedObject.type === 'text' || selectedObject.type === 'textbox')) {
-                this.selectedTextObject = selectedObject;
-                this.showTextToolbar();
-                this.updateToolbarValues();
-                this.updateToolbarPosition();
-                this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
-            } else if (selectedObject && (selectedObject.id === 'ctaBackground' || selectedObject.id === 'cta' || selectedObject.id === 'ctaGroup')) {
-                if (selectedObject.id === 'ctaGroup') {
-                    this.selectedCtaObject = selectedObject;
+        // Simple click-based text selection system
+        this.canvas.on('mouse:up', (e) => {
+            // Small delay to ensure click is registered properly
+            setTimeout(() => {
+                if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
+                    // Show toolbar for text elements
+                    this.selectedTextObject = e.target;
+                    this.showTextToolbar();
+                    this.updateToolbarValues();
+                    this.updateToolbarPosition();
+                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
+                    // Handle CTA click - show CTA toolbar
+                    if (e.target.id === 'ctaGroup') {
+                        this.selectedCtaObject = e.target;
+                    } else {
+                        // Find the parent CTA group
+                        this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
+                    }
+                    
+                    if (this.selectedCtaObject) {
+                        this.hideTextToolbar(); // Hide text toolbar first
+                        this.showCtaToolbar();
+                        this.updateCtaToolbarValues();
+                        this.updateCtaToolbarPosition();
+                    }
                 } else {
-                    this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
-                }
-                
-                if (this.selectedCtaObject) {
+                    // Hide toolbars for non-text/non-CTA clicks
                     this.hideTextToolbar();
-                    this.showCtaToolbar();
-                    this.updateCtaToolbarValues();
-                    this.updateCtaToolbarPosition();
-                    this.hideBackgroundToolbar();
+                    this.hideCtaToolbar();
                 }
-            }
-        });
-
-        this.canvas.on('selection:updated', (e) => {
-            const selectedObject = e.selected[0];
-            if (selectedObject && (selectedObject.type === 'text' || selectedObject.type === 'textbox')) {
-                this.selectedTextObject = selectedObject;
-                this.showTextToolbar();
-                this.updateToolbarValues();
-                this.updateToolbarPosition();
-                this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
-            }
-        });
-
-        this.canvas.on('selection:cleared', () => {
-            this.hideTextToolbar();
-            this.hideCtaToolbar();
-            this.hideBackgroundToolbar();
-        });
-
-        // Handle background clicks
-        this.canvas.on('mouse:down', (e) => {
-            if (!e.target) {
-                // Clicked on canvas background
-                this.hideTextToolbar();
-                this.hideCtaToolbar();
-                this.showBackgroundToolbar(e);
-            }
+            }, 100);
         });
 
         // Ensure toolbar updates position when text or CTA is moved
@@ -415,16 +391,13 @@ class TemplateAdsEditor {
 
         // Hide toolbar when clicking completely outside the canvas
         document.addEventListener('click', (e) => {
-            // Don't hide if clicking on any toolbar
-            if (this.textToolbar && this.textToolbar.contains(e.target)) {
+            // Don't hide if clicking on the toolbar itself
+            if (this.textToolbar.contains(e.target)) {
                 return;
             }
             
+            // Don't hide if clicking on CTA toolbar
             if (this.ctaToolbar && this.ctaToolbar.contains(e.target)) {
-                return;
-            }
-            
-            if (this.backgroundToolbar && this.backgroundToolbar.contains(e.target)) {
                 return;
             }
             
@@ -432,7 +405,6 @@ class TemplateAdsEditor {
             if (!this.canvas.getElement().contains(e.target)) {
                 this.hideTextToolbar();
                 this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
             }
         });
     }
@@ -600,75 +572,6 @@ class TemplateAdsEditor {
                     }
                 }
             });
-        }
-    }
-
-    setupBackgroundToolbarEvents() {
-        // Get background toolbar elements
-        const backgroundColorPicker = document.getElementById('backgroundColorPicker');
-        const resetBackgroundBtn = document.getElementById('resetBackground');
-        
-        // Background color change
-        if (backgroundColorPicker) {
-            backgroundColorPicker.addEventListener('input', (e) => {
-                this.canvas.backgroundColor = e.target.value;
-                this.canvas.renderAll();
-                this.saveState();
-            });
-        }
-        
-        // Reset background to white
-        if (resetBackgroundBtn) {
-            resetBackgroundBtn.addEventListener('click', () => {
-                this.canvas.backgroundColor = '#ffffff';
-                if (backgroundColorPicker) {
-                    backgroundColorPicker.value = '#ffffff';
-                }
-                this.canvas.renderAll();
-                this.saveState();
-            });
-        }
-    }
-
-    showBackgroundToolbar(e) {
-        if (!this.backgroundToolbar) {
-            this.backgroundToolbar = document.getElementById('backgroundToolbar');
-        }
-        
-        if (this.backgroundToolbar) {
-            this.backgroundToolbar.classList.remove('hidden');
-            this.updateBackgroundToolbarPosition(e);
-        }
-    }
-
-    hideBackgroundToolbar() {
-        if (!this.backgroundToolbar) {
-            this.backgroundToolbar = document.getElementById('backgroundToolbar');
-        }
-        
-        if (this.backgroundToolbar) {
-            this.backgroundToolbar.classList.add('hidden');
-        }
-    }
-
-    updateBackgroundToolbarPosition(e) {
-        if (!this.backgroundToolbar) return;
-        
-        const canvasContainer = this.canvas.getElement().parentElement;
-        const pointer = this.canvas.getPointer(e.e);
-        const zoom = this.canvas.getZoom();
-        
-        // Position relative to canvas
-        const toolbarX = pointer.x * zoom;
-        const toolbarY = pointer.y * zoom;
-        
-        this.backgroundToolbar.style.position = 'absolute';
-        this.backgroundToolbar.style.left = `${Math.max(10, toolbarX - this.backgroundToolbar.offsetWidth / 2)}px`;
-        this.backgroundToolbar.style.top = `${Math.max(10, toolbarY - this.backgroundToolbar.offsetHeight - 10)}px`;
-        
-        // Append to canvas container for proper positioning
-        if (this.backgroundToolbar.parentElement !== canvasContainer) {
-            canvasContainer.appendChild(this.backgroundToolbar);
         }
     }
 
@@ -1172,7 +1075,7 @@ class TemplateAdsEditor {
         const isVertical = this.currentOrientation === 'vertical';
         
         // Title - white text over image, positioned for both orientations
-        this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.6 : canvasHeight * 0.65,
             fontSize: 40,
@@ -1182,14 +1085,11 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            width: canvasWidth * 0.8,
-            selectable: true,
-            editable: true,
             id: 'title'
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.7 : canvasHeight * 0.75,
             fontSize: 24,
@@ -1198,9 +1098,6 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            width: canvasWidth * 0.7,
-            selectable: true,
-            editable: true,
             id: 'subtitle'
         });
         
@@ -1221,7 +1118,7 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Textbox('Shop Now', {
+        this.ctaText = new fabric.Text('Shop Now', {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
             fontSize: 18,
@@ -1231,9 +1128,6 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
-            width: 100,
-            selectable: true,
-            editable: true,
             id: 'cta'
         });
 
@@ -1256,7 +1150,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - white text over image
-        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.6,
             fontSize: 40,
@@ -1266,15 +1160,11 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
-            width: canvasWidth * 0.35,
-            selectable: true,
-            editable: true,
-            splitByGrapheme: false,
             id: 'title'
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.7,
             fontSize: 24,
@@ -1283,9 +1173,6 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
-            width: canvasWidth * 0.35,
-            selectable: true,
-            editable: true,
             id: 'subtitle'
         });
         
@@ -1309,7 +1196,7 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Textbox('Shop Now', {
+        this.ctaText = new fabric.Text('Shop Now', {
             left: canvasWidth * 0.1 + 60,
             top: canvasHeight * 0.85,
             fontSize: 18,
@@ -1341,7 +1228,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - white text over image
-        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.5,
             fontSize: 40,
@@ -1355,7 +1242,7 @@ class TemplateAdsEditor {
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: 24,
@@ -1369,7 +1256,7 @@ class TemplateAdsEditor {
         
         // Calculate responsive button width based on text
         const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        const tempText = new fabric.Textbox(ctaTextValue, {
+        const tempText = new fabric.Text(ctaTextValue, {
             fontSize: 18,
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold'
@@ -1394,7 +1281,7 @@ class TemplateAdsEditor {
         });
 
         // CTA Button Text
-        this.ctaText = new fabric.Textbox(ctaTextValue, {
+        this.ctaText = new fabric.Text(ctaTextValue, {
             left: canvasWidth / 2,
             top: canvasHeight * 0.8,
             fontSize: 18,
@@ -1472,7 +1359,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Textbox('Shop Now', {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.9,
                 fontSize: 16,
@@ -1525,7 +1412,7 @@ class TemplateAdsEditor {
             
             // Calculate responsive button width
             const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-            const tempText = new fabric.Textbox(ctaTextValue, {
+            const tempText = new fabric.Text(ctaTextValue, {
                 fontSize: 18,
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold'
@@ -1547,7 +1434,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Textbox('Shop Now', {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth * 0.75,
                 top: canvasHeight * 0.7,
                 fontSize: 18,
@@ -1625,7 +1512,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Textbox('Shop Now', {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth / 2,
                 top: canvasHeight * 0.45,
                 fontSize: 18,
@@ -1678,7 +1565,7 @@ class TemplateAdsEditor {
             
             // Calculate responsive button width
             const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-            const tempText = new fabric.Textbox(ctaTextValue, {
+            const tempText = new fabric.Text(ctaTextValue, {
                 fontSize: 18,
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold'
@@ -1700,7 +1587,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Textbox('Shop Now', {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.7,
                 fontSize: 18,
@@ -1732,7 +1619,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - positioned in bottom text area, using color scheme
-        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: 40,
@@ -1746,7 +1633,7 @@ class TemplateAdsEditor {
         });
         
         // Subtitle - positioned in bottom text area, using color scheme
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.78,
             fontSize: 24,
@@ -1760,7 +1647,7 @@ class TemplateAdsEditor {
         
         // Calculate responsive button width
         const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        const tempText = new fabric.Textbox(ctaTextValue, {
+        const tempText = new fabric.Text(ctaTextValue, {
             fontSize: 18,
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold'
@@ -1783,7 +1670,7 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
-        this.ctaText = new fabric.Textbox('Shop Now', {
+        this.ctaText = new fabric.Text('Shop Now', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.9,
             fontSize: 18,
@@ -1839,16 +1726,31 @@ class TemplateAdsEditor {
                     const isVertical = this.currentOrientation === 'vertical';
                     
                     if (this.currentTemplate === 'template4') {
-                        // Split Left template positioning - always position for left half
-                        clonedImg.set({
-                            left: canvasWidth * 0.25, // Center of left half
-                            top: canvasHeight / 2,
-                            originX: 'center',
-                            originY: 'center',
-                            scaleX: scale,
-                            scaleY: scale,
-                            id: 'mainImage'
-                        });
+                        // Split Top template positioning
+                        if (isVertical) {
+                            // Vertical: position image to fill and be clipped to top half
+                            clonedImg.set({
+                                left: canvasWidth / 2,
+                                top: canvasHeight / 2, // Center on full canvas, will be clipped
+                                originX: 'center',
+                                originY: 'center',
+                                scaleX: scale,
+                                scaleY: scale,
+                                id: 'mainImage'
+                            });
+                        } else {
+                            // Horizontal: scale image to fill left half area, position at center of left half
+                            const leftHalfScale = Math.max((canvasWidth * 0.5) / clonedImg.width, canvasHeight / clonedImg.height);
+                            clonedImg.set({
+                                left: canvasWidth * 0.25, // Center of left half
+                                top: canvasHeight / 2,
+                                originX: 'center',
+                                originY: 'center',
+                                scaleX: leftHalfScale,
+                                scaleY: leftHalfScale,
+                                id: 'mainImage'
+                            });
+                        }
                     } else {
                         // Other split templates: center on full canvas then clip
                         clonedImg.set({
@@ -2094,22 +1996,22 @@ class TemplateAdsEditor {
                 
                 if (this.currentTemplate === 'template4') {
                     if (isVertical) {
-                        // Vertical: left half clipping for Split Left
+                        // Vertical: top half clipping - position image properly within clip area
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
-                            width: canvasWidth * 0.5,
-                            height: canvasHeight,
-                            absolutePositioned: true
+                            left: -img.left + canvasWidth / 2,
+                            top: -img.top + canvasHeight / 2,
+                            width: canvasWidth,
+                            height: canvasHeight * 0.5,
+                            absolutePositioned: false
                         });
                     } else {
-                        // Horizontal: left half clipping for Split Left
+                        // Horizontal: left half clipping
                         img.clipPath = new fabric.Rect({
-                            left: 0,
-                            top: 0,
+                            left: -img.left + canvasWidth / 2,
+                            top: -img.top + canvasHeight / 2,
                             width: canvasWidth * 0.5,
                             height: canvasHeight,
-                            absolutePositioned: true
+                            absolutePositioned: false
                         });
                     }
                 } else if (this.currentTemplate === 'template5') {
