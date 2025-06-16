@@ -980,3 +980,24 @@ h1, h2, h3, h4, h5, h6 {
 .canvas-container canvas:active {
     cursor: grabbing;
 }
+
+/* Background toolbar button styling */
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #495057;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #212529;
+}

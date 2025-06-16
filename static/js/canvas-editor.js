@@ -582,6 +582,75 @@ class TemplateAdsEditor {
         }
     }
 
+    setupBackgroundToolbarEvents() {
+        // Get background toolbar elements
+        const backgroundColorPicker = document.getElementById('backgroundColorPicker');
+        const resetBackgroundBtn = document.getElementById('resetBackground');
+        
+        // Background color change
+        if (backgroundColorPicker) {
+            backgroundColorPicker.addEventListener('input', (e) => {
+                this.canvas.backgroundColor = e.target.value;
+                this.canvas.renderAll();
+                this.saveState();
+            });
+        }
+        
+        // Reset background to white
+        if (resetBackgroundBtn) {
+            resetBackgroundBtn.addEventListener('click', () => {
+                this.canvas.backgroundColor = '#ffffff';
+                if (backgroundColorPicker) {
+                    backgroundColorPicker.value = '#ffffff';
+                }
+                this.canvas.renderAll();
+                this.saveState();
+            });
+        }
+    }
+
+    showBackgroundToolbar(e) {
+        if (!this.backgroundToolbar) {
+            this.backgroundToolbar = document.getElementById('backgroundToolbar');
+        }
+        
+        if (this.backgroundToolbar) {
+            this.backgroundToolbar.classList.remove('hidden');
+            this.updateBackgroundToolbarPosition(e);
+        }
+    }
+
+    hideBackgroundToolbar() {
+        if (!this.backgroundToolbar) {
+            this.backgroundToolbar = document.getElementById('backgroundToolbar');
+        }
+        
+        if (this.backgroundToolbar) {
+            this.backgroundToolbar.classList.add('hidden');
+        }
+    }
+
+    updateBackgroundToolbarPosition(e) {
+        if (!this.backgroundToolbar) return;
+        
+        const canvasContainer = this.canvas.getElement().parentElement;
+        const pointer = this.canvas.getPointer(e.e);
+        const zoom = this.canvas.getZoom();
+        
+        // Position relative to canvas
+        const toolbarX = pointer.x * zoom;
+        const toolbarY = pointer.y * zoom;
+        
+        this.backgroundToolbar.style.position = 'absolute';
+        this.backgroundToolbar.style.left = `${Math.max(10, toolbarX - this.backgroundToolbar.offsetWidth / 2)}px`;
+        this.backgroundToolbar.style.top = `${Math.max(10, toolbarY - this.backgroundToolbar.offsetHeight - 10)}px`;
+        
+        // Append to canvas container for proper positioning
+        if (this.backgroundToolbar.parentElement !== canvasContainer) {
+            canvasContainer.appendChild(this.backgroundToolbar);
+        }
+    }
+
     handleTextSelection(e) {
         const selectedObject = e.selected[0];
         
