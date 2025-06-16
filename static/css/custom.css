@@ -77,13 +77,16 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
-    position: sticky; /* Keep header visible when scrolling */
-    top: 2rem;
-    z-index: 100;
-    background: #fdfaf5;
-    padding: 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Always visible floating controls */
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(222, 226, 230, 0.8);
 }
 
 .canvas-action-btn {
@@ -91,20 +94,28 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    border: 1px solid #dee2e6;
+    border: 1px solid rgba(222, 226, 230, 0.6);
     border-radius: 8px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.9);
     color: #495057;
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
 }
 
 .canvas-action-btn:hover {
-    background: #f8f9fa;
+    background: rgba(255, 255, 255, 1);
     border-color: var(--brand-primary);
     color: var(--brand-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 119, 181, 0.15);
+}
+
+.canvas-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
 }
 
 .canvas-action-btn:disabled {
@@ -198,28 +209,23 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     background: transparent;
-    border-radius: 12px;
     padding: 0;
     margin: 0;
-    overflow: auto; /* Allow scrolling when canvas is larger than container */
-    min-height: 0; /* Prevent flex item from growing beyond container */
+    overflow: auto;
+    min-height: 0;
 }
 
 .canvas-container {
     background: transparent;
-    border-radius: 12px;
-    padding: 2rem; /* Add padding to ensure zoomed content has space */
+    padding: 0;
     margin: 0;
     position: relative;
-    min-width: fit-content; /* Allow container to grow with zoomed content */
 }
 
 #designCanvas {
-    border: 1px solid #dee2e6;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-width: 100%;
     height: auto;
+    /* Remove border and container styling for cleaner look */
 }
 
 /* Minimalist Sidebar Sections */
@@ -732,6 +738,36 @@ h1, h2, h3, h4, h5, h6 {
     
     .col-lg-3, .col-md-4 {
         margin-bottom: 1rem;
+    }
+    
+    /* Mobile responsive adjustments for floating controls */
+    .canvas-header {
+        position: fixed;
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        margin-bottom: 0;
+    }
+    
+    .canvas-action-btn {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .canvas-action-btn span {
+        display: none; /* Hide text on mobile, show only icons */
+    }
+    
+    .canvas-wrapper {
+        padding: 1rem;
+        padding-bottom: 100px; /* Account for floating controls */
     }
 }
 
