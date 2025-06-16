@@ -57,7 +57,7 @@ class TemplateAdsEditor {
         this.loadTemplate(this.currentTemplate);
         
         // Load default image in background
-        const defaultImagePath = '/static/images/default-office.jpg';
+        const defaultImagePath = '/static/images/default-placeholder.jpg';
         fabric.Image.fromURL(defaultImagePath, (img) => {
             const canvasWidth = this.canvas.width;
             const canvasHeight = this.canvas.height;
@@ -91,8 +91,8 @@ class TemplateAdsEditor {
     }
 
     loadDefaultImage() {
-        // Load the default office image on page load
-        const defaultImagePath = '/static/images/default-office.jpg';
+        // Load the default placeholder image on page load
+        const defaultImagePath = '/static/images/default-placeholder.jpg';
         this.addImageToCanvas(defaultImagePath, 'main');
     }
 
