@@ -347,6 +347,9 @@ class TemplateAdsEditor {
         });
         this.canvas.on('path:created', () => this.debouncedSaveState());
         
+        // Add keyboard accessibility for ad elements
+        this.setupKeyboardAccessibility();
+        
         // Simple click-based text selection system
         this.canvas.on('mouse:up', (e) => {
             // Small delay to ensure click is registered properly
@@ -366,7 +369,11 @@ class TemplateAdsEditor {
                         // Find the parent CTA group
                         this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
                     }
+                    this.hideTextToolbar();
                     this.hideBackgroundToolbar();
+                    this.showCtaToolbar();
+                    this.updateCtaToolbarValues();
+                    this.updateCtaToolbarPosition();
                 } else if (!e.target) {
                     // Clicked on background (empty canvas area)
                     this.hideTextToolbar();
@@ -377,13 +384,6 @@ class TemplateAdsEditor {
                     this.hideTextToolbar();
                     this.hideCtaToolbar();
                     this.hideBackgroundToolbar();
-                    
-                    if (this.selectedCtaObject) {
-                        this.hideTextToolbar(); // Hide text toolbar first
-                        this.showCtaToolbar();
-                        this.updateCtaToolbarValues();
-                        this.updateCtaToolbarPosition();
-                    }
                 }
             }, 100);
         });
@@ -423,6 +423,204 @@ class TemplateAdsEditor {
                 this.hideBackgroundToolbar();
             }
         });
+    }
+
+    setupKeyboardAccessibility() {
+        // Make canvas focusable and add keyboard navigation
+        const canvasElement = this.canvas.getElement();
+        canvasElement.setAttribute('tabindex', '0');
+        canvasElement.setAttribute('role', 'application');
+        canvasElement.setAttribute('aria-label', 'Advertisement canvas editor. Use Tab to navigate between elements, Enter to select, and arrow keys to move selected elements.');
+        
+        // Track focusable objects on canvas
+        this.focusableObjects = [];
+        this.currentFocusIndex = -1;
+        
+        // Add keyboard event listeners
+        canvasElement.addEventListener('keydown', (e) => {
+            this.handleKeyboardNavigation(e);
+        });
+        
+        // Update focusable objects when canvas changes
+        this.canvas.on('object:added', () => this.updateFocusableObjects());
+        this.canvas.on('object:removed', () => this.updateFocusableObjects());
+        
+        // Initial setup
+        this.updateFocusableObjects();
+    }
+
+    updateFocusableObjects() {
+        // Get all interactive objects on canvas
+        this.focusableObjects = this.canvas.getObjects().filter(obj => 
+            obj.id === 'title' || 
+            obj.id === 'subtitle' || 
+            obj.id === 'ctaGroup' || 
+            obj.id === 'mainImage' || 
+            obj.id === 'logo'
+        );
+    }
+
+    handleKeyboardNavigation(e) {
+        // Tab navigation
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            if (e.shiftKey) {
+                this.focusPreviousObject();
+            } else {
+                this.focusNextObject();
+            }
+        }
+        
+        // Enter to select/edit
+        if (e.key === 'Enter' && this.currentFocusIndex >= 0) {
+            e.preventDefault();
+            const focusedObject = this.focusableObjects[this.currentFocusIndex];
+            this.selectObject(focusedObject);
+        }
+        
+        // Arrow keys to move selected object
+        if (this.canvas.getActiveObject()) {
+            const selectedObject = this.canvas.getActiveObject();
+            let moved = false;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    selectedObject.set('left', selectedObject.left - 5);
+                    moved = true;
+                    break;
+                case 'ArrowRight':
+                    selectedObject.set('left', selectedObject.left + 5);
+                    moved = true;
+                    break;
+                case 'ArrowUp':
+                    selectedObject.set('top', selectedObject.top - 5);
+                    moved = true;
+                    break;
+                case 'ArrowDown':
+                    selectedObject.set('top', selectedObject.top + 5);
+                    moved = true;
+                    break;
+            }
+            
+            if (moved) {
+                e.preventDefault();
+                this.canvas.renderAll();
+                this.saveState();
+            }
+        }
+        
+        // Escape to deselect
+        if (e.key === 'Escape') {
+            this.canvas.discardActiveObject();
+            this.hideTextToolbar();
+            this.hideCtaToolbar();
+            this.hideBackgroundToolbar();
+            this.canvas.renderAll();
+            this.currentFocusIndex = -1;
+        }
+    }
+
+    focusNextObject() {
+        if (this.focusableObjects.length === 0) return;
+        
+        this.currentFocusIndex = (this.currentFocusIndex + 1) % this.focusableObjects.length;
+        this.highlightFocusedObject();
+    }
+
+    focusPreviousObject() {
+        if (this.focusableObjects.length === 0) return;
+        
+        this.currentFocusIndex = this.currentFocusIndex <= 0 
+            ? this.focusableObjects.length - 1 
+            : this.currentFocusIndex - 1;
+        this.highlightFocusedObject();
+    }
+
+    highlightFocusedObject() {
+        // Remove previous focus highlight
+        this.canvas.getObjects().forEach(obj => {
+            obj.set('stroke', obj.originalStroke || null);
+            obj.set('strokeWidth', obj.originalStrokeWidth || 0);
+        });
+        
+        if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableObjects.length) {
+            const focusedObject = this.focusableObjects[this.currentFocusIndex];
+            
+            // Store original stroke properties
+            focusedObject.originalStroke = focusedObject.stroke;
+            focusedObject.originalStrokeWidth = focusedObject.strokeWidth;
+            
+            // Add focus highlight
+            focusedObject.set('stroke', '#007bff');
+            focusedObject.set('strokeWidth', 3);
+            focusedObject.set('strokeDashArray', [5, 5]);
+            
+            this.canvas.renderAll();
+            
+            // Announce focused element for screen readers
+            this.announceFocusedElement(focusedObject);
+        }
+    }
+
+    selectObject(obj) {
+        this.canvas.setActiveObject(obj);
+        this.canvas.renderAll();
+        
+        // Show appropriate toolbar based on object type
+        if (obj.id === 'title' || obj.id === 'subtitle') {
+            this.selectedTextObject = obj;
+            this.showTextToolbar();
+            this.updateToolbarValues();
+            this.updateToolbarPosition();
+        } else if (obj.id === 'ctaGroup') {
+            this.selectedCtaObject = obj;
+            this.showCtaToolbar();
+            this.updateCtaToolbarValues();
+            this.updateCtaToolbarPosition();
+        }
+    }
+
+    announceFocusedElement(obj) {
+        let announcement = '';
+        
+        switch(obj.id) {
+            case 'title':
+                announcement = `Title text: ${obj.text || 'Your Amazing Product'}`;
+                break;
+            case 'subtitle':
+                announcement = `Subtitle text: ${obj.text || 'Premium quality at affordable prices'}`;
+                break;
+            case 'ctaGroup':
+                const ctaText = obj.getObjects().find(o => o.id === 'cta');
+                announcement = `Call to action button: ${ctaText?.text || 'Shop Now'}`;
+                break;
+            case 'mainImage':
+                announcement = 'Main image';
+                break;
+            case 'logo':
+                announcement = 'Logo image';
+                break;
+            default:
+                announcement = 'Canvas element';
+        }
+        
+        // Create temporary aria-live region for announcements
+        const announcement_div = document.getElementById('accessibility-announcements') || 
+            (() => {
+                const div = document.createElement('div');
+                div.id = 'accessibility-announcements';
+                div.setAttribute('aria-live', 'polite');
+                div.setAttribute('aria-atomic', 'true');
+                div.style.position = 'absolute';
+                div.style.left = '-10000px';
+                div.style.width = '1px';
+                div.style.height = '1px';
+                div.style.overflow = 'hidden';
+                document.body.appendChild(div);
+                return div;
+            })();
+            
+        announcement_div.textContent = announcement;
     }
 
     setupTextToolbarEvents() {

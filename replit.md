@@ -117,6 +117,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 16, 2025: Replaced default office image with new gray placeholder image featuring clean background and image placeholder icon
 - June 17, 2025: Updated placeholder image to new design with refined image placeholder icon
 - June 17, 2025: Fixed template switching issue where images uploaded to split templates retained incorrect positioning when switching to full templates (Classic, Grid, Minimal)
+- June 17, 2025: Fixed CTA floating toolbar display issue - toolbar now properly appears when CTA button is clicked
+- June 17, 2025: Added comprehensive keyboard accessibility - canvas elements are now tab-navigable with visual focus indicators and screen reader announcements
 
 ## Changelog
 - June 16, 2025. Initial setup
