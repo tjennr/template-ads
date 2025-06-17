@@ -815,7 +815,11 @@ h1, h2, h3, h4, h5, h6 {
 .floating-toolbar .toolbar-size-input,
 .floating-toolbar .toolbar-font-select,
 .floating-toolbar input[type="number"],
-.floating-toolbar select {
+.floating-toolbar select,
+.floating-toolbar input,
+#textToolbar input[type="number"],
+#ctaToolbar input[type="number"],
+#backgroundToolbar input[type="number"] {
     background: #ffffff !important;
     color: #333333 !important;
     border: 1px solid #dee2e6 !important;
@@ -828,7 +832,11 @@ h1, h2, h3, h4, h5, h6 {
 .floating-toolbar .toolbar-size-input:focus,
 .floating-toolbar .toolbar-font-select:focus,
 .floating-toolbar input[type="number"]:focus,
-.floating-toolbar select:focus {
+.floating-toolbar select:focus,
+.floating-toolbar input:focus,
+#textToolbar input[type="number"]:focus,
+#ctaToolbar input[type="number"]:focus,
+#backgroundToolbar input[type="number"]:focus {
     border-color: var(--brand-primary) !important;
     box-shadow: 0 0 0 2px var(--brand-primary-light) !important;
     outline: none !important;
