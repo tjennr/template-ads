@@ -811,6 +811,42 @@ h1, h2, h3, h4, h5, h6 {
     white-space: nowrap;
 }
 
+/* Floating toolbar input styling fixes */
+.floating-toolbar .toolbar-size-input,
+.floating-toolbar .toolbar-font-select {
+    background: white !important;
+    color: #333333 !important;
+    border: 1px solid #dee2e6 !important;
+    font-size: 14px !important;
+}
+
+.floating-toolbar .toolbar-size-input:focus,
+.floating-toolbar .toolbar-font-select:focus {
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 2px var(--brand-primary-light) !important;
+    outline: none !important;
+}
+
+/* Fix for CTA checkbox styling */
+.checkbox-label input[type="checkbox"] {
+    background: white !important;
+    border: 2px solid #dee2e6 !important;
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 8px !important;
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+    background: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
+}
+
+.checkbox-label input[type="checkbox"]:focus {
+    outline: none !important;
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 2px var(--brand-primary-light) !important;
+}
+
 .toolbar-btn.active {
     background: var(--brand-primary);
     color: #ffffff;

@@ -456,7 +456,7 @@ class TemplateAdsEditor {
     }
 
     updateFocusableObjects() {
-        // Get all interactive objects on canvas including CTA when enabled
+        // Get all interactive objects on canvas including CTA when enabled and background
         this.focusableObjects = this.canvas.getObjects().filter(obj => 
             obj.id === 'title' || 
             obj.id === 'subtitle' || 
@@ -464,6 +464,9 @@ class TemplateAdsEditor {
             obj.id === 'logo' ||
             (obj.id === 'ctaGroup' && obj.visible)
         );
+        
+        // Add background as a virtual focusable object
+        this.focusableObjects.push({ id: 'background', virtual: true });
     }
 
     handleKeyboardNavigation(e) {
@@ -574,9 +577,14 @@ class TemplateAdsEditor {
         if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableObjects.length) {
             const focusedObject = this.focusableObjects[this.currentFocusIndex];
             
-            // Use regular selection highlighting instead of custom dashed border
-            this.canvas.setActiveObject(focusedObject);
-            this.canvas.renderAll();
+            if (focusedObject.virtual && focusedObject.id === 'background') {
+                // Handle virtual background object - show background toolbar
+                this.showBackgroundToolbar({ x: this.canvas.width / 2, y: this.canvas.height / 2 });
+            } else {
+                // Use regular selection highlighting for canvas objects
+                this.canvas.setActiveObject(focusedObject);
+                this.canvas.renderAll();
+            }
             
             // Announce focused element for screen readers
             this.announceFocusedElement(focusedObject);
@@ -620,6 +628,9 @@ class TemplateAdsEditor {
                 break;
             case 'logo':
                 announcement = 'Logo image';
+                break;
+            case 'background':
+                announcement = 'Background color controls';
                 break;
             default:
                 announcement = 'Canvas element';
