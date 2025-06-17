@@ -335,6 +335,12 @@ class TemplateAdsEditor {
         
         // Initialize slider fills on load
         this.initializeSliderFills();
+        
+        // Add keyboard accessibility for image upload labels
+        this.setupImageUploadAccessibility();
+        
+        // Add keyboard accessibility for CTA checkbox
+        this.setupCtaCheckboxAccessibility();
     }
 
     setupCanvasEvents() {
@@ -450,13 +456,13 @@ class TemplateAdsEditor {
     }
 
     updateFocusableObjects() {
-        // Get all interactive objects on canvas
+        // Get all interactive objects on canvas including CTA when enabled
         this.focusableObjects = this.canvas.getObjects().filter(obj => 
             obj.id === 'title' || 
             obj.id === 'subtitle' || 
-            obj.id === 'ctaGroup' || 
             obj.id === 'mainImage' || 
-            obj.id === 'logo'
+            obj.id === 'logo' ||
+            (obj.id === 'ctaGroup' && obj.visible)
         );
     }
 
@@ -495,33 +501,42 @@ class TemplateAdsEditor {
         }
         
         // Arrow keys to move selected object
-        if (this.canvas.getActiveObject()) {
-            const selectedObject = this.canvas.getActiveObject();
-            let moved = false;
-            
-            switch(e.key) {
-                case 'ArrowLeft':
-                    selectedObject.set('left', selectedObject.left - 5);
-                    moved = true;
-                    break;
-                case 'ArrowRight':
-                    selectedObject.set('left', selectedObject.left + 5);
-                    moved = true;
-                    break;
-                case 'ArrowUp':
-                    selectedObject.set('top', selectedObject.top - 5);
-                    moved = true;
-                    break;
-                case 'ArrowDown':
-                    selectedObject.set('top', selectedObject.top + 5);
-                    moved = true;
-                    break;
-            }
-            
-            if (moved) {
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            const activeObject = this.canvas.getActiveObject();
+            if (activeObject) {
                 e.preventDefault();
-                this.canvas.renderAll();
-                this.saveState();
+                let moved = false;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        activeObject.set('left', activeObject.left - 5);
+                        moved = true;
+                        break;
+                    case 'ArrowRight':
+                        activeObject.set('left', activeObject.left + 5);
+                        moved = true;
+                        break;
+                    case 'ArrowUp':
+                        activeObject.set('top', activeObject.top - 5);
+                        moved = true;
+                        break;
+                    case 'ArrowDown':
+                        activeObject.set('top', activeObject.top + 5);
+                        moved = true;
+                        break;
+                }
+                
+                if (moved) {
+                    this.canvas.renderAll();
+                    this.saveState();
+                    
+                    // Update toolbar positions if they're visible
+                    if (activeObject === this.selectedTextObject) {
+                        this.updateToolbarPosition();
+                    } else if (activeObject === this.selectedCtaObject) {
+                        this.updateCtaToolbarPosition();
+                    }
+                }
             }
         }
         
@@ -553,38 +568,14 @@ class TemplateAdsEditor {
     }
 
     highlightFocusedObject() {
-        // Remove previous focus highlight
-        this.canvas.getObjects().forEach(obj => {
-            obj.set('stroke', obj.originalStroke || null);
-            obj.set('strokeWidth', obj.originalStrokeWidth || 0);
-            obj.set('strokeDashArray', null);
-        });
+        // Clear any existing selection first
+        this.canvas.discardActiveObject();
         
         if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableObjects.length) {
             const focusedObject = this.focusableObjects[this.currentFocusIndex];
             
-            // Store original stroke properties
-            focusedObject.originalStroke = focusedObject.stroke;
-            focusedObject.originalStrokeWidth = focusedObject.strokeWidth;
-            
-            // Add focus highlight with special handling for CTA group
-            if (focusedObject.id === 'ctaGroup') {
-                // For CTA groups, highlight the background element
-                const ctaBackground = focusedObject.getObjects().find(obj => obj.id === 'ctaBackground');
-                if (ctaBackground) {
-                    ctaBackground.originalStroke = ctaBackground.stroke;
-                    ctaBackground.originalStrokeWidth = ctaBackground.strokeWidth;
-                    ctaBackground.set('stroke', '#007bff');
-                    ctaBackground.set('strokeWidth', 4);
-                    ctaBackground.set('strokeDashArray', [8, 4]);
-                }
-            } else {
-                // Standard highlight for other elements
-                focusedObject.set('stroke', '#007bff');
-                focusedObject.set('strokeWidth', 3);
-                focusedObject.set('strokeDashArray', [5, 5]);
-            }
-            
+            // Use regular selection highlighting instead of custom dashed border
+            this.canvas.setActiveObject(focusedObject);
             this.canvas.renderAll();
             
             // Announce focused element for screen readers
@@ -654,12 +645,8 @@ class TemplateAdsEditor {
     }
 
     clearCanvasFocus() {
-        // Clear focus highlighting
-        this.canvas.getObjects().forEach(obj => {
-            obj.set('stroke', obj.originalStroke || null);
-            obj.set('strokeWidth', obj.originalStrokeWidth || 0);
-            obj.set('strokeDashArray', null);
-        });
+        // Clear selection highlighting
+        this.canvas.discardActiveObject();
         this.currentFocusIndex = -1;
         this.canvas.renderAll();
     }
@@ -705,6 +692,36 @@ class TemplateAdsEditor {
         this.hideTextToolbar();
         this.hideCtaToolbar();
         this.hideBackgroundToolbar();
+    }
+
+    setupImageUploadAccessibility() {
+        // Make image upload labels keyboard accessible
+        const uploadLabels = document.querySelectorAll('.upload-label');
+        uploadLabels.forEach(label => {
+            label.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const fileInput = label.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        fileInput.click();
+                    }
+                }
+            });
+        });
+    }
+
+    setupCtaCheckboxAccessibility() {
+        // Make CTA checkbox keyboard accessible
+        const ctaCheckbox = document.getElementById('ctaEnabled');
+        if (ctaCheckbox) {
+            ctaCheckbox.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    ctaCheckbox.checked = !ctaCheckbox.checked;
+                    ctaCheckbox.dispatchEvent(new Event('change'));
+                }
+            });
+        }
     }
 
     setupTextToolbarEvents() {
