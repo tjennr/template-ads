@@ -461,12 +461,28 @@ class TemplateAdsEditor {
     }
 
     handleKeyboardNavigation(e) {
-        // Tab navigation
+        // Tab navigation - allow tabbing out of canvas
         if (e.key === 'Tab') {
-            e.preventDefault();
-            if (e.shiftKey) {
+            // Only prevent default if we're navigating within canvas objects
+            if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableObjects.length - 1 && !e.shiftKey) {
+                // Normal tab within canvas
+                e.preventDefault();
+                this.focusNextObject();
+            } else if (this.currentFocusIndex > 0 && e.shiftKey) {
+                // Shift+tab within canvas
+                e.preventDefault();
                 this.focusPreviousObject();
-            } else {
+            } else if (this.currentFocusIndex === this.focusableObjects.length - 1 && !e.shiftKey) {
+                // Tab out of canvas (forward)
+                this.clearCanvasFocus();
+                // Let browser handle natural tab flow
+            } else if (this.currentFocusIndex === 0 && e.shiftKey) {
+                // Tab out of canvas (backward)
+                this.clearCanvasFocus();
+                // Let browser handle natural tab flow
+            } else if (this.currentFocusIndex === -1 && !e.shiftKey) {
+                // First tab into canvas
+                e.preventDefault();
                 this.focusNextObject();
             }
         }
@@ -541,6 +557,7 @@ class TemplateAdsEditor {
         this.canvas.getObjects().forEach(obj => {
             obj.set('stroke', obj.originalStroke || null);
             obj.set('strokeWidth', obj.originalStrokeWidth || 0);
+            obj.set('strokeDashArray', null);
         });
         
         if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableObjects.length) {
@@ -550,10 +567,23 @@ class TemplateAdsEditor {
             focusedObject.originalStroke = focusedObject.stroke;
             focusedObject.originalStrokeWidth = focusedObject.strokeWidth;
             
-            // Add focus highlight
-            focusedObject.set('stroke', '#007bff');
-            focusedObject.set('strokeWidth', 3);
-            focusedObject.set('strokeDashArray', [5, 5]);
+            // Add focus highlight with special handling for CTA group
+            if (focusedObject.id === 'ctaGroup') {
+                // For CTA groups, highlight the background element
+                const ctaBackground = focusedObject.getObjects().find(obj => obj.id === 'ctaBackground');
+                if (ctaBackground) {
+                    ctaBackground.originalStroke = ctaBackground.stroke;
+                    ctaBackground.originalStrokeWidth = ctaBackground.strokeWidth;
+                    ctaBackground.set('stroke', '#007bff');
+                    ctaBackground.set('strokeWidth', 4);
+                    ctaBackground.set('strokeDashArray', [8, 4]);
+                }
+            } else {
+                // Standard highlight for other elements
+                focusedObject.set('stroke', '#007bff');
+                focusedObject.set('strokeWidth', 3);
+                focusedObject.set('strokeDashArray', [5, 5]);
+            }
             
             this.canvas.renderAll();
             
@@ -621,6 +651,60 @@ class TemplateAdsEditor {
             })();
             
         announcement_div.textContent = announcement;
+    }
+
+    clearCanvasFocus() {
+        // Clear focus highlighting
+        this.canvas.getObjects().forEach(obj => {
+            obj.set('stroke', obj.originalStroke || null);
+            obj.set('strokeWidth', obj.originalStrokeWidth || 0);
+            obj.set('strokeDashArray', null);
+        });
+        this.currentFocusIndex = -1;
+        this.canvas.renderAll();
+    }
+
+    makeToolbarAccessible(toolbar) {
+        // Make toolbar elements focusable and add proper tab order
+        const focusableElements = toolbar.querySelectorAll('input, select, button');
+        focusableElements.forEach((element, index) => {
+            element.setAttribute('tabindex', '0');
+            
+            // Add keyboard event listener for Escape to close toolbar
+            element.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.hideAllToolbars();
+                    // Return focus to canvas
+                    this.canvas.getElement().focus();
+                } else if (e.key === 'Tab') {
+                    // Handle tab navigation within toolbar
+                    if (!e.shiftKey && index === focusableElements.length - 1) {
+                        // Tab out of last element - return to canvas
+                        e.preventDefault();
+                        this.hideAllToolbars();
+                        this.canvas.getElement().focus();
+                    } else if (e.shiftKey && index === 0) {
+                        // Shift+tab out of first element - return to canvas
+                        e.preventDefault();
+                        this.hideAllToolbars();
+                        this.canvas.getElement().focus();
+                    }
+                }
+            });
+        });
+        
+        // Focus first element in toolbar
+        if (focusableElements.length > 0) {
+            setTimeout(() => {
+                focusableElements[0].focus();
+            }, 100);
+        }
+    }
+
+    hideAllToolbars() {
+        this.hideTextToolbar();
+        this.hideCtaToolbar();
+        this.hideBackgroundToolbar();
     }
 
     setupTextToolbarEvents() {
@@ -804,6 +888,7 @@ class TemplateAdsEditor {
 
     showTextToolbar() {
         this.textToolbar.classList.remove('hidden');
+        this.makeToolbarAccessible(this.textToolbar);
     }
 
     hideTextToolbar() {
@@ -813,6 +898,7 @@ class TemplateAdsEditor {
 
     showCtaToolbar() {
         this.ctaToolbar.classList.remove('hidden');
+        this.makeToolbarAccessible(this.ctaToolbar);
     }
 
     hideCtaToolbar() {
@@ -2692,6 +2778,7 @@ class TemplateAdsEditor {
         if (!this.backgroundToolbar) return;
         
         this.backgroundToolbar.classList.remove('hidden');
+        this.makeToolbarAccessible(this.backgroundToolbar);
         
         // Position the toolbar near the click point
         const canvasContainer = this.canvas.getElement().parentElement;
