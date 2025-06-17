@@ -1788,7 +1788,7 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // Add clipping to contain image within its designated area
+                // Add clipping for split templates, remove for full templates
                 if (this.currentTemplate === 'template4') {
                     // Split Left: Clip to left half
                     clonedImg.clipPath = new fabric.Rect({
@@ -1804,6 +1804,9 @@ class TemplateAdsEditor {
                     clonedImg.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
+                } else {
+                    // Full templates: Remove any existing clipping
+                    clonedImg.clipPath = null;
                 }
                 
                 // Remove any existing main image first
@@ -1952,7 +1955,7 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // Add clipping to contain image within its designated area
+                // Add clipping for split templates, remove for full templates
                 if (this.currentTemplate === 'template4') {
                     // Split Left: Clip to left half
                     img.clipPath = new fabric.Rect({
@@ -1968,6 +1971,9 @@ class TemplateAdsEditor {
                     img.clipPath = new fabric.Rect({
                         left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
                     });
+                } else {
+                    // Full templates: Remove any existing clipping
+                    img.clipPath = null;
                 }
                 
                 // Remove existing main image
