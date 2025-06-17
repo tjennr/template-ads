@@ -500,7 +500,13 @@ class TemplateAdsEditor {
         if (e.key === 'Enter' && this.currentFocusIndex >= 0) {
             e.preventDefault();
             const focusedObject = this.focusableObjects[this.currentFocusIndex];
-            this.selectObject(focusedObject);
+            
+            if (focusedObject.virtual && focusedObject.id === 'background') {
+                // Show background toolbar when background is selected
+                this.showBackgroundToolbar({ x: this.canvas.width / 2, y: this.canvas.height / 2 });
+            } else {
+                this.selectObject(focusedObject);
+            }
         }
         
         // Arrow keys to move selected object
@@ -578,8 +584,8 @@ class TemplateAdsEditor {
             const focusedObject = this.focusableObjects[this.currentFocusIndex];
             
             if (focusedObject.virtual && focusedObject.id === 'background') {
-                // Handle virtual background object - show background toolbar
-                this.showBackgroundToolbar({ x: this.canvas.width / 2, y: this.canvas.height / 2 });
+                // Handle virtual background object - just announce, don't show toolbar yet
+                // Toolbar will be shown on Enter/Space key press
             } else {
                 // Use regular selection highlighting for canvas objects
                 this.canvas.setActiveObject(focusedObject);
