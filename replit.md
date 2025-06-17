@@ -115,6 +115,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 16, 2025: Standardized Split Left text sizing and positioning to match Split Right in horizontal orientation for consistency
 - June 16, 2025: Updated split template image scaling to fill entire designated half areas using Math.max scaling with proper clipping
 - June 16, 2025: Replaced default office image with new gray placeholder image featuring clean background and image placeholder icon
+- June 17, 2025: Updated placeholder image to new design with refined image placeholder icon
 
 ## Changelog
 - June 16, 2025. Initial setup
