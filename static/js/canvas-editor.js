@@ -362,21 +362,12 @@ class TemplateAdsEditor {
                 this.updateCtaToolbarPosition();
                 console.log('Selected CTA object');
             } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
-                // Handle image clicks - check if in allowed area for split templates
-                if (this.isClickInAllowedImageArea(e.pointer, e.target.id)) {
-                    this.canvas.setActiveObject(e.target);
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
-                    this.hideBackgroundToolbar();
-                    console.log('Selected image:', e.target.id);
-                } else {
-                    // Treat as background click for split templates
-                    this.canvas.discardActiveObject();
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
-                    this.showBackgroundToolbar(e.pointer);
-                    console.log('Background click in text area of split template');
-                }
+                // Handle image clicks - containsPoint method handles area restrictions for split templates
+                this.canvas.setActiveObject(e.target);
+                this.hideTextToolbar();
+                this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
+                console.log('Selected image:', e.target.id);
             } else if (!e.target) {
                 // Clicked on background (empty canvas area)
                 this.canvas.discardActiveObject();
@@ -2445,6 +2436,29 @@ class TemplateAdsEditor {
                 }
                 
                 this.mainImage = img;
+                
+                // Override containsPoint for split templates to restrict click areas
+                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                    const originalContainsPoint = img.containsPoint.bind(img);
+                    const editor = this;
+                    
+                    img.containsPoint = function(point, lines, absolute) {
+                        // First check if the point is within the normal image bounds
+                        if (!originalContainsPoint(point, lines, absolute)) {
+                            return false;
+                        }
+                        
+                        // For split templates, check if click is in allowed area
+                        // Point is already in local object coordinates, need to convert to canvas coordinates
+                        const transform = this.calcTransformMatrix();
+                        const canvasPoint = fabric.util.transformPoint(point, transform);
+                        
+                        console.log('Click point check:', canvasPoint, 'for template:', editor.currentTemplate);
+                        const isAllowed = editor.isClickInAllowedImageArea(canvasPoint, this.id);
+                        console.log('Click allowed:', isAllowed);
+                        return isAllowed;
+                    };
+                }
                 
                 // Add image and send to back so text appears in front
                 this.canvas.add(img);
