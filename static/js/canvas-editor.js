@@ -1908,9 +1908,9 @@ class TemplateAdsEditor {
 
         // Group them together
         this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-            left: canvasWidth * 0.1,
+            left: canvasWidth * 0.1 + 60,
             top: canvasHeight * 0.85,
-            originX: 'left',
+            originX: 'center',
             originY: 'center',
             id: 'ctaGroup'
         });
@@ -2195,8 +2195,8 @@ class TemplateAdsEditor {
             });
             
             const ctaButtonBg = new fabric.Rect({
-                left: canvasWidth * 0.25,
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 width: 120,
                 height: 40,
                 fill: '#0077B5',
@@ -2210,8 +2210,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaText = new fabric.Text('Shop Now', {
-                left: canvasWidth * 0.25,
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 fontSize: 18,
                 fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2270,8 +2270,8 @@ class TemplateAdsEditor {
             const buttonWidth = Math.max(80, tempText.width + 32);
 
             const ctaButtonBg = new fabric.Rect({
-                left: canvasWidth * 0.25,
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 width: buttonWidth,
                 height: 40,
                 fill: '#0077B5',
@@ -2285,8 +2285,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaText = new fabric.Text('Shop Now', {
-                left: canvasWidth * 0.25,
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 fontSize: 18,
                 fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2353,8 +2353,8 @@ class TemplateAdsEditor {
 
         // CTA Button
         const ctaButtonBg = new fabric.Rect({
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.9,
+            left: 0,
+            top: 0,
             width: buttonWidth,
             height: 40,
             fill: '#0077B5',
@@ -2368,8 +2368,8 @@ class TemplateAdsEditor {
         });
 
         this.ctaText = new fabric.Text('Shop Now', {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.9,
+            left: 0,
+            top: 0,
             fontSize: 18,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
