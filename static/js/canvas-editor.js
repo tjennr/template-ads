@@ -56,35 +56,9 @@ class TemplateAdsEditor {
         // Create initial template content without waiting for image load
         this.loadTemplate(this.currentTemplate);
         
-        // Load default image in background
+        // Load default image using the proper image handling method
         const defaultImagePath = '/static/images/default-placeholder.png';
-        fabric.Image.fromURL(defaultImagePath, (img) => {
-            const canvasWidth = this.canvas.width;
-            const canvasHeight = this.canvas.height;
-            
-            // Scale and position the main image
-            const scaleX = canvasWidth / img.width;
-            const scaleY = canvasHeight / img.height;
-            const scale = Math.max(scaleX, scaleY);
-            
-            img.set({
-                left: canvasWidth / 2,
-                top: canvasHeight / 2,
-                originX: 'center',
-                originY: 'center',
-                scaleX: scale,
-                scaleY: scale,
-                selectable: true,
-                evented: true,
-                id: 'mainImage'
-            });
-            
-            this.canvas.add(img);
-            this.canvas.sendToBack(img);
-            this.mainImage = img;
-            this.canvas.renderAll();
-            this.saveState();
-        });
+        this.addImageToCanvas(defaultImagePath, 'main');
         
         this.updateFontFamilyDisplay();
         this.applyZoom();
@@ -2425,53 +2399,63 @@ class TemplateAdsEditor {
                     const scaleToFitHeight = targetHeight / img.height;
                     const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
-                    // Instead of scaling to full canvas, crop the image to fit only the target area
-                    const cropScale = Math.max(targetWidth / img.width, targetHeight / img.height);
+                    // Scale image to fill the entire canvas area first
+                    const fullCanvasScale = Math.max(canvasWidth / img.width, canvasHeight / img.height);
                     
                     img.set({
-                        left: targetLeft,
-                        top: targetTop,
+                        left: canvasWidth / 2,
+                        top: canvasHeight / 2,
                         originX: 'center',
                         originY: 'center',
-                        scaleX: cropScale,
-                        scaleY: cropScale,
+                        scaleX: fullCanvasScale,
+                        scaleY: fullCanvasScale,
                         id: 'mainImage',
                         selectable: true,
                         evented: true
                     });
                     
-                    // Apply clipping for split templates
+                    // Apply strict clipping for split templates to prevent bleeding
+                    let clipX = 0, clipY = 0, clipWidth = canvasWidth, clipHeight = canvasHeight;
+                    
                     if (this.currentOrientation === 'vertical') {
                         // Vertical orientation clipping
                         if (this.currentTemplate === 'template4') {
-                            img.clipPath = new fabric.Rect({
-                                left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                            });
+                            // Split Left (vertical) = top half only
+                            clipHeight = canvasHeight * 0.5;
                         } else if (this.currentTemplate === 'template5') {
-                            img.clipPath = new fabric.Rect({
-                                left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                            });
+                            // Split Right (vertical) = bottom half only
+                            clipY = canvasHeight * 0.5;
+                            clipHeight = canvasHeight * 0.5;
                         } else if (this.currentTemplate === 'template6') {
-                            img.clipPath = new fabric.Rect({
-                                left: 0, top: canvasHeight * 0.2, width: canvasWidth, height: canvasHeight * 0.6, absolutePositioned: true
-                            });
+                            // Split Top (vertical) = center area only
+                            clipY = canvasHeight * 0.2;
+                            clipHeight = canvasHeight * 0.6;
                         }
                     } else {
                         // Horizontal orientation clipping
                         if (this.currentTemplate === 'template4') {
-                            img.clipPath = new fabric.Rect({
-                                left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                            });
+                            // Split Left (horizontal) = left half only
+                            clipWidth = canvasWidth * 0.5;
                         } else if (this.currentTemplate === 'template5') {
-                            img.clipPath = new fabric.Rect({
-                                left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                            });
+                            // Split Right (horizontal) = right half only
+                            clipX = canvasWidth * 0.5;
+                            clipWidth = canvasWidth * 0.5;
                         } else if (this.currentTemplate === 'template6') {
-                            img.clipPath = new fabric.Rect({
-                                left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                            });
+                            // Split Top (horizontal) = top half only
+                            clipHeight = canvasHeight * 0.5;
                         }
                     }
+                    
+                    // Create clipping rectangle with proper coordinates
+                    img.clipPath = new fabric.Rect({
+                        left: clipX - canvasWidth / 2,
+                        top: clipY - canvasHeight / 2,
+                        width: clipWidth,
+                        height: clipHeight,
+                        originX: 'left',
+                        originY: 'top',
+                        absolutePositioned: false
+                    });
                     
                     // For split templates, we use clipping for visual restriction
                     // Click handling will be managed at canvas level instead of overriding containsPoint
