@@ -2507,6 +2507,9 @@ class TemplateAdsEditor {
                 this.canvas.add(img);
                 this.canvas.sendToBack(img);
                 
+                // Set editor reference for containsPoint method (for split templates)
+                img.canvas.editor = this;
+                
             } else if (type === 'logo') {
                 // Determine logo position based on current template
                 const currentTemplate = this.currentTemplate || 'template1';
