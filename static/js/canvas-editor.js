@@ -2194,47 +2194,7 @@ class TemplateAdsEditor {
                     
                     clonedImg.clipPath = clipRect;
                     
-                    // Override the image's containsPoint method to only respond to clicks within the clipped area
-                    const originalContainsPoint = clonedImg.containsPoint;
-                    clonedImg.containsPoint = function(point) {
-                        // Check if the point is within the designated template area
-                        let isInArea = false;
-                        
-                        if (this.canvas && this.canvas.editor) {
-                            const template = this.canvas.editor.currentTemplate;
-                            const canvasWidth = this.canvas.width;
-                            const canvasHeight = this.canvas.height;
-                            const isVertical = this.canvas.editor.currentOrientation === 'vertical';
-                            
-                            if (template === 'template4') {
-                                // Split Left: only left half
-                                if (isVertical) {
-                                    isInArea = point.y <= canvasHeight * 0.5;
-                                } else {
-                                    isInArea = point.x <= canvasWidth * 0.5;
-                                }
-                            } else if (template === 'template5') {
-                                // Split Right: only right half
-                                if (isVertical) {
-                                    isInArea = point.y >= canvasHeight * 0.5;
-                                } else {
-                                    isInArea = point.x >= canvasWidth * 0.5;
-                                }
-                            } else if (template === 'template6') {
-                                // Split Top: only top half
-                                if (isVertical) {
-                                    isInArea = point.y >= canvasHeight * 0.2 && point.y <= canvasHeight * 0.8;
-                                } else {
-                                    isInArea = point.y <= canvasHeight * 0.5;
-                                }
-                            }
-                        }
-                        
-                        return isInArea && originalContainsPoint.call(this, point);
-                    };
-                    
-                    // Store reference to editor for the containsPoint method
-                    clonedImg.canvas.editor = this;
+                    // Canvas-level click handling manages split template interactions
                 } else {
                     // Full templates: position in designated area
                     clonedImg.set({
