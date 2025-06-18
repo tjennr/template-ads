@@ -124,12 +124,6 @@ class TemplateAdsEditor {
     changeOrientation(orientation) {
         this.currentOrientation = orientation;
         
-        // Update button states
-        document.querySelectorAll('.orientation-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.querySelector(`[data-orientation="${orientation}"]`).classList.add('active');
-        
         // Update canvas dimensions
         this.setCanvasDimensions();
         
@@ -357,45 +351,52 @@ class TemplateAdsEditor {
         this.setupTemplateDropdown();
         
         // Image uploads
-        document.getElementById('mainImageUpload').addEventListener('change', (e) => {
-            this.handleImageUpload(e, 'main');
-        });
+        const mainImageUpload = document.getElementById('mainImageUpload');
+        if (mainImageUpload) {
+            mainImageUpload.addEventListener('change', (e) => {
+                this.handleImageUpload(e, 'main');
+            });
+        }
         
-        document.getElementById('logoUpload').addEventListener('change', (e) => {
-            this.handleImageUpload(e, 'logo');
-        });
+        const logoUpload = document.getElementById('logoUpload');
+        if (logoUpload) {
+            logoUpload.addEventListener('change', (e) => {
+                this.handleImageUpload(e, 'logo');
+            });
+        }
         
         // Text inputs
-        document.getElementById('titleText').addEventListener('input', (e) => {
-            this.updateText('title', e.target.value);
-        });
+        const titleText = document.getElementById('titleText');
+        if (titleText) {
+            titleText.addEventListener('input', (e) => {
+                this.updateText('title', e.target.value);
+            });
+        }
         
-        document.getElementById('subtitleText').addEventListener('input', (e) => {
-            this.updateText('subtitle', e.target.value);
-        });
+        const subtitleText = document.getElementById('subtitleText');
+        if (subtitleText) {
+            subtitleText.addEventListener('input', (e) => {
+                this.updateText('subtitle', e.target.value);
+            });
+        }
         
-        document.getElementById('ctaText').addEventListener('input', (e) => {
-            this.updateText('cta', e.target.value);
-            this.updateCtaButtonSize();
-        });
+        const ctaText = document.getElementById('ctaText');
+        if (ctaText) {
+            ctaText.addEventListener('input', (e) => {
+                this.updateText('cta', e.target.value);
+                this.updateCtaButtonSize();
+            });
+        }
         
         // CTA toggle
-        document.getElementById('ctaEnabled').addEventListener('change', (e) => {
-            this.toggleCTA(e.target.checked);
-        });
+        const ctaEnabled = document.getElementById('ctaEnabled');
+        if (ctaEnabled) {
+            ctaEnabled.addEventListener('change', (e) => {
+                this.toggleCTA(e.target.checked);
+            });
+        }
 
-        // Orientation buttons
-        document.getElementById('horizontalBtn').addEventListener('click', () => {
-            this.changeOrientation('horizontal');
-        });
-
-        document.getElementById('squareBtn').addEventListener('click', () => {
-            this.changeOrientation('square');
-        });
-
-        document.getElementById('verticalBtn').addEventListener('click', () => {
-            this.changeOrientation('vertical');
-        });
+        // Orientation buttons removed - now handled by dropdown system
 
 
         
