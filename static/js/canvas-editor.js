@@ -2366,7 +2366,13 @@ class TemplateAdsEditor {
     }
     
     addImageToCanvas(dataUrl, type) {
+        console.log('Loading image:', dataUrl, 'type:', type);
         fabric.Image.fromURL(dataUrl, (img) => {
+            console.log('Image loaded successfully:', img);
+            if (!img || !img.width || !img.height) {
+                console.error('Invalid image loaded:', img);
+                return;
+            }
             const canvasWidth = this.canvas.getWidth();
             const canvasHeight = this.canvas.getHeight();
             
@@ -2434,18 +2440,16 @@ class TemplateAdsEditor {
                         evented: true
                     });
                     
-                    // Create a clipping rectangle that matches exactly the target area
-                    const clipRect = new fabric.Rect({
-                        left: 0,
-                        top: 0,
-                        width: targetWidth / cropScale,
-                        height: targetHeight / cropScale,
+                    // Create a clipping rectangle for split templates
+                    img.clipPath = new fabric.Rect({
+                        left: -targetWidth / 2,
+                        top: -targetHeight / 2,
+                        width: targetWidth,
+                        height: targetHeight,
                         originX: 'center',
                         originY: 'center',
                         absolutePositioned: false
                     });
-                    
-                    img.clipPath = clipRect;
                     
                     // For split templates, we use clipping for visual restriction
                     // Click handling will be managed at canvas level instead of overriding containsPoint
