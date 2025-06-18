@@ -1112,14 +1112,13 @@ input[type="checkbox"]:focus {
     top: calc(100% + 5px);
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(30, 30, 30, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: white;
+    border: 1px solid #ddd;
     border-radius: 8px;
     padding: 8px;
     min-width: 150px;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .effect-option {
@@ -1133,8 +1132,8 @@ input[type="checkbox"]:focus {
 .effect-toggle-btn {
     width: 100%;
     background: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #333;
+    border: 1px solid #ddd;
     border-radius: 4px;
     padding: 6px 10px;
     font-size: 12px;
@@ -1144,26 +1143,35 @@ input[type="checkbox"]:focus {
 }
 
 .effect-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: #f8f9fa;
+    border-color: #0077B5;
 }
 
 .effect-toggle-btn.active {
-    background: var(--bs-info);
-    border-color: var(--bs-info);
+    background: #0077B5;
+    border-color: #0077B5;
     color: white;
 }
 
 .effect-controls {
     margin-top: 8px;
     padding: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid #ddd;
 }
 
 .effect-label {
     display: block;
-    color: white;
+    color: #333;
     font-size: 11px;
     margin-bottom: 4px;
-    opacity: 0.8;
+    font-weight: 500;
+}
+
+/* Ensure dropdowns are properly hidden */
+.effect-dropdown.hidden {
+    display: none !important;
+}
+
+.effect-controls.hidden {
+    display: none !important;
 }

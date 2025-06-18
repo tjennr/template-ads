@@ -130,6 +130,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 18, 2025: Fixed floating toolbar persistence - toolbars now remain visible after clicking elements until user clicks elsewhere, ensuring proper selection feedback
 - June 18, 2025: Redesigned outline controls in floating toolbar - replaced outline toggle button with intuitive dropdown (None/Thin/Medium/Thick), outline color picker only appears when outline is enabled for cleaner minimalist interface
 - June 18, 2025: Enhanced shadow and outline controls with button-triggered dropdowns - clicking buttons reveals dropdown menus with effect options and color controls, providing better visual hierarchy and progressive disclosure
+- June 18, 2025: Fixed dropdown visibility and styling - dropdowns now properly hidden by default and only appear when buttons clicked, updated colors to white background with proper contrast matching website theme
 
 ## Changelog
 - June 16, 2025. Initial setup
