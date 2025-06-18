@@ -3311,7 +3311,7 @@ class TemplateAdsEditor {
         
         if (guides.length > 0) {
             this.drawGuidelines(guides);
-            this.snapToGuides(activeObject, guides);
+            // Removed automatic snapping - guides are now visual only
         }
     }
 
