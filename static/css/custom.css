@@ -1175,3 +1175,122 @@ input[type="checkbox"]:focus {
 .effect-controls.hidden {
     display: none !important;
 }
+
+/* Horizontal Control Dropdowns */
+.controls-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.control-dropdown-container {
+    flex: 1;
+    min-width: 0;
+}
+
+.control-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.control-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.control-dropdown-btn {
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+}
+
+.control-dropdown-btn:hover {
+    border-color: #0077B5;
+    box-shadow: 0 2px 4px rgba(0, 119, 181, 0.1);
+}
+
+.control-dropdown-btn.active {
+    border-color: #0077B5;
+    box-shadow: 0 0 0 2px rgba(0, 119, 181, 0.1);
+}
+
+.control-option-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.control-option-display svg {
+    flex-shrink: 0;
+}
+
+.dropdown-chevron {
+    font-size: 10px;
+    color: #6c757d;
+    transition: transform 0.2s ease;
+}
+
+.control-dropdown-btn.active .dropdown-chevron {
+    transform: rotate(180deg);
+}
+
+.control-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.control-dropdown-menu.hidden {
+    display: none;
+}
+
+.control-option {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: #333;
+    font-size: 13px;
+    text-align: left;
+}
+
+.control-option:hover {
+    background: #f8f9fa;
+}
+
+.control-option.active {
+    background: #0077B5;
+    color: white;
+}
+
+.control-option svg {
+    flex-shrink: 0;
+}

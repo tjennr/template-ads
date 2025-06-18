@@ -224,17 +224,137 @@ class TemplateAdsEditor {
         });
     }
     
-    setupEventListeners() {
-        // Template selection
-        document.querySelectorAll('.template-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.currentTemplate = btn.dataset.template;
-                this.loadTemplate(this.currentTemplate);
-                this.saveState();
+    setupOrientationDropdown() {
+        const orientationBtn = document.getElementById('orientationBtn');
+        const orientationMenu = document.getElementById('orientationMenu');
+        const orientationOptions = document.querySelectorAll('#orientationMenu .control-option');
+        
+        // Toggle dropdown
+        orientationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = orientationMenu.classList.contains('hidden');
+            
+            // Close template dropdown if open
+            const templateMenu = document.getElementById('templateMenu');
+            const templateBtn = document.getElementById('templateBtn');
+            if (templateMenu && !templateMenu.classList.contains('hidden')) {
+                templateMenu.classList.add('hidden');
+                templateBtn.classList.remove('active');
+            }
+            
+            if (isHidden) {
+                orientationMenu.classList.remove('hidden');
+                orientationBtn.classList.add('active');
+            } else {
+                orientationMenu.classList.add('hidden');
+                orientationBtn.classList.remove('active');
+            }
+        });
+        
+        // Handle option selection
+        orientationOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const orientation = option.getAttribute('data-orientation');
+                
+                // Update active state
+                orientationOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                
+                // Update button display
+                const display = orientationBtn.querySelector('.control-option-display');
+                display.innerHTML = option.innerHTML;
+                
+                // Change orientation
+                this.changeOrientation(orientation);
+                
+                // Close dropdown
+                orientationMenu.classList.add('hidden');
+                orientationBtn.classList.remove('active');
             });
         });
+    }
+    
+    setupTemplateDropdown() {
+        const templateBtn = document.getElementById('templateBtn');
+        const templateMenu = document.getElementById('templateMenu');
+        const templateOptions = document.querySelectorAll('#templateMenu .control-option');
+        
+        // Toggle dropdown
+        templateBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = templateMenu.classList.contains('hidden');
+            
+            // Close orientation dropdown if open
+            const orientationMenu = document.getElementById('orientationMenu');
+            const orientationBtn = document.getElementById('orientationBtn');
+            if (orientationMenu && !orientationMenu.classList.contains('hidden')) {
+                orientationMenu.classList.add('hidden');
+                orientationBtn.classList.remove('active');
+            }
+            
+            if (isHidden) {
+                templateMenu.classList.remove('hidden');
+                templateBtn.classList.add('active');
+            } else {
+                templateMenu.classList.add('hidden');
+                templateBtn.classList.remove('active');
+            }
+        });
+        
+        // Handle option selection
+        templateOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const template = option.getAttribute('data-template');
+                
+                // Update active state
+                templateOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                
+                // Update button display
+                const display = templateBtn.querySelector('.control-option-display');
+                display.innerHTML = option.innerHTML;
+                
+                // Load template
+                this.currentTemplate = template;
+                this.loadTemplate(template);
+                this.saveState();
+                
+                // Close dropdown
+                templateMenu.classList.add('hidden');
+                templateBtn.classList.remove('active');
+            });
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('orientationDropdown').contains(e.target)) {
+                const orientationMenu = document.getElementById('orientationMenu');
+                const orientationBtn = document.getElementById('orientationBtn');
+                if (orientationMenu && !orientationMenu.classList.contains('hidden')) {
+                    orientationMenu.classList.add('hidden');
+                    orientationBtn.classList.remove('active');
+                }
+            }
+            
+            if (!document.getElementById('templateDropdown').contains(e.target)) {
+                const templateMenu = document.getElementById('templateMenu');
+                const templateBtn = document.getElementById('templateBtn');
+                if (templateMenu && !templateMenu.classList.contains('hidden')) {
+                    templateMenu.classList.add('hidden');
+                    templateBtn.classList.remove('active');
+                }
+            }
+        });
+    }
+    
+    setupEventListeners() {
+        // Orientation dropdown
+        this.setupOrientationDropdown();
+        
+        // Template dropdown
+        this.setupTemplateDropdown();
         
         // Image uploads
         document.getElementById('mainImageUpload').addEventListener('change', (e) => {
