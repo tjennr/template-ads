@@ -853,7 +853,13 @@ class TemplateAdsEditor {
         const fontSizeInput = document.getElementById('toolbarFontSize');
         const textColorInput = document.getElementById('toolbarTextColor');
         const shadowBtn = document.getElementById('toolbarShadow');
-        const outlineSelect = document.getElementById('toolbarOutlineSelect');
+        const outlineBtn = document.getElementById('toolbarOutline');
+        
+        // Effect dropdown elements
+        const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');
+        const shadowControls = document.getElementById('shadowControls');
+        const shadowColorInput = document.getElementById('toolbarShadowColor');
+        const outlineToggleBtns = document.querySelectorAll('#outlineDropdown .effect-toggle-btn');
         const outlineControls = document.getElementById('outlineControls');
         const outlineColorInput = document.getElementById('toolbarOutlineColor');
 
@@ -943,10 +949,7 @@ class TemplateAdsEditor {
             });
         }
 
-        // Shadow effect toggle buttons
-        const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');
-        const shadowControls = document.getElementById('shadowControls');
-        const shadowColorInput = document.getElementById('toolbarShadowColor');
+        // Shadow effect toggle buttons - using variables declared at function start
 
         shadowToggleBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -978,10 +981,7 @@ class TemplateAdsEditor {
             });
         });
 
-        // Outline effect toggle buttons
-        const outlineToggleBtns = document.querySelectorAll('#outlineDropdown .effect-toggle-btn');
-        const outlineControls = document.getElementById('outlineControls');
-        const outlineColorInput = document.getElementById('toolbarOutlineColor');
+        // Outline effect toggle buttons - using shared variables from top of function
 
         outlineToggleBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -1219,11 +1219,13 @@ class TemplateAdsEditor {
         const fontFamilySelect = document.getElementById('toolbarFontFamily');
         const fontSizeInput = document.getElementById('toolbarFontSize');
         const textColorInput = document.getElementById('toolbarTextColor');
+        
+        // Get effect elements for this function only
         const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');
         const shadowControls = document.getElementById('shadowControls');
         const shadowColorInput = document.getElementById('toolbarShadowColor');
         const outlineToggleBtns = document.querySelectorAll('#outlineDropdown .effect-toggle-btn');
-        const outlineControls = document.getElementById('outlineControls');
+        const outlineControlsUpdate = document.getElementById('outlineControls');
         const outlineColorInput = document.getElementById('toolbarOutlineColor');
 
         // Check if elements exist before setting values
