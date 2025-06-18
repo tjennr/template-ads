@@ -1800,8 +1800,8 @@ class TemplateAdsEditor {
         
         // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
-            left: canvasWidth / 2,
-            top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
+            left: 0,
+            top: 0,
             width: 120,
             height: 40,
             fill: '#0077B5',
@@ -1816,8 +1816,8 @@ class TemplateAdsEditor {
 
         // CTA Button Text
         this.ctaText = new fabric.Text('Shop Now', {
-            left: canvasWidth / 2,
-            top: isVertical ? canvasHeight * 0.85 : canvasHeight * 0.88,
+            left: 0,
+            top: 0,
             fontSize: 18,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -1878,14 +1878,14 @@ class TemplateAdsEditor {
         
         // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
-            left: canvasWidth * 0.1,
-            top: canvasHeight * 0.85,
+            left: 0,
+            top: 0,
             width: 120,
             height: 40,
             fill: '#0077B5',
             rx: 8,
             ry: 8,
-            originX: 'left',
+            originX: 'center',
             originY: 'center',
             selectable: false,
             evented: false,
@@ -1894,8 +1894,8 @@ class TemplateAdsEditor {
 
         // CTA Button Text
         this.ctaText = new fabric.Text('Shop Now', {
-            left: canvasWidth * 0.1 + 60,
-            top: canvasHeight * 0.85,
+            left: 0,
+            top: 0,
             fontSize: 18,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -1963,8 +1963,8 @@ class TemplateAdsEditor {
 
         // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.8,
+            left: 0,
+            top: 0,
             width: buttonWidth,
             height: 40,
             fill: '#0077B5',
@@ -1979,8 +1979,8 @@ class TemplateAdsEditor {
 
         // CTA Button Text
         this.ctaText = new fabric.Text(ctaTextValue, {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.8,
+            left: 0,
+            top: 0,
             fontSize: 18,
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -2042,8 +2042,8 @@ class TemplateAdsEditor {
             });
             
             const ctaButtonBg = new fabric.Rect({
-                left: canvasWidth * 0.75,
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 width: 120,
                 height: 40,
                 fill: '#0077B5',
@@ -2057,8 +2057,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaText = new fabric.Text('Shop Now', {
-                left: canvasWidth * 0.75,
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 fontSize: 18,
                 fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2117,8 +2117,8 @@ class TemplateAdsEditor {
             const buttonWidth = Math.max(80, tempText.width + 32);
 
             const ctaButtonBg = new fabric.Rect({
-                left: canvasWidth * 0.75, // Match Split Right positioning
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 width: buttonWidth,
                 height: 40,
                 fill: '#0077B5',
@@ -2132,8 +2132,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaText = new fabric.Text('Shop Now', {
-                left: canvasWidth * 0.75, // Match Split Right positioning
-                top: canvasHeight * 0.7,
+                left: 0,
+                top: 0,
                 fontSize: 18,
                 fill: '#ffffff',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -3180,6 +3180,12 @@ class TemplateAdsEditor {
                 background.set({
                     width: newWidth,
                     height: Math.max(40, this.ctaText.height * this.ctaText.scaleY + 16)
+                });
+                
+                // Ensure text remains centered in the background
+                this.ctaText.set({
+                    left: 0,
+                    top: 0
                 });
                 
                 this.canvas.renderAll();
