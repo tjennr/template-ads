@@ -228,23 +228,48 @@
             <input type="color" class="toolbar-color-input" id="toolbarTextColor" title="Text Color">
         </div>
         
-        <div class="toolbar-section">
-            <button class="toolbar-btn" id="toolbarShadow" title="Toggle Shadow">
+        <div class="toolbar-section effect-dropdown-container">
+            <button class="toolbar-btn effect-btn" id="toolbarShadow" title="Shadow Effects">
                 <i class="fas fa-cloud"></i>
+                <i class="fas fa-chevron-down effect-chevron"></i>
             </button>
+            <div class="effect-dropdown hidden" id="shadowDropdown">
+                <div class="effect-option">
+                    <button class="effect-toggle-btn" data-effect="none">No Shadow</button>
+                </div>
+                <div class="effect-option">
+                    <button class="effect-toggle-btn" data-effect="shadow">Drop Shadow</button>
+                </div>
+                <div class="effect-controls shadow-controls hidden" id="shadowControls">
+                    <label class="effect-label">Shadow Color:</label>
+                    <input type="color" class="toolbar-color-input" id="toolbarShadowColor" title="Shadow Color" value="#000000">
+                </div>
+            </div>
         </div>
         
-        <div class="toolbar-section">
-            <select class="toolbar-outline-select" id="toolbarOutlineSelect">
-                <option value="none">No Outline</option>
-                <option value="thin">Thin Outline</option>
-                <option value="medium">Medium Outline</option>
-                <option value="thick">Thick Outline</option>
-            </select>
-        </div>
-        
-        <div class="toolbar-section outline-controls hidden" id="outlineControls">
-            <input type="color" class="toolbar-color-input" id="toolbarOutlineColor" title="Outline Color" value="#000000">
+        <div class="toolbar-section effect-dropdown-container">
+            <button class="toolbar-btn effect-btn" id="toolbarOutline" title="Outline Effects">
+                <i class="far fa-circle"></i>
+                <i class="fas fa-chevron-down effect-chevron"></i>
+            </button>
+            <div class="effect-dropdown hidden" id="outlineDropdown">
+                <div class="effect-option">
+                    <button class="effect-toggle-btn" data-effect="none">No Outline</button>
+                </div>
+                <div class="effect-option">
+                    <button class="effect-toggle-btn" data-effect="thin">Thin Outline</button>
+                </div>
+                <div class="effect-option">
+                    <button class="effect-toggle-btn" data-effect="medium">Medium Outline</button>
+                </div>
+                <div class="effect-option">
+                    <button class="effect-toggle-btn" data-effect="thick">Thick Outline</button>
+                </div>
+                <div class="effect-controls outline-controls hidden" id="outlineControls">
+                    <label class="effect-label">Outline Color:</label>
+                    <input type="color" class="toolbar-color-input" id="toolbarOutlineColor" title="Outline Color" value="#000000">
+                </div>
+            </div>
         </div>
     </div>
 

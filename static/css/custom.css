@@ -1082,3 +1082,88 @@ input[type="checkbox"]:focus {
 .canvas-container canvas:active {
     cursor: grabbing;
 }
+
+/* Effect dropdown containers */
+.effect-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.effect-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 50px;
+    justify-content: center;
+}
+
+.effect-chevron {
+    font-size: 10px;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+}
+
+.effect-btn.active .effect-chevron {
+    transform: rotate(180deg);
+}
+
+.effect-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    min-width: 150px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.effect-option {
+    margin-bottom: 4px;
+}
+
+.effect-option:last-child {
+    margin-bottom: 0;
+}
+
+.effect-toggle-btn {
+    width: 100%;
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.effect-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.effect-toggle-btn.active {
+    background: var(--bs-info);
+    border-color: var(--bs-info);
+    color: white;
+}
+
+.effect-controls {
+    margin-top: 8px;
+    padding: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.effect-label {
+    display: block;
+    color: white;
+    font-size: 11px;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
