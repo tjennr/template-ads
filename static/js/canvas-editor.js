@@ -39,6 +39,11 @@ class TemplateAdsEditor {
         this.maxZoom = 3;
         this.zoomStep = 0.25;
         
+        // Smart guides properties
+        this.guidelines = [];
+        this.snapThreshold = 8; // pixels
+        this.showingGuidelines = false;
+        
         this.setCanvasDimensions();
         this.setupEventListeners();
         this.setupCanvasEvents();
@@ -469,6 +474,11 @@ class TemplateAdsEditor {
             this.debouncedSaveState();
         });
         this.canvas.on('path:created', () => this.debouncedSaveState());
+        
+        // Smart guides functionality
+        this.canvas.on('object:moving', (e) => this.handleObjectMoving(e));
+        this.canvas.on('object:moved', () => this.clearGuidelines());
+        this.canvas.on('selection:cleared', () => this.clearGuidelines());
         
         // Add keyboard accessibility for ad elements
         this.setupKeyboardAccessibility();
@@ -3286,6 +3296,217 @@ class TemplateAdsEditor {
                 }
                 this.saveState();
             });
+        }
+    }
+
+    // Smart guides functionality
+    handleObjectMoving(e) {
+        const activeObject = e.target;
+        if (!activeObject || activeObject.isGuideline) return;
+
+        this.clearGuidelines();
+        
+        const activeObjectBounds = this.getObjectBounds(activeObject);
+        const guides = this.findAlignmentGuides(activeObject, activeObjectBounds);
+        
+        if (guides.length > 0) {
+            this.drawGuidelines(guides);
+            this.snapToGuides(activeObject, guides);
+        }
+    }
+
+    getObjectBounds(obj) {
+        const bounds = obj.getBoundingRect();
+        return {
+            left: bounds.left,
+            top: bounds.top,
+            right: bounds.left + bounds.width,
+            bottom: bounds.top + bounds.height,
+            centerX: bounds.left + bounds.width / 2,
+            centerY: bounds.top + bounds.height / 2,
+            width: bounds.width,
+            height: bounds.height
+        };
+    }
+
+    findAlignmentGuides(activeObject, activeBounds) {
+        const guides = [];
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Canvas center guides
+        const canvasCenterX = canvasWidth / 2;
+        const canvasCenterY = canvasHeight / 2;
+        
+        if (Math.abs(activeBounds.centerX - canvasCenterX) < this.snapThreshold) {
+            guides.push({
+                type: 'vertical',
+                position: canvasCenterX,
+                start: 0,
+                end: canvasHeight,
+                isCanvas: true
+            });
+        }
+        
+        if (Math.abs(activeBounds.centerY - canvasCenterY) < this.snapThreshold) {
+            guides.push({
+                type: 'horizontal',
+                position: canvasCenterY,
+                start: 0,
+                end: canvasWidth,
+                isCanvas: true
+            });
+        }
+
+        // Object alignment guides
+        const objects = this.canvas.getObjects().filter(obj => 
+            obj !== activeObject && 
+            obj.visible && 
+            !obj.virtual &&
+            !obj.isGuideline &&
+            obj.id !== 'background'
+        );
+
+        objects.forEach(obj => {
+            const objBounds = this.getObjectBounds(obj);
+            
+            // Vertical alignment guides
+            if (Math.abs(activeBounds.left - objBounds.left) < this.snapThreshold) {
+                guides.push({
+                    type: 'vertical',
+                    position: objBounds.left,
+                    start: Math.min(activeBounds.top, objBounds.top) - 20,
+                    end: Math.max(activeBounds.bottom, objBounds.bottom) + 20,
+                    isCanvas: false
+                });
+            }
+            
+            if (Math.abs(activeBounds.right - objBounds.right) < this.snapThreshold) {
+                guides.push({
+                    type: 'vertical',
+                    position: objBounds.right,
+                    start: Math.min(activeBounds.top, objBounds.top) - 20,
+                    end: Math.max(activeBounds.bottom, objBounds.bottom) + 20,
+                    isCanvas: false
+                });
+            }
+            
+            if (Math.abs(activeBounds.centerX - objBounds.centerX) < this.snapThreshold) {
+                guides.push({
+                    type: 'vertical',
+                    position: objBounds.centerX,
+                    start: Math.min(activeBounds.top, objBounds.top) - 20,
+                    end: Math.max(activeBounds.bottom, objBounds.bottom) + 20,
+                    isCanvas: false
+                });
+            }
+            
+            // Horizontal alignment guides
+            if (Math.abs(activeBounds.top - objBounds.top) < this.snapThreshold) {
+                guides.push({
+                    type: 'horizontal',
+                    position: objBounds.top,
+                    start: Math.min(activeBounds.left, objBounds.left) - 20,
+                    end: Math.max(activeBounds.right, objBounds.right) + 20,
+                    isCanvas: false
+                });
+            }
+            
+            if (Math.abs(activeBounds.bottom - objBounds.bottom) < this.snapThreshold) {
+                guides.push({
+                    type: 'horizontal',
+                    position: objBounds.bottom,
+                    start: Math.min(activeBounds.left, objBounds.left) - 20,
+                    end: Math.max(activeBounds.right, objBounds.right) + 20,
+                    isCanvas: false
+                });
+            }
+            
+            if (Math.abs(activeBounds.centerY - objBounds.centerY) < this.snapThreshold) {
+                guides.push({
+                    type: 'horizontal',
+                    position: objBounds.centerY,
+                    start: Math.min(activeBounds.left, objBounds.left) - 20,
+                    end: Math.max(activeBounds.right, objBounds.right) + 20,
+                    isCanvas: false
+                });
+            }
+        });
+
+        return guides;
+    }
+
+    drawGuidelines(guides) {
+        this.clearGuidelines();
+        
+        guides.forEach(guide => {
+            let guideLine;
+            
+            if (guide.type === 'vertical') {
+                guideLine = new fabric.Line([guide.position, guide.start, guide.position, guide.end], {
+                    stroke: guide.isCanvas ? '#FF6B6B' : '#4ECDC4',
+                    strokeWidth: 1,
+                    strokeDashArray: [5, 5],
+                    selectable: false,
+                    evented: false,
+                    excludeFromExport: true,
+                    isGuideline: true
+                });
+            } else {
+                guideLine = new fabric.Line([guide.start, guide.position, guide.end, guide.position], {
+                    stroke: guide.isCanvas ? '#FF6B6B' : '#4ECDC4',
+                    strokeWidth: 1,
+                    strokeDashArray: [5, 5],
+                    selectable: false,
+                    evented: false,
+                    excludeFromExport: true,
+                    isGuideline: true
+                });
+            }
+            
+            this.guidelines.push(guideLine);
+            this.canvas.add(guideLine);
+        });
+        
+        this.showingGuidelines = true;
+        this.canvas.renderAll();
+        
+        // Auto-hide guidelines after 2 seconds
+        setTimeout(() => {
+            if (this.showingGuidelines) {
+                this.clearGuidelines();
+            }
+        }, 2000);
+    }
+
+    snapToGuides(activeObject, guides) {
+        const activeBounds = this.getObjectBounds(activeObject);
+        
+        guides.forEach(guide => {
+            if (guide.type === 'vertical') {
+                const snapPosition = guide.position - activeBounds.width / 2;
+                if (Math.abs(activeBounds.centerX - guide.position) < this.snapThreshold) {
+                    activeObject.set('left', snapPosition);
+                }
+            } else {
+                const snapPosition = guide.position - activeBounds.height / 2;
+                if (Math.abs(activeBounds.centerY - guide.position) < this.snapThreshold) {
+                    activeObject.set('top', snapPosition);
+                }
+            }
+        });
+        
+        activeObject.setCoords();
+    }
+
+    clearGuidelines() {
+        if (this.guidelines.length > 0) {
+            this.guidelines.forEach(guideLine => {
+                this.canvas.remove(guideLine);
+            });
+            this.guidelines = [];
+            this.showingGuidelines = false;
+            this.canvas.renderAll();
         }
     }
 
