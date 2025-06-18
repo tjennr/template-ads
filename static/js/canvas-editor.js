@@ -262,9 +262,7 @@ class TemplateAdsEditor {
                 // Change orientation
                 this.changeOrientation(orientation);
                 
-                // Close dropdown
-                orientationMenu.classList.add('hidden');
-                orientationBtn.classList.remove('active');
+                // Keep dropdown open - will close when clicking outside
             });
         });
     }
@@ -315,9 +313,7 @@ class TemplateAdsEditor {
                 this.loadTemplate(template);
                 this.saveState();
                 
-                // Close dropdown
-                templateMenu.classList.add('hidden');
-                templateBtn.classList.remove('active');
+                // Keep dropdown open - will close when clicking outside
             });
         });
         

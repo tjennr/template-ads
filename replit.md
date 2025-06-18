@@ -132,6 +132,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 18, 2025: Enhanced shadow and outline controls with button-triggered dropdowns - clicking buttons reveals dropdown menus with effect options and color controls, providing better visual hierarchy and progressive disclosure
 - June 18, 2025: Fixed dropdown visibility and styling - dropdowns now properly hidden by default and only appear when buttons clicked, updated colors to white background with proper contrast matching website theme
 - June 18, 2025: Redesigned orientation and templates sections as horizontal dropdowns - both controls now appear side-by-side in a single row, displaying currently selected option when closed and revealing all options when clicked for cleaner, more compact interface
+- June 18, 2025: Enhanced dropdown behavior - orientation and template dropdowns now remain open after selection until user clicks outside, providing better user experience and allowing multiple selections without reopening
 
 ## Changelog
 - June 16, 2025. Initial setup
