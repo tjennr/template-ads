@@ -232,13 +232,19 @@
             <button class="toolbar-btn" id="toolbarShadow" title="Toggle Shadow">
                 <i class="fas fa-cloud"></i>
             </button>
-            <button class="toolbar-btn" id="toolbarOutline" title="Toggle Outline">
-                <i class="far fa-circle"></i>
-            </button>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color-input" id="toolbarEffectColor" title="Effect Color">
+            <select class="toolbar-outline-select" id="toolbarOutlineSelect">
+                <option value="none">No Outline</option>
+                <option value="thin">Thin Outline</option>
+                <option value="medium">Medium Outline</option>
+                <option value="thick">Thick Outline</option>
+            </select>
+        </div>
+        
+        <div class="toolbar-section outline-controls hidden" id="outlineControls">
+            <input type="color" class="toolbar-color-input" id="toolbarOutlineColor" title="Outline Color" value="#000000">
         </div>
     </div>
 

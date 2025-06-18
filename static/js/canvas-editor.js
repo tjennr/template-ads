@@ -853,8 +853,9 @@ class TemplateAdsEditor {
         const fontSizeInput = document.getElementById('toolbarFontSize');
         const textColorInput = document.getElementById('toolbarTextColor');
         const shadowBtn = document.getElementById('toolbarShadow');
-        const outlineBtn = document.getElementById('toolbarOutline');
-        const effectColorInput = document.getElementById('toolbarEffectColor');
+        const outlineSelect = document.getElementById('toolbarOutlineSelect');
+        const outlineControls = document.getElementById('outlineControls');
+        const outlineColorInput = document.getElementById('toolbarOutlineColor');
 
         // Font family change
         if (fontFamilySelect) {
@@ -897,9 +898,8 @@ class TemplateAdsEditor {
                         this.selectedTextObject.set('shadow', null);
                         e.target.classList.remove('active');
                     } else {
-                        const effectColor = effectColorInput ? effectColorInput.value : '#000000';
                         this.selectedTextObject.set('shadow', {
-                            color: effectColor,
+                            color: '#000000',
                             blur: 4,
                             offsetX: 2,
                             offsetY: 2
@@ -907,43 +907,60 @@ class TemplateAdsEditor {
                         e.target.classList.add('active');
                     }
                     this.canvas.renderAll();
+                    this.saveState();
                 }
             });
         }
 
-        // Outline toggle
-        if (outlineBtn) {
-            outlineBtn.addEventListener('click', (e) => {
+        // Outline dropdown change
+        if (outlineSelect) {
+            outlineSelect.addEventListener('change', (e) => {
                 if (this.selectedTextObject) {
-                    const hasStroke = this.selectedTextObject.stroke;
-                    if (hasStroke) {
+                    const outlineType = e.target.value;
+                    
+                    if (outlineType === 'none') {
                         this.selectedTextObject.set('stroke', '');
                         this.selectedTextObject.set('strokeWidth', 0);
-                        e.target.classList.remove('active');
+                        if (outlineControls) {
+                            outlineControls.classList.add('hidden');
+                        }
                     } else {
-                        const effectColor = effectColorInput ? effectColorInput.value : '#000000';
-                        this.selectedTextObject.set('stroke', effectColor);
-                        this.selectedTextObject.set('strokeWidth', 2);
-                        e.target.classList.add('active');
+                        let strokeWidth;
+                        switch (outlineType) {
+                            case 'thin':
+                                strokeWidth = 1;
+                                break;
+                            case 'medium':
+                                strokeWidth = 2;
+                                break;
+                            case 'thick':
+                                strokeWidth = 4;
+                                break;
+                            default:
+                                strokeWidth = 2;
+                        }
+                        
+                        const outlineColor = outlineColorInput ? outlineColorInput.value : '#000000';
+                        this.selectedTextObject.set('stroke', outlineColor);
+                        this.selectedTextObject.set('strokeWidth', strokeWidth);
+                        if (outlineControls) {
+                            outlineControls.classList.remove('hidden');
+                        }
                     }
+                    
                     this.canvas.renderAll();
+                    this.saveState();
                 }
             });
         }
 
-        // Effect color change
-        if (effectColorInput) {
-            effectColorInput.addEventListener('change', (e) => {
-                if (this.selectedTextObject) {
-                    if (shadowBtn && shadowBtn.classList.contains('active') && this.selectedTextObject.shadow) {
-                        this.selectedTextObject.shadow.color = e.target.value;
-                    }
-                    
-                    if (outlineBtn && outlineBtn.classList.contains('active') && this.selectedTextObject.stroke) {
-                        this.selectedTextObject.set('stroke', e.target.value);
-                    }
-                    
+        // Outline color change
+        if (outlineColorInput) {
+            outlineColorInput.addEventListener('input', (e) => {
+                if (this.selectedTextObject && outlineSelect && outlineSelect.value !== 'none') {
+                    this.selectedTextObject.set('stroke', e.target.value);
                     this.canvas.renderAll();
+                    this.saveState();
                 }
             });
         }
@@ -1103,8 +1120,9 @@ class TemplateAdsEditor {
         const fontSizeInput = document.getElementById('toolbarFontSize');
         const textColorInput = document.getElementById('toolbarTextColor');
         const shadowBtn = document.getElementById('toolbarShadow');
-        const outlineBtn = document.getElementById('toolbarOutline');
-        const effectColorInput = document.getElementById('toolbarEffectColor');
+        const outlineSelect = document.getElementById('toolbarOutlineSelect');
+        const outlineControls = document.getElementById('outlineControls');
+        const outlineColorInput = document.getElementById('toolbarOutlineColor');
 
         // Check if elements exist before setting values
         if (fontFamilySelect) {
@@ -1133,23 +1151,40 @@ class TemplateAdsEditor {
         if (shadowBtn) {
             if (this.selectedTextObject.shadow) {
                 shadowBtn.classList.add('active');
-                if (effectColorInput) {
-                    effectColorInput.value = this.selectedTextObject.shadow.color || '#000000';
-                }
             } else {
                 shadowBtn.classList.remove('active');
             }
         }
         
-        // Update outline button state
-        if (outlineBtn) {
-            if (this.selectedTextObject.stroke) {
-                outlineBtn.classList.add('active');
-                if (effectColorInput) {
-                    effectColorInput.value = this.selectedTextObject.stroke || '#000000';
+        // Update outline dropdown and controls
+        if (outlineSelect) {
+            const hasStroke = this.selectedTextObject.stroke && this.selectedTextObject.strokeWidth > 0;
+            
+            if (!hasStroke) {
+                outlineSelect.value = 'none';
+                if (outlineControls) {
+                    outlineControls.classList.add('hidden');
                 }
             } else {
-                outlineBtn.classList.remove('active');
+                const strokeWidth = this.selectedTextObject.strokeWidth;
+                let outlineType = 'medium';
+                
+                if (strokeWidth <= 1) {
+                    outlineType = 'thin';
+                } else if (strokeWidth >= 4) {
+                    outlineType = 'thick';
+                } else {
+                    outlineType = 'medium';
+                }
+                
+                outlineSelect.value = outlineType;
+                if (outlineControls) {
+                    outlineControls.classList.remove('hidden');
+                }
+                
+                if (outlineColorInput) {
+                    outlineColorInput.value = this.selectedTextObject.stroke || '#000000';
+                }
             }
         }
     }
