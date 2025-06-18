@@ -901,7 +901,7 @@ class TemplateAdsEditor {
                 e.stopPropagation();
                 const shadowDropdown = document.getElementById('shadowDropdown');
                 const outlineDropdown = document.getElementById('outlineDropdown');
-                const outlineBtn = document.getElementById('toolbarOutline');
+                // outlineBtn already declared at function start
                 
                 // Close outline dropdown if open
                 if (outlineDropdown && !outlineDropdown.classList.contains('hidden')) {
@@ -922,8 +922,7 @@ class TemplateAdsEditor {
             });
         }
 
-        // Outline button dropdown toggle
-        const outlineBtn = document.getElementById('toolbarOutline');
+        // Outline button dropdown toggle - using outlineBtn from function start
         if (outlineBtn) {
             outlineBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -1052,7 +1051,7 @@ class TemplateAdsEditor {
             const shadowDropdown = document.getElementById('shadowDropdown');
             const outlineDropdown = document.getElementById('outlineDropdown');
             const shadowBtn = document.getElementById('toolbarShadow');
-            const outlineBtn = document.getElementById('toolbarOutline');
+            // outlineBtn already declared at function start
 
             if (shadowDropdown && !shadowDropdown.classList.contains('hidden')) {
                 shadowDropdown.classList.add('hidden');
@@ -1273,7 +1272,7 @@ class TemplateAdsEditor {
         if (!hasStroke) {
             const noOutlineBtn = document.querySelector('#outlineDropdown .effect-toggle-btn[data-effect="none"]');
             if (noOutlineBtn) noOutlineBtn.classList.add('active');
-            if (outlineControls) outlineControls.classList.add('hidden');
+            if (outlineControlsUpdate) outlineControlsUpdate.classList.add('hidden');
         } else {
             const strokeWidth = this.selectedTextObject.strokeWidth;
             let outlineType = 'medium';
@@ -1288,7 +1287,7 @@ class TemplateAdsEditor {
             
             const activeOutlineBtn = document.querySelector(`#outlineDropdown .effect-toggle-btn[data-effect="${outlineType}"]`);
             if (activeOutlineBtn) activeOutlineBtn.classList.add('active');
-            if (outlineControls) outlineControls.classList.remove('hidden');
+            if (outlineControlsUpdate) outlineControlsUpdate.classList.remove('hidden');
             if (outlineColorInput) {
                 outlineColorInput.value = this.selectedTextObject.stroke || '#000000';
             }
