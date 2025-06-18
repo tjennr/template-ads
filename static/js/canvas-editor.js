@@ -357,59 +357,63 @@ class TemplateAdsEditor {
         this.setupKeyboardAccessibility();
         
         // Enhanced click-based selection system for all ad elements
-        this.canvas.on('mouse:down', (e) => {
-            console.log('Mouse down on:', e.target ? e.target.id || e.target.type : 'background');
-            
-            if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
-                // Show toolbar for text elements
-                this.selectedTextObject = e.target;
-                this.canvas.setActiveObject(e.target);
-                this.showTextToolbar();
-                this.updateToolbarValues();
-                this.updateToolbarPosition();
-                this.hideBackgroundToolbar();
-                console.log('Selected text object:', e.target.id);
-            } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
-                // Handle CTA click - show CTA toolbar
-                if (e.target.id === 'ctaGroup') {
-                    this.selectedCtaObject = e.target;
+        this.canvas.on('mouse:up', (e) => {
+            // Add a small delay to ensure the click event is properly processed
+            setTimeout(() => {
+                console.log('Mouse up on:', e.target ? e.target.id || e.target.type : 'background');
+                
+                if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
+                    // Show toolbar for text elements
+                    this.selectedTextObject = e.target;
                     this.canvas.setActiveObject(e.target);
-                } else {
-                    // Find the parent CTA group
-                    this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
-                    if (this.selectedCtaObject) {
-                        this.canvas.setActiveObject(this.selectedCtaObject);
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
+                    this.showTextToolbar();
+                    this.updateToolbarValues();
+                    this.updateToolbarPosition();
+                    console.log('Selected text object:', e.target.id);
+                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
+                    // Handle CTA click - show CTA toolbar
+                    if (e.target.id === 'ctaGroup') {
+                        this.selectedCtaObject = e.target;
+                        this.canvas.setActiveObject(e.target);
+                    } else {
+                        // Find the parent CTA group
+                        this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
+                        if (this.selectedCtaObject) {
+                            this.canvas.setActiveObject(this.selectedCtaObject);
+                        }
                     }
+                    this.hideTextToolbar();
+                    this.hideBackgroundToolbar();
+                    this.showCtaToolbar();
+                    this.updateCtaToolbarValues();
+                    this.updateCtaToolbarPosition();
+                    console.log('Selected CTA object');
+                } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
+                    // Handle image clicks - make them selectable and moveable
+                    this.canvas.setActiveObject(e.target);
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
+                    console.log('Selected image:', e.target.id);
+                } else if (!e.target) {
+                    // Clicked on background (empty canvas area)
+                    this.canvas.discardActiveObject();
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.showBackgroundToolbar(e.pointer);
+                    console.log('Selected background');
+                } else if (e.target) {
+                    // Clicked on other objects - make them selectable
+                    this.canvas.setActiveObject(e.target);
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
+                    console.log('Selected other object:', e.target.id || e.target.type);
                 }
-                this.hideTextToolbar();
-                this.hideBackgroundToolbar();
-                this.showCtaToolbar();
-                this.updateCtaToolbarValues();
-                this.updateCtaToolbarPosition();
-                console.log('Selected CTA object');
-            } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
-                // Handle image clicks - make them selectable and moveable
-                this.canvas.setActiveObject(e.target);
-                this.hideTextToolbar();
-                this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
-                console.log('Selected image:', e.target.id);
-            } else if (!e.target) {
-                // Clicked on background (empty canvas area)
-                this.canvas.discardActiveObject();
-                this.hideTextToolbar();
-                this.hideCtaToolbar();
-                this.showBackgroundToolbar(e.pointer);
-                console.log('Selected background');
-            } else if (e.target) {
-                // Clicked on other objects - make them selectable
-                this.canvas.setActiveObject(e.target);
-                this.hideTextToolbar();
-                this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
-                console.log('Selected other object:', e.target.id || e.target.type);
-            }
-            this.canvas.renderAll();
+                this.canvas.renderAll();
+            }, 50); // Small delay to ensure proper event handling
         });
 
         // Ensure toolbar updates position when text or CTA is moved
@@ -425,27 +429,30 @@ class TemplateAdsEditor {
 
         // Hide toolbar when clicking completely outside the canvas
         document.addEventListener('click', (e) => {
-            // Don't hide if clicking on the toolbar itself
-            if (this.textToolbar.contains(e.target)) {
+            // Don't hide if clicking on any toolbar
+            if (this.textToolbar && this.textToolbar.contains(e.target)) {
                 return;
             }
             
-            // Don't hide if clicking on CTA toolbar
             if (this.ctaToolbar && this.ctaToolbar.contains(e.target)) {
                 return;
             }
             
-            // Don't hide if clicking on background toolbar
             if (this.backgroundToolbar && this.backgroundToolbar.contains(e.target)) {
                 return;
             }
             
-            // Hide if clicking outside the canvas entirely
-            if (!this.canvas.getElement().contains(e.target)) {
-                this.hideTextToolbar();
-                this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
+            // Don't hide if clicking on the canvas itself (handled by canvas events)
+            if (this.canvas.getElement().contains(e.target)) {
+                return;
             }
+            
+            // Hide if clicking outside the canvas entirely
+            this.hideTextToolbar();
+            this.hideCtaToolbar();
+            this.hideBackgroundToolbar();
+            this.canvas.discardActiveObject();
+            this.canvas.renderAll();
         });
     }
 

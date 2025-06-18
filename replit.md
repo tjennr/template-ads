@@ -127,6 +127,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 18, 2025: Fixed reset button functionality - now properly resets all form values, template selection, orientation, font settings, CTA state, clears history, hides toolbars, and reloads default template with placeholder images
 - June 18, 2025: Enhanced click-to-select functionality - users can now click on any ad element (text, images, CTA buttons) to select them and move with arrow keys
 - June 18, 2025: Improved arrow key movement - selected elements can be moved with arrow keys (5px normal, 10px with Shift), includes boundary checking to keep elements within canvas
+- June 18, 2025: Fixed floating toolbar persistence - toolbars now remain visible after clicking elements until user clicks elsewhere, ensuring proper selection feedback
 
 ## Changelog
 - June 16, 2025. Initial setup
