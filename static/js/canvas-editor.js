@@ -356,13 +356,14 @@ class TemplateAdsEditor {
         // Add keyboard accessibility for ad elements
         this.setupKeyboardAccessibility();
         
-        // Simple click-based text selection system
+        // Enhanced click-based selection system for all ad elements
         this.canvas.on('mouse:up', (e) => {
             // Small delay to ensure click is registered properly
             setTimeout(() => {
                 if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
                     // Show toolbar for text elements
                     this.selectedTextObject = e.target;
+                    this.canvas.setActiveObject(e.target);
                     this.showTextToolbar();
                     this.updateToolbarValues();
                     this.updateToolbarPosition();
@@ -371,26 +372,40 @@ class TemplateAdsEditor {
                     // Handle CTA click - show CTA toolbar
                     if (e.target.id === 'ctaGroup') {
                         this.selectedCtaObject = e.target;
+                        this.canvas.setActiveObject(e.target);
                     } else {
                         // Find the parent CTA group
                         this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
+                        if (this.selectedCtaObject) {
+                            this.canvas.setActiveObject(this.selectedCtaObject);
+                        }
                     }
                     this.hideTextToolbar();
                     this.hideBackgroundToolbar();
                     this.showCtaToolbar();
                     this.updateCtaToolbarValues();
                     this.updateCtaToolbarPosition();
+                } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
+                    // Handle image clicks - make them selectable and moveable
+                    this.canvas.setActiveObject(e.target);
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
                 } else if (!e.target) {
                     // Clicked on background (empty canvas area)
                     this.hideTextToolbar();
                     this.hideCtaToolbar();
                     this.showBackgroundToolbar(e.pointer);
                 } else {
-                    // Clicked on other objects (images, etc.)
+                    // Clicked on other objects - make them selectable
+                    if (e.target) {
+                        this.canvas.setActiveObject(e.target);
+                    }
                     this.hideTextToolbar();
                     this.hideCtaToolbar();
                     this.hideBackgroundToolbar();
                 }
+                this.canvas.renderAll();
             }, 100);
         });
 
@@ -512,30 +527,32 @@ class TemplateAdsEditor {
         // Arrow keys to move selected object
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
             const activeObject = this.canvas.getActiveObject();
-            if (activeObject) {
+            if (activeObject && !activeObject.virtual) {
                 e.preventDefault();
                 let moved = false;
+                const moveDistance = e.shiftKey ? 10 : 5; // Hold Shift for larger movements
                 
                 switch(e.key) {
                     case 'ArrowLeft':
-                        activeObject.set('left', activeObject.left - 5);
+                        activeObject.set('left', Math.max(0, activeObject.left - moveDistance));
                         moved = true;
                         break;
                     case 'ArrowRight':
-                        activeObject.set('left', activeObject.left + 5);
+                        activeObject.set('left', Math.min(this.canvas.width - activeObject.getScaledWidth(), activeObject.left + moveDistance));
                         moved = true;
                         break;
                     case 'ArrowUp':
-                        activeObject.set('top', activeObject.top - 5);
+                        activeObject.set('top', Math.max(0, activeObject.top - moveDistance));
                         moved = true;
                         break;
                     case 'ArrowDown':
-                        activeObject.set('top', activeObject.top + 5);
+                        activeObject.set('top', Math.min(this.canvas.height - activeObject.getScaledHeight(), activeObject.top + moveDistance));
                         moved = true;
                         break;
                 }
                 
                 if (moved) {
+                    activeObject.setCoords(); // Update object coordinates
                     this.canvas.renderAll();
                     this.saveState();
                     
@@ -545,6 +562,10 @@ class TemplateAdsEditor {
                     } else if (activeObject === this.selectedCtaObject) {
                         this.updateCtaToolbarPosition();
                     }
+                    
+                    // Announce movement for screen readers
+                    const announcement = `Moved ${activeObject.id || 'element'} to position ${Math.round(activeObject.left)}, ${Math.round(activeObject.top)}`;
+                    this.announceMovement(announcement);
                 }
             }
         }
@@ -659,6 +680,26 @@ class TemplateAdsEditor {
             })();
             
         announcement_div.textContent = announcement;
+    }
+    
+    announceMovement(message) {
+        // Create temporary aria-live region for announcements
+        const announcement_div = document.getElementById('accessibility-announcements') || 
+            (() => {
+                const div = document.createElement('div');
+                div.id = 'accessibility-announcements';
+                div.setAttribute('aria-live', 'polite');
+                div.setAttribute('aria-atomic', 'true');
+                div.style.position = 'absolute';
+                div.style.left = '-10000px';
+                div.style.width = '1px';
+                div.style.height = '1px';
+                div.style.overflow = 'hidden';
+                document.body.appendChild(div);
+                return div;
+            })();
+        
+        announcement_div.textContent = message;
     }
 
     clearCanvasFocus() {
