@@ -388,12 +388,21 @@ class TemplateAdsEditor {
                 this.updateCtaToolbarPosition();
                 console.log('Selected CTA object');
             } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
-                // Handle image clicks - make them selectable and moveable
-                this.canvas.setActiveObject(e.target);
-                this.hideTextToolbar();
-                this.hideCtaToolbar();
-                this.hideBackgroundToolbar();
-                console.log('Selected image:', e.target.id);
+                // Handle image clicks - check if in allowed area for split templates
+                if (this.isClickInAllowedImageArea(e.pointer, e.target.id)) {
+                    this.canvas.setActiveObject(e.target);
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.hideBackgroundToolbar();
+                    console.log('Selected image:', e.target.id);
+                } else {
+                    // Treat as background click for split templates
+                    this.canvas.discardActiveObject();
+                    this.hideTextToolbar();
+                    this.hideCtaToolbar();
+                    this.showBackgroundToolbar(e.pointer);
+                    console.log('Background click in text area of split template');
+                }
             } else if (!e.target) {
                 // Clicked on background (empty canvas area)
                 this.canvas.discardActiveObject();
@@ -2438,44 +2447,8 @@ class TemplateAdsEditor {
                     
                     img.clipPath = clipRect;
                     
-                    // Override the image's containsPoint method to only respond to clicks within the clipped area
-                    const originalContainsPoint = img.containsPoint;
-                    img.containsPoint = function(point) {
-                        // Check if the point is within the designated template area
-                        let isInArea = false;
-                        
-                        if (this.canvas && this.canvas.editor) {
-                            const template = this.canvas.editor.currentTemplate;
-                            const canvasWidth = this.canvas.width;
-                            const canvasHeight = this.canvas.height;
-                            const isVertical = this.canvas.editor.currentOrientation === 'vertical';
-                            
-                            if (template === 'template4') {
-                                // Split Left: only left half
-                                if (isVertical) {
-                                    isInArea = point.y <= canvasHeight * 0.5;
-                                } else {
-                                    isInArea = point.x <= canvasWidth * 0.5;
-                                }
-                            } else if (template === 'template5') {
-                                // Split Right: only right half
-                                if (isVertical) {
-                                    isInArea = point.y >= canvasHeight * 0.5;
-                                } else {
-                                    isInArea = point.x >= canvasWidth * 0.5;
-                                }
-                            } else if (template === 'template6') {
-                                // Split Top: only top half
-                                if (isVertical) {
-                                    isInArea = point.y >= canvasHeight * 0.2 && point.y <= canvasHeight * 0.8;
-                                } else {
-                                    isInArea = point.y <= canvasHeight * 0.5;
-                                }
-                            }
-                        }
-                        
-                        return isInArea && originalContainsPoint.call(this, point);
-                    };
+                    // For split templates, we use clipping for visual restriction
+                    // Click handling will be managed at canvas level instead of overriding containsPoint
                 } else {
                     // Full templates: position in designated area
                     img.set({
@@ -2506,9 +2479,6 @@ class TemplateAdsEditor {
                 // Add image and send to back so text appears in front
                 this.canvas.add(img);
                 this.canvas.sendToBack(img);
-                
-                // Set editor reference for containsPoint method (for split templates)
-                img.canvas.editor = this;
                 
             } else if (type === 'logo') {
                 // Determine logo position based on current template
@@ -3098,6 +3068,43 @@ class TemplateAdsEditor {
         if (this.backgroundToolbar) {
             this.backgroundToolbar.classList.add('hidden');
         }
+    }
+
+    isClickInAllowedImageArea(pointer, imageId) {
+        // For non-split templates, all clicks are allowed
+        if (!(this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6')) {
+            return true;
+        }
+        
+        // For split templates, check if click is in the designated image area
+        const canvasWidth = this.canvas.width;
+        const canvasHeight = this.canvas.height;
+        const isVertical = this.currentOrientation === 'vertical';
+        
+        if (this.currentTemplate === 'template4') {
+            // Split Left: image in left half (horizontal) or top half (vertical)
+            if (isVertical) {
+                return pointer.y <= canvasHeight * 0.5;
+            } else {
+                return pointer.x <= canvasWidth * 0.5;
+            }
+        } else if (this.currentTemplate === 'template5') {
+            // Split Right: image in right half (horizontal) or bottom half (vertical)
+            if (isVertical) {
+                return pointer.y >= canvasHeight * 0.5;
+            } else {
+                return pointer.x >= canvasWidth * 0.5;
+            }
+        } else if (this.currentTemplate === 'template6') {
+            // Split Top: image in top half (horizontal) or center area (vertical)
+            if (isVertical) {
+                return pointer.y >= canvasHeight * 0.2 && pointer.y <= canvasHeight * 0.8;
+            } else {
+                return pointer.y <= canvasHeight * 0.5;
+            }
+        }
+        
+        return true;
     }
 
     setupBackgroundToolbarEvents() {
