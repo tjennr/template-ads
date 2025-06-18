@@ -2440,16 +2440,38 @@ class TemplateAdsEditor {
                         evented: true
                     });
                     
-                    // Create a clipping rectangle for split templates
-                    img.clipPath = new fabric.Rect({
-                        left: -targetWidth / 2,
-                        top: -targetHeight / 2,
-                        width: targetWidth,
-                        height: targetHeight,
-                        originX: 'center',
-                        originY: 'center',
-                        absolutePositioned: false
-                    });
+                    // Apply clipping for split templates
+                    if (this.currentOrientation === 'vertical') {
+                        // Vertical orientation clipping
+                        if (this.currentTemplate === 'template4') {
+                            img.clipPath = new fabric.Rect({
+                                left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                            });
+                        } else if (this.currentTemplate === 'template5') {
+                            img.clipPath = new fabric.Rect({
+                                left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                            });
+                        } else if (this.currentTemplate === 'template6') {
+                            img.clipPath = new fabric.Rect({
+                                left: 0, top: canvasHeight * 0.2, width: canvasWidth, height: canvasHeight * 0.6, absolutePositioned: true
+                            });
+                        }
+                    } else {
+                        // Horizontal orientation clipping
+                        if (this.currentTemplate === 'template4') {
+                            img.clipPath = new fabric.Rect({
+                                left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                            });
+                        } else if (this.currentTemplate === 'template5') {
+                            img.clipPath = new fabric.Rect({
+                                left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                            });
+                        } else if (this.currentTemplate === 'template6') {
+                            img.clipPath = new fabric.Rect({
+                                left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                            });
+                        }
+                    }
                     
                     // For split templates, we use clipping for visual restriction
                     // Click handling will be managed at canvas level instead of overriding containsPoint
