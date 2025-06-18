@@ -56,9 +56,35 @@ class TemplateAdsEditor {
         // Create initial template content without waiting for image load
         this.loadTemplate(this.currentTemplate);
         
-        // Load default image using the proper image handling method
+        // Load default image in background
         const defaultImagePath = '/static/images/default-placeholder.png';
-        this.addImageToCanvas(defaultImagePath, 'main');
+        fabric.Image.fromURL(defaultImagePath, (img) => {
+            const canvasWidth = this.canvas.width;
+            const canvasHeight = this.canvas.height;
+            
+            // Scale and position the main image
+            const scaleX = canvasWidth / img.width;
+            const scaleY = canvasHeight / img.height;
+            const scale = Math.max(scaleX, scaleY);
+            
+            img.set({
+                left: canvasWidth / 2,
+                top: canvasHeight / 2,
+                originX: 'center',
+                originY: 'center',
+                scaleX: scale,
+                scaleY: scale,
+                selectable: true,
+                evented: true,
+                id: 'mainImage'
+            });
+            
+            this.canvas.add(img);
+            this.canvas.sendToBack(img);
+            this.mainImage = img;
+            this.canvas.renderAll();
+            this.saveState();
+        });
         
         this.updateFontFamilyDisplay();
         this.applyZoom();
@@ -362,7 +388,7 @@ class TemplateAdsEditor {
                 this.updateCtaToolbarPosition();
                 console.log('Selected CTA object');
             } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
-                // Handle image clicks - containsPoint method handles area restrictions for split templates
+                // Handle image clicks - make them selectable and moveable
                 this.canvas.setActiveObject(e.target);
                 this.hideTextToolbar();
                 this.hideCtaToolbar();
@@ -2157,35 +2183,15 @@ class TemplateAdsEditor {
                     const scaleToFitHeight = targetHeight / clonedImg.height;
                     const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
-                    // Instead of scaling to full canvas, crop the image to fit only the target area
-                    const cropScale = Math.max(targetWidth / clonedImg.width, targetHeight / clonedImg.height);
-                    
                     clonedImg.set({
                         left: targetLeft,
                         top: targetTop,
                         originX: 'center',
                         originY: 'center',
-                        scaleX: cropScale,
-                        scaleY: cropScale,
-                        id: 'mainImage',
-                        selectable: true,
-                        evented: true
+                        scaleX: splitScale,
+                        scaleY: splitScale,
+                        id: 'mainImage'
                     });
-                    
-                    // Create a clipping rectangle that matches exactly the target area
-                    const clipRect = new fabric.Rect({
-                        left: 0,
-                        top: 0,
-                        width: targetWidth / cropScale,
-                        height: targetHeight / cropScale,
-                        originX: 'center',
-                        originY: 'center',
-                        absolutePositioned: false
-                    });
-                    
-                    clonedImg.clipPath = clipRect;
-                    
-                    // Canvas-level click handling manages split template interactions
                 } else {
                     // Full templates: position in designated area
                     clonedImg.set({
@@ -2291,13 +2297,7 @@ class TemplateAdsEditor {
     }
     
     addImageToCanvas(dataUrl, type) {
-        console.log('Loading image:', dataUrl, 'type:', type);
         fabric.Image.fromURL(dataUrl, (img) => {
-            console.log('Image loaded successfully:', img);
-            if (!img || !img.width || !img.height) {
-                console.error('Invalid image loaded:', img);
-                return;
-            }
             const canvasWidth = this.canvas.getWidth();
             const canvasHeight = this.canvas.getHeight();
             
@@ -2350,66 +2350,15 @@ class TemplateAdsEditor {
                     const scaleToFitHeight = targetHeight / img.height;
                     const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
-                    // Scale image to fill the entire canvas area first
-                    const fullCanvasScale = Math.max(canvasWidth / img.width, canvasHeight / img.height);
-                    
                     img.set({
-                        left: canvasWidth / 2,
-                        top: canvasHeight / 2,
+                        left: targetLeft,
+                        top: targetTop,
                         originX: 'center',
                         originY: 'center',
-                        scaleX: fullCanvasScale,
-                        scaleY: fullCanvasScale,
-                        id: 'mainImage',
-                        selectable: true,
-                        evented: true
+                        scaleX: splitScale,
+                        scaleY: splitScale,
+                        id: 'mainImage'
                     });
-                    
-                    // Apply strict clipping for split templates to prevent bleeding
-                    let clipX = 0, clipY = 0, clipWidth = canvasWidth, clipHeight = canvasHeight;
-                    
-                    if (this.currentOrientation === 'vertical') {
-                        // Vertical orientation clipping
-                        if (this.currentTemplate === 'template4') {
-                            // Split Left (vertical) = top half only
-                            clipHeight = canvasHeight * 0.5;
-                        } else if (this.currentTemplate === 'template5') {
-                            // Split Right (vertical) = bottom half only
-                            clipY = canvasHeight * 0.5;
-                            clipHeight = canvasHeight * 0.5;
-                        } else if (this.currentTemplate === 'template6') {
-                            // Split Top (vertical) = center area only
-                            clipY = canvasHeight * 0.2;
-                            clipHeight = canvasHeight * 0.6;
-                        }
-                    } else {
-                        // Horizontal orientation clipping
-                        if (this.currentTemplate === 'template4') {
-                            // Split Left (horizontal) = left half only
-                            clipWidth = canvasWidth * 0.5;
-                        } else if (this.currentTemplate === 'template5') {
-                            // Split Right (horizontal) = right half only
-                            clipX = canvasWidth * 0.5;
-                            clipWidth = canvasWidth * 0.5;
-                        } else if (this.currentTemplate === 'template6') {
-                            // Split Top (horizontal) = top half only
-                            clipHeight = canvasHeight * 0.5;
-                        }
-                    }
-                    
-                    // Create clipping rectangle with proper coordinates
-                    img.clipPath = new fabric.Rect({
-                        left: clipX - canvasWidth / 2,
-                        top: clipY - canvasHeight / 2,
-                        width: clipWidth,
-                        height: clipHeight,
-                        originX: 'left',
-                        originY: 'top',
-                        absolutePositioned: false
-                    });
-                    
-                    // For split templates, we use clipping for visual restriction
-                    // Click handling will be managed at canvas level instead of overriding containsPoint
                 } else {
                     // Full templates: position in designated area
                     img.set({
@@ -2423,8 +2372,23 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // For split templates, clipping and click restrictions are handled above
-                if (!(this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6')) {
+                // Add clipping for split templates, remove for full templates
+                if (this.currentTemplate === 'template4') {
+                    // Split Left: Clip to left half
+                    img.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template5') {
+                    // Split Right: Clip to right half
+                    img.clipPath = new fabric.Rect({
+                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
+                } else if (this.currentTemplate === 'template6') {
+                    // Split Top: Clip to top half
+                    img.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                    });
+                } else {
                     // Full templates: Remove any existing clipping
                     img.clipPath = null;
                 }
@@ -2436,29 +2400,6 @@ class TemplateAdsEditor {
                 }
                 
                 this.mainImage = img;
-                
-                // Override containsPoint for split templates to restrict click areas
-                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
-                    const originalContainsPoint = img.containsPoint.bind(img);
-                    const editor = this;
-                    
-                    img.containsPoint = function(point, lines, absolute) {
-                        // First check if the point is within the normal image bounds
-                        if (!originalContainsPoint(point, lines, absolute)) {
-                            return false;
-                        }
-                        
-                        // For split templates, check if click is in allowed area
-                        // Point is already in local object coordinates, need to convert to canvas coordinates
-                        const transform = this.calcTransformMatrix();
-                        const canvasPoint = fabric.util.transformPoint(point, transform);
-                        
-                        console.log('Click point check:', canvasPoint, 'for template:', editor.currentTemplate);
-                        const isAllowed = editor.isClickInAllowedImageArea(canvasPoint, this.id);
-                        console.log('Click allowed:', isAllowed);
-                        return isAllowed;
-                    };
-                }
                 
                 // Add image and send to back so text appears in front
                 this.canvas.add(img);
@@ -3052,43 +2993,6 @@ class TemplateAdsEditor {
         if (this.backgroundToolbar) {
             this.backgroundToolbar.classList.add('hidden');
         }
-    }
-
-    isClickInAllowedImageArea(pointer, imageId) {
-        // For non-split templates, all clicks are allowed
-        if (!(this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6')) {
-            return true;
-        }
-        
-        // For split templates, check if click is in the designated image area
-        const canvasWidth = this.canvas.width;
-        const canvasHeight = this.canvas.height;
-        const isVertical = this.currentOrientation === 'vertical';
-        
-        if (this.currentTemplate === 'template4') {
-            // Split Left: image in left half (horizontal) or top half (vertical)
-            if (isVertical) {
-                return pointer.y <= canvasHeight * 0.5;
-            } else {
-                return pointer.x <= canvasWidth * 0.5;
-            }
-        } else if (this.currentTemplate === 'template5') {
-            // Split Right: image in right half (horizontal) or bottom half (vertical)
-            if (isVertical) {
-                return pointer.y >= canvasHeight * 0.5;
-            } else {
-                return pointer.x >= canvasWidth * 0.5;
-            }
-        } else if (this.currentTemplate === 'template6') {
-            // Split Top: image in top half (horizontal) or center area (vertical)
-            if (isVertical) {
-                return pointer.y >= canvasHeight * 0.2 && pointer.y <= canvasHeight * 0.8;
-            } else {
-                return pointer.y <= canvasHeight * 0.5;
-            }
-        }
-        
-        return true;
     }
 
     setupBackgroundToolbarEvents() {

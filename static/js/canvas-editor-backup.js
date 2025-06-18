@@ -1,1 +1,0 @@
-// Backup of current canvas-editor.js before fixing image issue
