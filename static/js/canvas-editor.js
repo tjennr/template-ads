@@ -2496,76 +2496,81 @@ class TemplateAdsEditor {
     }
     
     resetCanvas() {
-        // Reset form values to defaults
-        document.getElementById('titleText').value = 'Your Amazing Product';
-        document.getElementById('subtitleText').value = 'Premium quality at affordable prices';
-        document.getElementById('ctaText').value = 'Shop Now';
-        document.getElementById('ctaSize').value = '18';
-        document.getElementById('ctaColor').value = '#ffffff';
-        document.getElementById('ctaBackgroundColor').value = '#0077B5';
-        
-        // Reset font controls
-        document.getElementById('fontFamily').value = 'Source Sans Pro';
-        this.updateFontFamilyDisplay();
-        
-        // Reset CTA checkbox
-        document.getElementById('ctaEnabled').checked = true;
-        
-        // Clear file inputs
-        document.getElementById('mainImageUpload').value = '';
-        document.getElementById('logoUpload').value = '';
-        
-        // Clear canvas completely
-        this.canvas.clear();
-        this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
-        
-        // Reset image references
-        this.mainImage = null;
-        this.logo = null;
-        
-        // Reset template and orientation to defaults
-        this.currentTemplate = 'template1';
-        this.currentOrientation = 'horizontal';
-        
-        // Update UI to reflect reset state
-        document.querySelectorAll('.template-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.querySelector('[data-template="template1"]').classList.add('active');
-        
-        document.querySelectorAll('.orientation-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.getElementById('horizontalBtn').classList.add('active');
-        
-        // Set canvas dimensions for horizontal orientation
-        this.setCanvasDimensions();
-        
-        // Reload current template with default values
-        this.loadTemplate('template1');
-        
-        // Load default images after template is loaded
-        setTimeout(() => {
-            this.loadDefaultImage();
-        }, 100);
-        
-        // Re-initialize slider fills
-        this.initializeSliderFills();
-        
-        // Hide any open toolbars
-        this.hideTextToolbar();
-        this.hideCtaToolbar();
-        this.hideBackgroundToolbar();
-        
-        // Clear history and save the reset state
-        this.history = [];
-        this.currentHistoryIndex = -1;
-        this.saveState();
-        
-        // Update focusable objects for keyboard navigation
-        this.updateFocusableObjects();
-        
-        console.log('Canvas reset to default state');
+        try {
+            // Reset form values to defaults - only access elements that exist
+            const titleText = document.getElementById('titleText');
+            const subtitleText = document.getElementById('subtitleText');
+            const ctaText = document.getElementById('ctaText');
+            const ctaEnabled = document.getElementById('ctaEnabled');
+            const mainImageUpload = document.getElementById('mainImageUpload');
+            const logoUpload = document.getElementById('logoUpload');
+            
+            if (titleText) titleText.value = 'Your Amazing Product';
+            if (subtitleText) subtitleText.value = 'Premium quality at affordable prices';
+            if (ctaText) ctaText.value = 'Shop Now';
+            if (ctaEnabled) ctaEnabled.checked = true;
+            
+            // Clear file inputs
+            if (mainImageUpload) mainImageUpload.value = '';
+            if (logoUpload) logoUpload.value = '';
+            
+            // Clear canvas completely
+            this.canvas.clear();
+            this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+            
+            // Reset image references
+            this.mainImage = null;
+            this.logo = null;
+            
+            // Reset template and orientation to defaults
+            this.currentTemplate = 'template1';
+            this.currentOrientation = 'horizontal';
+            
+            // Update UI to reflect reset state
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const template1Btn = document.querySelector('[data-template="template1"]');
+            if (template1Btn) template1Btn.classList.add('active');
+            
+            document.querySelectorAll('.orientation-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const horizontalBtn = document.getElementById('horizontalBtn');
+            if (horizontalBtn) horizontalBtn.classList.add('active');
+            
+            // Set canvas dimensions for horizontal orientation
+            this.setCanvasDimensions();
+            
+            // Reload current template with default values
+            this.loadTemplate('template1');
+            
+            // Load default images after template is loaded
+            setTimeout(() => {
+                this.loadDefaultImage();
+            }, 100);
+            
+            // Hide any open toolbars
+            this.hideTextToolbar();
+            this.hideCtaToolbar();
+            this.hideBackgroundToolbar();
+            
+            // Clear history and save the reset state
+            this.history = [];
+            this.currentHistoryIndex = -1;
+            this.saveState();
+            
+            // Update focusable objects for keyboard navigation
+            this.updateFocusableObjects();
+            
+            console.log('Canvas reset to default state');
+        } catch (error) {
+            console.error('Error during reset:', error);
+            // Even if there's an error, try to clear the canvas
+            this.canvas.clear();
+            this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+            this.loadTemplate('template1');
+        }
     }
     
     setupZoomEvents() {
