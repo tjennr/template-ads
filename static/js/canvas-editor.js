@@ -2183,15 +2183,75 @@ class TemplateAdsEditor {
                     const scaleToFitHeight = targetHeight / clonedImg.height;
                     const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
+                    // Instead of scaling to full canvas, crop the image to fit only the target area
+                    const cropScale = Math.max(targetWidth / clonedImg.width, targetHeight / clonedImg.height);
+                    
                     clonedImg.set({
                         left: targetLeft,
                         top: targetTop,
                         originX: 'center',
                         originY: 'center',
-                        scaleX: splitScale,
-                        scaleY: splitScale,
-                        id: 'mainImage'
+                        scaleX: cropScale,
+                        scaleY: cropScale,
+                        id: 'mainImage',
+                        selectable: true,
+                        evented: true
                     });
+                    
+                    // Create a clipping rectangle that matches exactly the target area
+                    const clipRect = new fabric.Rect({
+                        left: 0,
+                        top: 0,
+                        width: targetWidth / cropScale,
+                        height: targetHeight / cropScale,
+                        originX: 'center',
+                        originY: 'center',
+                        absolutePositioned: false
+                    });
+                    
+                    clonedImg.clipPath = clipRect;
+                    
+                    // Override the image's containsPoint method to only respond to clicks within the clipped area
+                    const originalContainsPoint = clonedImg.containsPoint;
+                    clonedImg.containsPoint = function(point) {
+                        // Check if the point is within the designated template area
+                        let isInArea = false;
+                        
+                        if (this.canvas && this.canvas.editor) {
+                            const template = this.canvas.editor.currentTemplate;
+                            const canvasWidth = this.canvas.width;
+                            const canvasHeight = this.canvas.height;
+                            const isVertical = this.canvas.editor.currentOrientation === 'vertical';
+                            
+                            if (template === 'template4') {
+                                // Split Left: only left half
+                                if (isVertical) {
+                                    isInArea = point.y <= canvasHeight * 0.5;
+                                } else {
+                                    isInArea = point.x <= canvasWidth * 0.5;
+                                }
+                            } else if (template === 'template5') {
+                                // Split Right: only right half
+                                if (isVertical) {
+                                    isInArea = point.y >= canvasHeight * 0.5;
+                                } else {
+                                    isInArea = point.x >= canvasWidth * 0.5;
+                                }
+                            } else if (template === 'template6') {
+                                // Split Top: only top half
+                                if (isVertical) {
+                                    isInArea = point.y >= canvasHeight * 0.2 && point.y <= canvasHeight * 0.8;
+                                } else {
+                                    isInArea = point.y <= canvasHeight * 0.5;
+                                }
+                            }
+                        }
+                        
+                        return isInArea && originalContainsPoint.call(this, point);
+                    };
+                    
+                    // Store reference to editor for the containsPoint method
+                    clonedImg.canvas.editor = this;
                 } else {
                     // Full templates: position in designated area
                     clonedImg.set({
@@ -2350,15 +2410,72 @@ class TemplateAdsEditor {
                     const scaleToFitHeight = targetHeight / img.height;
                     const splitScale = Math.max(scaleToFitWidth, scaleToFitHeight);
                     
+                    // Instead of scaling to full canvas, crop the image to fit only the target area
+                    const cropScale = Math.max(targetWidth / img.width, targetHeight / img.height);
+                    
                     img.set({
                         left: targetLeft,
                         top: targetTop,
                         originX: 'center',
                         originY: 'center',
-                        scaleX: splitScale,
-                        scaleY: splitScale,
-                        id: 'mainImage'
+                        scaleX: cropScale,
+                        scaleY: cropScale,
+                        id: 'mainImage',
+                        selectable: true,
+                        evented: true
                     });
+                    
+                    // Create a clipping rectangle that matches exactly the target area
+                    const clipRect = new fabric.Rect({
+                        left: 0,
+                        top: 0,
+                        width: targetWidth / cropScale,
+                        height: targetHeight / cropScale,
+                        originX: 'center',
+                        originY: 'center',
+                        absolutePositioned: false
+                    });
+                    
+                    img.clipPath = clipRect;
+                    
+                    // Override the image's containsPoint method to only respond to clicks within the clipped area
+                    const originalContainsPoint = img.containsPoint;
+                    img.containsPoint = function(point) {
+                        // Check if the point is within the designated template area
+                        let isInArea = false;
+                        
+                        if (this.canvas && this.canvas.editor) {
+                            const template = this.canvas.editor.currentTemplate;
+                            const canvasWidth = this.canvas.width;
+                            const canvasHeight = this.canvas.height;
+                            const isVertical = this.canvas.editor.currentOrientation === 'vertical';
+                            
+                            if (template === 'template4') {
+                                // Split Left: only left half
+                                if (isVertical) {
+                                    isInArea = point.y <= canvasHeight * 0.5;
+                                } else {
+                                    isInArea = point.x <= canvasWidth * 0.5;
+                                }
+                            } else if (template === 'template5') {
+                                // Split Right: only right half
+                                if (isVertical) {
+                                    isInArea = point.y >= canvasHeight * 0.5;
+                                } else {
+                                    isInArea = point.x >= canvasWidth * 0.5;
+                                }
+                            } else if (template === 'template6') {
+                                // Split Top: only top half
+                                if (isVertical) {
+                                    isInArea = point.y >= canvasHeight * 0.2 && point.y <= canvasHeight * 0.8;
+                                } else {
+                                    isInArea = point.y <= canvasHeight * 0.5;
+                                }
+                            }
+                        }
+                        
+                        return isInArea && originalContainsPoint.call(this, point);
+                    };
                 } else {
                     // Full templates: position in designated area
                     img.set({
@@ -2372,23 +2489,8 @@ class TemplateAdsEditor {
                     });
                 }
 
-                // Add clipping for split templates, remove for full templates
-                if (this.currentTemplate === 'template4') {
-                    // Split Left: Clip to left half
-                    img.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
-                } else if (this.currentTemplate === 'template5') {
-                    // Split Right: Clip to right half
-                    img.clipPath = new fabric.Rect({
-                        left: canvasWidth * 0.5, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
-                } else if (this.currentTemplate === 'template6') {
-                    // Split Top: Clip to top half
-                    img.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
-                    });
-                } else {
+                // For split templates, clipping and click restrictions are handled above
+                if (!(this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6')) {
                     // Full templates: Remove any existing clipping
                     img.clipPath = null;
                 }
