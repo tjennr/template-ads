@@ -124,6 +124,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 17, 2025: Added background color accessibility - users can tab to background for color changes, fixed floating toolbar color scheme to match website theme
 - June 17, 2025: Refined background keyboard interaction - toolbar now appears only when background is actively selected with Enter key, not just tabbed to
 - June 17, 2025: Enhanced floating toolbar styling - font size inputs and checkboxes now use bright white backgrounds with proper contrast matching website theme
+- June 18, 2025: Fixed reset button functionality - now properly resets all form values, template selection, orientation, font settings, CTA state, clears history, hides toolbars, and reloads default template with placeholder images
 
 ## Changelog
 - June 16, 2025. Initial setup

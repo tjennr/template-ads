@@ -2502,6 +2502,14 @@ class TemplateAdsEditor {
         document.getElementById('ctaText').value = 'Shop Now';
         document.getElementById('ctaSize').value = '18';
         document.getElementById('ctaColor').value = '#ffffff';
+        document.getElementById('ctaBackgroundColor').value = '#0077B5';
+        
+        // Reset font controls
+        document.getElementById('fontFamily').value = 'Source Sans Pro';
+        this.updateFontFamilyDisplay();
+        
+        // Reset CTA checkbox
+        document.getElementById('ctaEnabled').checked = true;
         
         // Clear file inputs
         document.getElementById('mainImageUpload').value = '';
@@ -2515,17 +2523,49 @@ class TemplateAdsEditor {
         this.mainImage = null;
         this.logo = null;
         
+        // Reset template and orientation to defaults
+        this.currentTemplate = 'template1';
+        this.currentOrientation = 'horizontal';
+        
+        // Update UI to reflect reset state
+        document.querySelectorAll('.template-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector('[data-template="template1"]').classList.add('active');
+        
+        document.querySelectorAll('.orientation-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.getElementById('horizontalBtn').classList.add('active');
+        
+        // Set canvas dimensions for horizontal orientation
+        this.setCanvasDimensions();
+        
         // Reload current template with default values
-        this.loadTemplate(this.currentTemplate || 'template1');
+        this.loadTemplate('template1');
         
         // Load default images after template is loaded
-        this.loadDefaultImage();
+        setTimeout(() => {
+            this.loadDefaultImage();
+        }, 100);
         
         // Re-initialize slider fills
         this.initializeSliderFills();
         
-        // Save the reset state
+        // Hide any open toolbars
+        this.hideTextToolbar();
+        this.hideCtaToolbar();
+        this.hideBackgroundToolbar();
+        
+        // Clear history and save the reset state
+        this.history = [];
+        this.currentHistoryIndex = -1;
         this.saveState();
+        
+        // Update focusable objects for keyboard navigation
+        this.updateFocusableObjects();
+        
+        console.log('Canvas reset to default state');
     }
     
     setupZoomEvents() {
