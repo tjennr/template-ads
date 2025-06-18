@@ -357,56 +357,59 @@ class TemplateAdsEditor {
         this.setupKeyboardAccessibility();
         
         // Enhanced click-based selection system for all ad elements
-        this.canvas.on('mouse:up', (e) => {
-            // Small delay to ensure click is registered properly
-            setTimeout(() => {
-                if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
-                    // Show toolbar for text elements
-                    this.selectedTextObject = e.target;
+        this.canvas.on('mouse:down', (e) => {
+            console.log('Mouse down on:', e.target ? e.target.id || e.target.type : 'background');
+            
+            if (e.target && (e.target.type === 'text' || e.target.type === 'textbox')) {
+                // Show toolbar for text elements
+                this.selectedTextObject = e.target;
+                this.canvas.setActiveObject(e.target);
+                this.showTextToolbar();
+                this.updateToolbarValues();
+                this.updateToolbarPosition();
+                this.hideBackgroundToolbar();
+                console.log('Selected text object:', e.target.id);
+            } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
+                // Handle CTA click - show CTA toolbar
+                if (e.target.id === 'ctaGroup') {
+                    this.selectedCtaObject = e.target;
                     this.canvas.setActiveObject(e.target);
-                    this.showTextToolbar();
-                    this.updateToolbarValues();
-                    this.updateToolbarPosition();
-                    this.hideBackgroundToolbar();
-                } else if (e.target && (e.target.id === 'ctaBackground' || e.target.id === 'cta' || e.target.id === 'ctaGroup')) {
-                    // Handle CTA click - show CTA toolbar
-                    if (e.target.id === 'ctaGroup') {
-                        this.selectedCtaObject = e.target;
-                        this.canvas.setActiveObject(e.target);
-                    } else {
-                        // Find the parent CTA group
-                        this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
-                        if (this.selectedCtaObject) {
-                            this.canvas.setActiveObject(this.selectedCtaObject);
-                        }
-                    }
-                    this.hideTextToolbar();
-                    this.hideBackgroundToolbar();
-                    this.showCtaToolbar();
-                    this.updateCtaToolbarValues();
-                    this.updateCtaToolbarPosition();
-                } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
-                    // Handle image clicks - make them selectable and moveable
-                    this.canvas.setActiveObject(e.target);
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
-                    this.hideBackgroundToolbar();
-                } else if (!e.target) {
-                    // Clicked on background (empty canvas area)
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
-                    this.showBackgroundToolbar(e.pointer);
                 } else {
-                    // Clicked on other objects - make them selectable
-                    if (e.target) {
-                        this.canvas.setActiveObject(e.target);
+                    // Find the parent CTA group
+                    this.selectedCtaObject = this.canvas.getObjects().find(obj => obj.id === 'ctaGroup');
+                    if (this.selectedCtaObject) {
+                        this.canvas.setActiveObject(this.selectedCtaObject);
                     }
-                    this.hideTextToolbar();
-                    this.hideCtaToolbar();
-                    this.hideBackgroundToolbar();
                 }
-                this.canvas.renderAll();
-            }, 100);
+                this.hideTextToolbar();
+                this.hideBackgroundToolbar();
+                this.showCtaToolbar();
+                this.updateCtaToolbarValues();
+                this.updateCtaToolbarPosition();
+                console.log('Selected CTA object');
+            } else if (e.target && (e.target.id === 'mainImage' || e.target.id === 'logo')) {
+                // Handle image clicks - make them selectable and moveable
+                this.canvas.setActiveObject(e.target);
+                this.hideTextToolbar();
+                this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
+                console.log('Selected image:', e.target.id);
+            } else if (!e.target) {
+                // Clicked on background (empty canvas area)
+                this.canvas.discardActiveObject();
+                this.hideTextToolbar();
+                this.hideCtaToolbar();
+                this.showBackgroundToolbar(e.pointer);
+                console.log('Selected background');
+            } else if (e.target) {
+                // Clicked on other objects - make them selectable
+                this.canvas.setActiveObject(e.target);
+                this.hideTextToolbar();
+                this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
+                console.log('Selected other object:', e.target.id || e.target.type);
+            }
+            this.canvas.renderAll();
         });
 
         // Ensure toolbar updates position when text or CTA is moved
@@ -457,9 +460,22 @@ class TemplateAdsEditor {
         this.focusableObjects = [];
         this.currentFocusIndex = -1;
         
-        // Add keyboard event listeners
+        // Add keyboard event listeners to both canvas element and document
         canvasElement.addEventListener('keydown', (e) => {
             this.handleKeyboardNavigation(e);
+        });
+        
+        // Also add global keyboard listener for arrow keys when canvas has focus
+        document.addEventListener('keydown', (e) => {
+            // Only handle arrow keys if canvas is focused or an object is selected
+            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                const activeObject = this.canvas.getActiveObject();
+                console.log('Arrow key pressed:', e.key, 'Active object:', activeObject ? activeObject.id || activeObject.type : 'none');
+                if (activeObject) {
+                    e.preventDefault();
+                    this.moveSelectedObject(e.key, e.shiftKey);
+                }
+            }
         });
         
         // Update focusable objects when canvas changes
@@ -700,6 +716,48 @@ class TemplateAdsEditor {
             })();
         
         announcement_div.textContent = message;
+    }
+    
+    moveSelectedObject(direction, isShiftPressed) {
+        const activeObject = this.canvas.getActiveObject();
+        if (!activeObject || activeObject.virtual) return;
+        
+        const moveDistance = isShiftPressed ? 10 : 5;
+        let moved = false;
+        
+        switch(direction) {
+            case 'ArrowLeft':
+                activeObject.set('left', Math.max(0, activeObject.left - moveDistance));
+                moved = true;
+                break;
+            case 'ArrowRight':
+                activeObject.set('left', Math.min(this.canvas.width - activeObject.getScaledWidth(), activeObject.left + moveDistance));
+                moved = true;
+                break;
+            case 'ArrowUp':
+                activeObject.set('top', Math.max(0, activeObject.top - moveDistance));
+                moved = true;
+                break;
+            case 'ArrowDown':
+                activeObject.set('top', Math.min(this.canvas.height - activeObject.getScaledHeight(), activeObject.top + moveDistance));
+                moved = true;
+                break;
+        }
+        
+        if (moved) {
+            activeObject.setCoords();
+            this.canvas.renderAll();
+            this.saveState();
+            
+            // Update toolbar positions if they're visible
+            if (activeObject === this.selectedTextObject) {
+                this.updateToolbarPosition();
+            } else if (activeObject === this.selectedCtaObject) {
+                this.updateCtaToolbarPosition();
+            }
+            
+            console.log(`Moved ${activeObject.id || 'element'} ${direction} by ${moveDistance}px`);
+        }
     }
 
     clearCanvasFocus() {
