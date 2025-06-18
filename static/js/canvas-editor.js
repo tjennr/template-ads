@@ -3334,7 +3334,7 @@ class TemplateAdsEditor {
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Canvas center guides - only for center alignment to avoid conflicts
+        // Canvas center guides
         const canvasCenterX = canvasWidth / 2;
         const canvasCenterY = canvasHeight / 2;
         
@@ -3344,8 +3344,7 @@ class TemplateAdsEditor {
                 position: canvasCenterX,
                 start: 0,
                 end: canvasHeight,
-                isCanvas: true,
-                priority: 2 // Lower priority than object guides
+                isCanvas: true
             });
         }
         
@@ -3355,8 +3354,7 @@ class TemplateAdsEditor {
                 position: canvasCenterY,
                 start: 0,
                 end: canvasWidth,
-                isCanvas: true,
-                priority: 2 // Lower priority than object guides
+                isCanvas: true
             });
         }
 
@@ -3372,16 +3370,14 @@ class TemplateAdsEditor {
         objects.forEach(obj => {
             const objBounds = this.getObjectBounds(obj);
             
-            // Vertical alignment guides with priority
+            // Vertical alignment guides
             if (Math.abs(activeBounds.left - objBounds.left) < this.snapThreshold) {
                 guides.push({
                     type: 'vertical',
                     position: objBounds.left,
                     start: Math.min(activeBounds.top, objBounds.top) - 20,
                     end: Math.max(activeBounds.bottom, objBounds.bottom) + 20,
-                    isCanvas: false,
-                    priority: 1,
-                    distance: Math.abs(activeBounds.left - objBounds.left)
+                    isCanvas: false
                 });
             }
             
@@ -3391,9 +3387,7 @@ class TemplateAdsEditor {
                     position: objBounds.right,
                     start: Math.min(activeBounds.top, objBounds.top) - 20,
                     end: Math.max(activeBounds.bottom, objBounds.bottom) + 20,
-                    isCanvas: false,
-                    priority: 1,
-                    distance: Math.abs(activeBounds.right - objBounds.right)
+                    isCanvas: false
                 });
             }
             
@@ -3403,22 +3397,18 @@ class TemplateAdsEditor {
                     position: objBounds.centerX,
                     start: Math.min(activeBounds.top, objBounds.top) - 20,
                     end: Math.max(activeBounds.bottom, objBounds.bottom) + 20,
-                    isCanvas: false,
-                    priority: 1,
-                    distance: Math.abs(activeBounds.centerX - objBounds.centerX)
+                    isCanvas: false
                 });
             }
             
-            // Horizontal alignment guides with priority
+            // Horizontal alignment guides
             if (Math.abs(activeBounds.top - objBounds.top) < this.snapThreshold) {
                 guides.push({
                     type: 'horizontal',
                     position: objBounds.top,
                     start: Math.min(activeBounds.left, objBounds.left) - 20,
                     end: Math.max(activeBounds.right, objBounds.right) + 20,
-                    isCanvas: false,
-                    priority: 1,
-                    distance: Math.abs(activeBounds.top - objBounds.top)
+                    isCanvas: false
                 });
             }
             
@@ -3428,9 +3418,7 @@ class TemplateAdsEditor {
                     position: objBounds.bottom,
                     start: Math.min(activeBounds.left, objBounds.left) - 20,
                     end: Math.max(activeBounds.right, objBounds.right) + 20,
-                    isCanvas: false,
-                    priority: 1,
-                    distance: Math.abs(activeBounds.bottom - objBounds.bottom)
+                    isCanvas: false
                 });
             }
             
@@ -3440,9 +3428,7 @@ class TemplateAdsEditor {
                     position: objBounds.centerY,
                     start: Math.min(activeBounds.left, objBounds.left) - 20,
                     end: Math.max(activeBounds.right, objBounds.right) + 20,
-                    isCanvas: false,
-                    priority: 1,
-                    distance: Math.abs(activeBounds.centerY - objBounds.centerY)
+                    isCanvas: false
                 });
             }
         });
@@ -3495,87 +3481,20 @@ class TemplateAdsEditor {
 
     snapToGuides(activeObject, guides) {
         const activeBounds = this.getObjectBounds(activeObject);
-        let bestVerticalGuide = null;
-        let bestHorizontalGuide = null;
-        let minVerticalScore = Infinity;
-        let minHorizontalScore = Infinity;
         
-        // Find the best guide for each direction using priority and distance
         guides.forEach(guide => {
             if (guide.type === 'vertical') {
-                const distanceToLeft = Math.abs(activeBounds.left - guide.position);
-                const distanceToRight = Math.abs(activeBounds.right - guide.position);
-                const distanceToCenter = Math.abs(activeBounds.centerX - guide.position);
-                
-                const minDistance = Math.min(distanceToLeft, distanceToRight, distanceToCenter);
-                
-                // Score based on priority (lower is better) and distance
-                const score = (guide.priority || 1) * 100 + minDistance;
-                
-                if (minDistance < this.snapThreshold && score < minVerticalScore) {
-                    minVerticalScore = score;
-                    bestVerticalGuide = {
-                        ...guide,
-                        snapType: distanceToLeft === minDistance ? 'left' : 
-                                 distanceToRight === minDistance ? 'right' : 'center',
-                        distance: minDistance
-                    };
+                const snapPosition = guide.position - activeBounds.width / 2;
+                if (Math.abs(activeBounds.centerX - guide.position) < this.snapThreshold) {
+                    activeObject.set('left', snapPosition);
                 }
             } else {
-                const distanceToTop = Math.abs(activeBounds.top - guide.position);
-                const distanceToBottom = Math.abs(activeBounds.bottom - guide.position);
-                const distanceToCenter = Math.abs(activeBounds.centerY - guide.position);
-                
-                const minDistance = Math.min(distanceToTop, distanceToBottom, distanceToCenter);
-                
-                // Score based on priority (lower is better) and distance
-                const score = (guide.priority || 1) * 100 + minDistance;
-                
-                if (minDistance < this.snapThreshold && score < minHorizontalScore) {
-                    minHorizontalScore = score;
-                    bestHorizontalGuide = {
-                        ...guide,
-                        snapType: distanceToTop === minDistance ? 'top' : 
-                                 distanceToBottom === minDistance ? 'bottom' : 'center',
-                        distance: minDistance
-                    };
+                const snapPosition = guide.position - activeBounds.height / 2;
+                if (Math.abs(activeBounds.centerY - guide.position) < this.snapThreshold) {
+                    activeObject.set('top', snapPosition);
                 }
             }
         });
-        
-        // Apply the best vertical snap only if it's very close (within 3 pixels for precision)
-        if (bestVerticalGuide && bestVerticalGuide.distance <= 3) {
-            let newLeft;
-            switch (bestVerticalGuide.snapType) {
-                case 'left':
-                    newLeft = bestVerticalGuide.position;
-                    break;
-                case 'right':
-                    newLeft = bestVerticalGuide.position - activeBounds.width;
-                    break;
-                case 'center':
-                    newLeft = bestVerticalGuide.position - activeBounds.width / 2;
-                    break;
-            }
-            activeObject.set('left', newLeft);
-        }
-        
-        // Apply the best horizontal snap only if it's very close (within 3 pixels for precision)
-        if (bestHorizontalGuide && bestHorizontalGuide.distance <= 3) {
-            let newTop;
-            switch (bestHorizontalGuide.snapType) {
-                case 'top':
-                    newTop = bestHorizontalGuide.position;
-                    break;
-                case 'bottom':
-                    newTop = bestHorizontalGuide.position - activeBounds.height;
-                    break;
-                case 'center':
-                    newTop = bestHorizontalGuide.position - activeBounds.height / 2;
-                    break;
-            }
-            activeObject.set('top', newTop);
-        }
         
         activeObject.setCoords();
     }
