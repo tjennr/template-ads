@@ -1655,10 +1655,28 @@ class TemplateAdsEditor {
             if (obj.id === 'title' || obj.id === 'subtitle') {
                 const savedStyle = styling.textElements[obj.id];
                 if (savedStyle) {
+                    // Determine if we're in a split template (which uses white background)
+                    const isSplitTemplate = this.currentTemplate === 'template4' || 
+                                          this.currentTemplate === 'template5' || 
+                                          this.currentTemplate === 'template6';
+                    
+                    // Only preserve fill color if it's been customized from defaults
+                    const isDefaultWhiteText = savedStyle.fill === '#ffffff';
+                    const isDefaultDarkText = savedStyle.fill === '#333333' || savedStyle.fill === '#666666';
+                    
+                    let fillColor = savedStyle.fill;
+                    if (isSplitTemplate && isDefaultWhiteText) {
+                        // Don't preserve white text on split templates, let template set dark color
+                        fillColor = obj.fill; // Keep the template's default dark color
+                    } else if (!isSplitTemplate && isDefaultDarkText) {
+                        // Don't preserve dark text on full templates, let template set white color  
+                        fillColor = obj.fill; // Keep the template's default white color
+                    }
+                    
                     obj.set({
                         fontFamily: savedStyle.fontFamily,
                         fontSize: savedStyle.fontSize,
-                        fill: savedStyle.fill,
+                        fill: fillColor,
                         shadow: savedStyle.shadow,
                         stroke: savedStyle.stroke,
                         strokeWidth: savedStyle.strokeWidth
