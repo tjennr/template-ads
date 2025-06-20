@@ -1097,6 +1097,63 @@ class TemplateAdsEditor {
             });
         }
 
+        // Text formatting controls
+        const boldBtn = document.getElementById('toolbarBold');
+        const italicBtn = document.getElementById('toolbarItalic');
+        const underlineBtn = document.getElementById('toolbarUnderline');
+        const alignSelect = document.getElementById('toolbarTextAlign');
+
+        if (boldBtn) {
+            boldBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this.selectedTextObject) {
+                    const currentWeight = this.selectedTextObject.fontWeight || 'normal';
+                    const newWeight = currentWeight === 'bold' ? 'normal' : 'bold';
+                    this.selectedTextObject.set('fontWeight', newWeight);
+                    boldBtn.classList.toggle('active', newWeight === 'bold');
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        if (italicBtn) {
+            italicBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this.selectedTextObject) {
+                    const currentStyle = this.selectedTextObject.fontStyle || 'normal';
+                    const newStyle = currentStyle === 'italic' ? 'normal' : 'italic';
+                    this.selectedTextObject.set('fontStyle', newStyle);
+                    italicBtn.classList.toggle('active', newStyle === 'italic');
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        if (underlineBtn) {
+            underlineBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this.selectedTextObject) {
+                    const currentUnderline = this.selectedTextObject.underline || false;
+                    this.selectedTextObject.set('underline', !currentUnderline);
+                    underlineBtn.classList.toggle('active', !currentUnderline);
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        if (alignSelect) {
+            alignSelect.addEventListener('change', (e) => {
+                if (this.selectedTextObject) {
+                    this.selectedTextObject.set('textAlign', e.target.value);
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
         // Shadow button dropdown toggle
         if (shadowBtn) {
             shadowBtn.addEventListener('click', (e) => {
@@ -1452,6 +1509,28 @@ class TemplateAdsEditor {
         
         if (textColorInput) {
             textColorInput.value = this.selectedTextObject.fill || '#000000';
+        }
+
+        // Update formatting button states
+        const boldBtn = document.getElementById('toolbarBold');
+        const italicBtn = document.getElementById('toolbarItalic');
+        const underlineBtn = document.getElementById('toolbarUnderline');
+        const alignSelect = document.getElementById('toolbarTextAlign');
+
+        if (boldBtn) {
+            boldBtn.classList.toggle('active', this.selectedTextObject.fontWeight === 'bold');
+        }
+        
+        if (italicBtn) {
+            italicBtn.classList.toggle('active', this.selectedTextObject.fontStyle === 'italic');
+        }
+        
+        if (underlineBtn) {
+            underlineBtn.classList.toggle('active', this.selectedTextObject.underline === true);
+        }
+        
+        if (alignSelect) {
+            alignSelect.value = this.selectedTextObject.textAlign || 'center';
         }
         
         // Update shadow dropdown buttons
@@ -2355,8 +2434,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-                left: canvasWidth * 0.75,
-                top: canvasHeight * 0.7,
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.88,
                 originX: 'center',
                 originY: 'center',
                 id: 'ctaGroup'
