@@ -14,6 +14,7 @@ class TemplateAdsEditor {
         this.history = [];
         this.historyStep = -1;
         this.maxHistorySteps = 20;
+        this.isInitializing = true; // Flag to prevent undo during initialization
         
         this.init();
     }
@@ -53,6 +54,9 @@ class TemplateAdsEditor {
         this.setupZoomEvents();
         this.setupResizeListener();
         
+        // Initialize button states first
+        this.updateUndoRedoButtonStates();
+        
         // Initialize canvas with default content
         this.initializeDefaultContent();
     }
@@ -88,11 +92,26 @@ class TemplateAdsEditor {
             this.canvas.sendToBack(img);
             this.mainImage = img;
             this.canvas.renderAll();
-            this.saveState();
+            
+            // Complete initialization and save initial state
+            this.completeInitialization();
         });
         
         this.updateFontFamilyDisplay();
         this.applyZoom();
+    }
+    
+    completeInitialization() {
+        // End initialization phase and save the initial state
+        this.isInitializing = false;
+        
+        // Save the initial state as the baseline
+        const state = JSON.stringify(this.canvas.toJSON(['id']));
+        this.history.push(state);
+        this.historyStep = 0;
+        
+        // Initialize button states (both should be disabled initially)
+        this.updateUndoRedoButtonStates();
     }
 
     loadDefaultImage() {
@@ -1453,6 +1472,11 @@ class TemplateAdsEditor {
     }
 
     saveState() {
+        // Skip saving state during initialization
+        if (this.isInitializing) {
+            return;
+        }
+        
         // Clear redo history when new action is performed
         if (this.historyStep < this.history.length - 1) {
             this.history = this.history.slice(0, this.historyStep + 1);
@@ -1520,6 +1544,7 @@ class TemplateAdsEditor {
         const redoButton = document.getElementById('redoCanvas');
         
         if (undoButton) {
+            // Undo is only enabled when there are changes beyond the initial state
             undoButton.disabled = this.historyStep <= 0;
         }
         
@@ -2949,10 +2974,15 @@ class TemplateAdsEditor {
             this.hideCtaToolbar();
             this.hideBackgroundToolbar();
             
-            // Clear history and save the reset state
+            // Clear history and reset to initial state
             this.history = [];
             this.historyStep = -1;
-            this.saveState();
+            this.isInitializing = true;
+            
+            // After reset is complete, save as new initial state
+            setTimeout(() => {
+                this.completeInitialization();
+            }, 200);
             
             // Update focusable objects for keyboard navigation
             this.updateFocusableObjects();
