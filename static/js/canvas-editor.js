@@ -2082,7 +2082,36 @@ class TemplateAdsEditor {
         
         switch(templateName) {
             case 'template1': // Classic - full canvas
-            case 'template2': // Modern Grid - full canvas
+                return {
+                    left: canvasWidth / 2,
+                    top: canvasHeight / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    width: canvasWidth,
+                    height: canvasHeight
+                };
+            case 'template2': // Left Aligned - right side image
+                if (isVertical) {
+                    // Vertical: right half for image
+                    return {
+                        left: canvasWidth * 0.75,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight
+                    };
+                } else {
+                    // Horizontal: right 55% for image
+                    return {
+                        left: canvasWidth * 0.725,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth * 0.55,
+                        height: canvasHeight
+                    };
+                }
             case 'template3': // Minimalist - full canvas
                 return {
                     left: canvasWidth / 2,
@@ -2247,46 +2276,73 @@ class TemplateAdsEditor {
     }
     
     createTemplate2() {
-        // Modern Grid - Split layout
-        const canvasWidth = this.canvas.getWidth();
-        const canvasHeight = this.canvas.getHeight();
+        // Left Aligned template - text aligned to left side with right-side image
+        this.canvas.clear();
         
-        // Title - white text over image
-        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
-            left: canvasWidth * 0.1,
-            top: canvasHeight * 0.6,
-            fontSize: 40,
-            fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
+        const canvasWidth = this.canvas.width;
+        const canvasHeight = this.canvas.height;
+        
+        // Add background image
+        const imageConfig = this.getImageConfigForTemplate('template2', canvasWidth, canvasHeight);
+        this.addExistingImageToCanvas(this.defaultImageElement, 'background', imageConfig);
+
+        // Add logo
+        const logoPosition = this.getLogoPositionForTemplate('template2', canvasWidth, canvasHeight);
+        this.addExistingImageToCanvas(this.logoImageElement, 'logo', logoPosition);
+
+        // Title text - positioned on left side with white text over dark overlay
+        const titleLeft = canvasWidth * 0.08;
+        const titleTop = canvasWidth > canvasHeight ? canvasHeight * 0.45 : canvasHeight * 0.35;
+        const titleText = new fabric.Text('Your Title Here', {
+            left: titleLeft,
+            top: titleTop,
+            fontFamily: 'Source Sans Pro',
+            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.06 : canvasWidth * 0.08,
             fontWeight: 'bold',
+            fill: '#ffffff',
             textAlign: 'left',
-            originX: 'left',
-            originY: 'center',
+            width: canvasWidth * 0.45,
+            selectable: true,
+            hasControls: true,
+            hasBorders: true,
             id: 'title'
         });
-        
-        // Subtitle - white text over image
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-            left: canvasWidth * 0.1,
-            top: canvasHeight * 0.7,
-            fontSize: 24,
+        this.canvas.add(titleText);
+
+        // Subtitle text - positioned below title on left
+        const subtitleLeft = canvasWidth * 0.08;
+        const subtitleTop = canvasWidth > canvasHeight ? canvasHeight * 0.6 : canvasHeight * 0.5;
+        const subtitleText = new fabric.Text('Your subtitle text goes here and can span multiple lines', {
+            left: subtitleLeft,
+            top: subtitleTop,
+            fontFamily: 'Source Sans Pro',
+            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.03 : canvasWidth * 0.04,
             fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'left',
-            originX: 'left',
-            originY: 'center',
+            width: canvasWidth * 0.45,
+            selectable: true,
+            hasControls: true,
+            hasBorders: true,
             id: 'subtitle'
         });
-        
-        // Calculate responsive button width based on text
+        this.canvas.add(subtitleText);
+
+        // CTA Button
         const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        
-        // CTA Button - Create rounded rectangle background
+        const tempText = new fabric.Text(ctaTextValue, {
+            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.025 : canvasWidth * 0.035,
+            fontFamily: 'Source Sans Pro',
+            fontWeight: 'bold'
+        });
+        const textWidth = tempText.width;
+        const buttonWidth = Math.max(80, textWidth + 32);
+        const buttonHeight = canvasWidth > canvasHeight ? 35 : 40;
+
         const ctaButtonBg = new fabric.Rect({
             left: 0,
             top: 0,
-            width: 120,
-            height: 40,
+            width: buttonWidth,
+            height: buttonHeight,
             fill: '#0077B5',
             rx: 8,
             ry: 8,
@@ -2297,13 +2353,12 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
-        // CTA Button Text
-        this.ctaText = new fabric.Text('Shop Now', {
+        const ctaText = new fabric.Text(ctaTextValue, {
             left: 0,
             top: 0,
-            fontSize: 18,
+            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.025 : canvasWidth * 0.035,
             fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
+            fontFamily: 'Source Sans Pro',
             fontWeight: 'bold',
             textAlign: 'center',
             originX: 'center',
@@ -2311,16 +2366,16 @@ class TemplateAdsEditor {
             id: 'cta'
         });
 
-        // Group them together
-        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-            left: canvasWidth * 0.1 + 60,
-            top: canvasHeight * 0.85,
+        const ctaGroup = new fabric.Group([ctaButtonBg, ctaText], {
+            left: canvasWidth * 0.08 + buttonWidth/2,
+            top: canvasWidth > canvasHeight ? canvasHeight * 0.78 : canvasHeight * 0.7,
             originX: 'center',
             originY: 'center',
             id: 'ctaGroup'
         });
-        
-        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
+        this.canvas.add(ctaGroup);
+
+        this.enforceProperLayering();
         this.canvas.renderAll();
     }
     
@@ -2985,7 +3040,7 @@ class TemplateAdsEditor {
                 // For split templates, scale to fill entire canvas then clip
                 // For full templates, scale to fit designated area
                 let scale;
-                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                if (this.currentTemplate === 'template2' || this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
                     // Split templates: scale to fill entire canvas for proper coverage
                     const scaleToFitWidth = canvasWidth / img.width;
                     const scaleToFitHeight = canvasHeight / img.height;
