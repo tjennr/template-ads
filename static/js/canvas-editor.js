@@ -2835,10 +2835,18 @@ class TemplateAdsEditor {
 
                 // Add clipping for split templates, remove for full templates
                 if (this.currentTemplate === 'template4') {
-                    // Split Left: Clip to left half
-                    clonedImg.clipPath = new fabric.Rect({
-                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                    });
+                    // Split Bottom: Clip based on orientation
+                    if (this.currentOrientation === 'vertical') {
+                        // Vertical: Clip to top 60%
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.6, absolutePositioned: true
+                        });
+                    } else {
+                        // Horizontal: Clip to left half
+                        clonedImg.clipPath = new fabric.Rect({
+                            left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                        });
+                    }
                 } else if (this.currentTemplate === 'template5') {
                     // Split Right: Clip to right half
                     clonedImg.clipPath = new fabric.Rect({
