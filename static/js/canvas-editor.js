@@ -147,7 +147,6 @@ class TemplateAdsEditor {
         this.loadTemplate(this.currentTemplate);
         
         this.canvas.renderAll();
-        this.saveState();
     }
 
     toggleCTA(enabled) {
@@ -351,7 +350,6 @@ class TemplateAdsEditor {
                 // Load template
                 this.currentTemplate = template;
                 this.loadTemplate(template);
-                this.saveState();
                 
                 // Keep dropdown open - will close when clicking outside
             });
