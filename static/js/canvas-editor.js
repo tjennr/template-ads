@@ -14,6 +14,7 @@ class TemplateAdsEditor {
         this.history = [];
         this.historyStep = -1;
         this.maxHistorySteps = 20;
+        this.isLoadingTemplate = false;
         
         this.init();
     }
@@ -58,6 +59,9 @@ class TemplateAdsEditor {
     }
 
     initializeDefaultContent() {
+        // Set loading flag to prevent undo states during initialization
+        this.isLoadingTemplate = true;
+        
         // Create initial template content without waiting for image load
         this.loadTemplate(this.currentTemplate);
         
@@ -88,6 +92,13 @@ class TemplateAdsEditor {
             this.canvas.sendToBack(img);
             this.mainImage = img;
             this.canvas.renderAll();
+            
+            // Now enable undo system and save the complete initial state
+            this.isLoadingTemplate = false;
+            
+            // Clear any existing history and set this as the baseline
+            this.history = [];
+            this.historyStep = -1;
             this.saveState();
         });
         
@@ -1503,6 +1514,11 @@ class TemplateAdsEditor {
     }
 
     saveState() {
+        // Don't save state during template loading to prevent undo issues
+        if (this.isLoadingTemplate) {
+            return;
+        }
+        
         // Clear redo history when new action is performed
         if (this.historyStep < this.history.length - 1) {
             this.history = this.history.slice(0, this.historyStep + 1);
@@ -1753,6 +1769,9 @@ class TemplateAdsEditor {
         // Preserve current styling before clearing canvas
         const currentStyling = this.captureCurrentStyling();
         
+        // Temporarily disable automatic state saving during template loading
+        this.isLoadingTemplate = true;
+        
         // Clear canvas completely to prevent formatting issues
         this.canvas.clear();
         this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
@@ -1794,6 +1813,10 @@ class TemplateAdsEditor {
         // Ensure proper final layering: background images at bottom, text on top
         this.enforceProperLayering();
         this.canvas.renderAll();
+        
+        // Re-enable state saving and save the final template state as new baseline
+        this.isLoadingTemplate = false;
+        this.saveState();
     }
     
     enforceProperLayering() {
