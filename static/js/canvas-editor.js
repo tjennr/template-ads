@@ -528,13 +528,27 @@ class TemplateAdsEditor {
 
     setupCanvasEvents() {
         // Track canvas changes for undo functionality with debouncing
-        this.canvas.on('object:added', () => this.debouncedSaveState());
-        this.canvas.on('object:removed', () => this.debouncedSaveState());
+        this.canvas.on('object:added', () => {
+            if (!this.isLoadingTemplate) {
+                this.debouncedSaveState();
+            }
+        });
+        this.canvas.on('object:removed', () => {
+            if (!this.isLoadingTemplate) {
+                this.debouncedSaveState();
+            }
+        });
         this.canvas.on('object:modified', () => {
             this.updateToolbarPosition();
-            this.debouncedSaveState();
+            if (!this.isLoadingTemplate) {
+                this.debouncedSaveState();
+            }
         });
-        this.canvas.on('path:created', () => this.debouncedSaveState());
+        this.canvas.on('path:created', () => {
+            if (!this.isLoadingTemplate) {
+                this.debouncedSaveState();
+            }
+        });
         
         // Smart guides functionality
         this.canvas.on('object:moving', (e) => this.handleObjectMoving(e));
@@ -1812,9 +1826,8 @@ class TemplateAdsEditor {
         this.enforceProperLayering();
         this.canvas.renderAll();
         
-        // Re-enable state saving and save the final template state as new baseline
+        // Re-enable state saving
         this.isLoadingTemplate = false;
-        this.saveState();
     }
     
     enforceProperLayering() {

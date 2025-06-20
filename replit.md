@@ -145,6 +145,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 20, 2025: Fixed text color preservation logic - split templates (Split Left, Split Right, Split Top) now maintain black text against white backgrounds while preserving truly customized colors during template switching
 - June 20, 2025: Fixed undo system to prevent undoing template initialization - undo no longer removes default images or template elements that weren't user-created, protecting against accidental removal of baseline content
 - June 20, 2025: Removed redundant state saving from template and orientation switching - eliminated duplicate saveState calls that created problematic undo points during template/orientation changes
+- June 20, 2025: Fixed canvas event handlers to respect template loading flag - prevented automatic state saving during template operations by checking isLoadingTemplate flag in object:added, object:removed, object:modified, and path:created events
+- June 20, 2025: Removed final saveState call from loadTemplate function - eliminated the last source of problematic undo states during template switching
 
 ## Changelog
 - June 16, 2025. Initial setup
