@@ -451,6 +451,10 @@ class TemplateAdsEditor {
             this.undo();
         });
         
+        document.getElementById('redoCanvas').addEventListener('click', () => {
+            this.redo();
+        });
+        
         document.getElementById('resetCanvas').addEventListener('click', () => {
             this.resetCanvas();
         });
@@ -1481,16 +1485,46 @@ class TemplateAdsEditor {
                 this.canvas.renderAll();
                 // Re-enable event listeners
                 this.setupCanvasEvents();
-                this.updateUndoButtonState();
+                this.updateUndoRedoButtonStates();
+                this.updateObjectReferences();
+            });
+        }
+    }
+
+    redo() {
+        if (this.historyStep < this.history.length - 1) {
+            this.historyStep++;
+            const state = this.history[this.historyStep];
+            
+            // Temporarily disable event listeners to prevent saving state during redo
+            this.canvas.off('object:added');
+            this.canvas.off('object:removed');
+            this.canvas.off('object:modified');
+            
+            this.canvas.loadFromJSON(state, () => {
+                this.canvas.renderAll();
+                // Re-enable event listeners
+                this.setupCanvasEvents();
+                this.updateUndoRedoButtonStates();
                 this.updateObjectReferences();
             });
         }
     }
 
     updateUndoButtonState() {
+        this.updateUndoRedoButtonStates();
+    }
+
+    updateUndoRedoButtonStates() {
         const undoButton = document.getElementById('undoCanvas');
+        const redoButton = document.getElementById('redoCanvas');
+        
         if (undoButton) {
             undoButton.disabled = this.historyStep <= 0;
+        }
+        
+        if (redoButton) {
+            redoButton.disabled = this.historyStep >= this.history.length - 1;
         }
     }
 
