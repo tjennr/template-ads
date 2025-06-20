@@ -270,6 +270,30 @@ class TemplateAdsEditor {
                 // Keep dropdown open - will close when clicking outside
             });
         });
+        
+        // Close dropdown when focus leaves the dropdown area
+        orientationBtn.addEventListener('focusout', (e) => {
+            // Use setTimeout to ensure the focus has moved before checking
+            setTimeout(() => {
+                const orientationDropdown = document.getElementById('orientationDropdown');
+                if (!orientationDropdown.contains(document.activeElement)) {
+                    orientationMenu.classList.add('hidden');
+                    orientationBtn.classList.remove('active');
+                }
+            }, 0);
+        });
+        
+        orientationOptions.forEach(option => {
+            option.addEventListener('focusout', (e) => {
+                setTimeout(() => {
+                    const orientationDropdown = document.getElementById('orientationDropdown');
+                    if (!orientationDropdown.contains(document.activeElement)) {
+                        orientationMenu.classList.add('hidden');
+                        orientationBtn.classList.remove('active');
+                    }
+                }, 0);
+            });
+        });
     }
     
     setupTemplateDropdown() {
@@ -319,6 +343,30 @@ class TemplateAdsEditor {
                 this.saveState();
                 
                 // Keep dropdown open - will close when clicking outside
+            });
+        });
+        
+        // Close dropdown when focus leaves the dropdown area
+        templateBtn.addEventListener('focusout', (e) => {
+            // Use setTimeout to ensure the focus has moved before checking
+            setTimeout(() => {
+                const templateDropdown = document.getElementById('templateDropdown');
+                if (!templateDropdown.contains(document.activeElement)) {
+                    templateMenu.classList.add('hidden');
+                    templateBtn.classList.remove('active');
+                }
+            }, 0);
+        });
+        
+        templateOptions.forEach(option => {
+            option.addEventListener('focusout', (e) => {
+                setTimeout(() => {
+                    const templateDropdown = document.getElementById('templateDropdown');
+                    if (!templateDropdown.contains(document.activeElement)) {
+                        templateMenu.classList.add('hidden');
+                        templateBtn.classList.remove('active');
+                    }
+                }, 0);
             });
         });
         
