@@ -155,6 +155,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 20, 2025: Implemented text formatting functionality - bold, italic, underline, and text alignment controls now properly update text objects with visual feedback in toolbar
 - June 20, 2025: Reorganized text toolbar layout - moved text color control after font size and replaced text alignment dropdown with intuitive icon buttons for left, center, and right alignment
 - June 20, 2025: Converted text alignment to dropdown format - replaced side-by-side alignment buttons with dropdown menu showing current alignment icon as trigger, providing cleaner interface while maintaining icon-based selection
+- June 20, 2025: Restored Grid template as "Left Aligned" and removed Minimal template - updated template dropdown to include Left Aligned option with proper image positioning and text layout for left-side text placement
 
 ## Changelog
 - June 16, 2025. Initial setup
