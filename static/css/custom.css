@@ -843,6 +843,23 @@ h1, h2, h3, h4, h5, h6 {
     border-color: #adb5bd;
 }
 
+.toolbar-btn.active {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: white;
+}
+
+.toolbar-select {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background: #ffffff;
+    color: #495057;
+    min-width: 100px;
+    cursor: pointer;
+}
+
 /* Background toolbar specific styling */
 #backgroundToolbar {
     min-width: 280px;

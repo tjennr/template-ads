@@ -1054,6 +1054,10 @@ class TemplateAdsEditor {
         const fontFamilySelect = document.getElementById('toolbarFontFamily');
         const fontSizeInput = document.getElementById('toolbarFontSize');
         const textColorInput = document.getElementById('toolbarTextColor');
+        const boldBtn = document.getElementById('toolbarBold');
+        const italicBtn = document.getElementById('toolbarItalic');
+        const underlineBtn = document.getElementById('toolbarUnderline');
+        const textAlignSelect = document.getElementById('toolbarTextAlign');
         const shadowBtn = document.getElementById('toolbarShadow');
         const outlineBtn = document.getElementById('toolbarOutline');
         
@@ -1091,6 +1095,59 @@ class TemplateAdsEditor {
             textColorInput.addEventListener('input', (e) => {
                 if (this.selectedTextObject) {
                     this.selectedTextObject.set('fill', e.target.value);
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        // Bold toggle
+        if (boldBtn) {
+            boldBtn.addEventListener('click', (e) => {
+                if (this.selectedTextObject) {
+                    const currentWeight = this.selectedTextObject.fontWeight || 'normal';
+                    const newWeight = currentWeight === 'bold' ? 'normal' : 'bold';
+                    this.selectedTextObject.set('fontWeight', newWeight);
+                    boldBtn.classList.toggle('active', newWeight === 'bold');
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        // Italic toggle
+        if (italicBtn) {
+            italicBtn.addEventListener('click', (e) => {
+                if (this.selectedTextObject) {
+                    const currentStyle = this.selectedTextObject.fontStyle || 'normal';
+                    const newStyle = currentStyle === 'italic' ? 'normal' : 'italic';
+                    this.selectedTextObject.set('fontStyle', newStyle);
+                    italicBtn.classList.toggle('active', newStyle === 'italic');
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        // Underline toggle
+        if (underlineBtn) {
+            underlineBtn.addEventListener('click', (e) => {
+                if (this.selectedTextObject) {
+                    const currentUnderline = this.selectedTextObject.underline || false;
+                    const newUnderline = !currentUnderline;
+                    this.selectedTextObject.set('underline', newUnderline);
+                    underlineBtn.classList.toggle('active', newUnderline);
+                    this.canvas.renderAll();
+                    this.saveState();
+                }
+            });
+        }
+
+        // Text alignment change
+        if (textAlignSelect) {
+            textAlignSelect.addEventListener('change', (e) => {
+                if (this.selectedTextObject) {
+                    this.selectedTextObject.set('textAlign', e.target.value);
                     this.canvas.renderAll();
                     this.saveState();
                 }
@@ -1422,6 +1479,10 @@ class TemplateAdsEditor {
         const fontFamilySelect = document.getElementById('toolbarFontFamily');
         const fontSizeInput = document.getElementById('toolbarFontSize');
         const textColorInput = document.getElementById('toolbarTextColor');
+        const boldBtn = document.getElementById('toolbarBold');
+        const italicBtn = document.getElementById('toolbarItalic');
+        const underlineBtn = document.getElementById('toolbarUnderline');
+        const textAlignSelect = document.getElementById('toolbarTextAlign');
         
         // Get effect elements for this function only
         const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');
@@ -1452,6 +1513,28 @@ class TemplateAdsEditor {
         
         if (textColorInput) {
             textColorInput.value = this.selectedTextObject.fill || '#000000';
+        }
+        
+        // Update formatting button states
+        if (boldBtn) {
+            const isBold = this.selectedTextObject.fontWeight === 'bold';
+            boldBtn.classList.toggle('active', isBold);
+        }
+        
+        if (italicBtn) {
+            const isItalic = this.selectedTextObject.fontStyle === 'italic';
+            italicBtn.classList.toggle('active', isItalic);
+        }
+        
+        if (underlineBtn) {
+            const isUnderline = this.selectedTextObject.underline === true;
+            underlineBtn.classList.toggle('active', isUnderline);
+        }
+        
+        // Update text alignment dropdown
+        if (textAlignSelect) {
+            const currentAlign = this.selectedTextObject.textAlign || 'left';
+            textAlignSelect.value = currentAlign;
         }
         
         // Update shadow dropdown buttons
