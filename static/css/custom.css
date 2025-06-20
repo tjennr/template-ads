@@ -212,6 +212,51 @@ h1, h2, h3, h4, h5, h6 {
     transition: transform 0.2s ease;
 }
 
+/* Compact button group for undo/redo */
+.btn-group {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn-compact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: none;
+    color: #495057;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    height: 44px;
+}
+
+.action-btn-compact:first-child {
+    border-right: 1px solid #e9ecef;
+}
+
+.action-btn-compact:hover {
+    background: #f8f9fa;
+    color: #212529;
+}
+
+.action-btn-compact:disabled {
+    background: #f8f9fa;
+    color: #adb5bd;
+    cursor: not-allowed;
+}
+
+.action-btn-compact:disabled:hover {
+    background: #f8f9fa;
+    color: #adb5bd;
+}
+
 .canvas-container-centered {
     flex: 1;
     display: flex;
