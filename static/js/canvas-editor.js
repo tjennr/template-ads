@@ -1101,7 +1101,9 @@ class TemplateAdsEditor {
         const boldBtn = document.getElementById('toolbarBold');
         const italicBtn = document.getElementById('toolbarItalic');
         const underlineBtn = document.getElementById('toolbarUnderline');
-        const alignSelect = document.getElementById('toolbarTextAlign');
+        const alignLeftBtn = document.getElementById('toolbarAlignLeft');
+        const alignCenterBtn = document.getElementById('toolbarAlignCenter');
+        const alignRightBtn = document.getElementById('toolbarAlignRight');
 
         if (boldBtn) {
             boldBtn.addEventListener('click', (e) => {
@@ -1144,15 +1146,25 @@ class TemplateAdsEditor {
             });
         }
 
-        if (alignSelect) {
-            alignSelect.addEventListener('change', (e) => {
-                if (this.selectedTextObject) {
-                    this.selectedTextObject.set('textAlign', e.target.value);
-                    this.canvas.renderAll();
-                    this.saveState();
-                }
-            });
-        }
+        // Text alignment buttons
+        [alignLeftBtn, alignCenterBtn, alignRightBtn].forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (this.selectedTextObject) {
+                        const alignment = btn.getAttribute('data-align');
+                        this.selectedTextObject.set('textAlign', alignment);
+                        
+                        // Update button states
+                        [alignLeftBtn, alignCenterBtn, alignRightBtn].forEach(b => b?.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        this.canvas.renderAll();
+                        this.saveState();
+                    }
+                });
+            }
+        });
 
         // Shadow button dropdown toggle
         if (shadowBtn) {
@@ -1515,7 +1527,9 @@ class TemplateAdsEditor {
         const boldBtn = document.getElementById('toolbarBold');
         const italicBtn = document.getElementById('toolbarItalic');
         const underlineBtn = document.getElementById('toolbarUnderline');
-        const alignSelect = document.getElementById('toolbarTextAlign');
+        const alignLeftBtn = document.getElementById('toolbarAlignLeft');
+        const alignCenterBtn = document.getElementById('toolbarAlignCenter');
+        const alignRightBtn = document.getElementById('toolbarAlignRight');
 
         if (boldBtn) {
             boldBtn.classList.toggle('active', this.selectedTextObject.fontWeight === 'bold');
@@ -1529,8 +1543,16 @@ class TemplateAdsEditor {
             underlineBtn.classList.toggle('active', this.selectedTextObject.underline === true);
         }
         
-        if (alignSelect) {
-            alignSelect.value = this.selectedTextObject.textAlign || 'center';
+        // Update text alignment button states
+        const currentAlign = this.selectedTextObject.textAlign || 'center';
+        [alignLeftBtn, alignCenterBtn, alignRightBtn].forEach(btn => btn?.classList.remove('active'));
+        
+        if (currentAlign === 'left' && alignLeftBtn) {
+            alignLeftBtn.classList.add('active');
+        } else if (currentAlign === 'center' && alignCenterBtn) {
+            alignCenterBtn.classList.add('active');
+        } else if (currentAlign === 'right' && alignRightBtn) {
+            alignRightBtn.classList.add('active');
         }
         
         // Update shadow dropdown buttons

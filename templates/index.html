@@ -254,6 +254,10 @@
         </div>
         
         <div class="toolbar-section">
+            <input type="color" class="toolbar-color-input" id="toolbarTextColor" title="Text Color">
+        </div>
+        
+        <div class="toolbar-section">
             <button class="toolbar-btn format-btn" id="toolbarBold" title="Bold">
                 <i class="fas fa-bold"></i>
             </button>
@@ -266,15 +270,15 @@
         </div>
         
         <div class="toolbar-section">
-            <select class="toolbar-select" id="toolbarTextAlign" title="Text Alignment">
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
-            </select>
-        </div>
-        
-        <div class="toolbar-section">
-            <input type="color" class="toolbar-color-input" id="toolbarTextColor" title="Text Color">
+            <button class="toolbar-btn format-btn" id="toolbarAlignLeft" data-align="left" title="Align Left">
+                <i class="fas fa-align-left"></i>
+            </button>
+            <button class="toolbar-btn format-btn" id="toolbarAlignCenter" data-align="center" title="Align Center">
+                <i class="fas fa-align-center"></i>
+            </button>
+            <button class="toolbar-btn format-btn" id="toolbarAlignRight" data-align="right" title="Align Right">
+                <i class="fas fa-align-right"></i>
+            </button>
         </div>
         
         <div class="toolbar-section effect-dropdown-container">
