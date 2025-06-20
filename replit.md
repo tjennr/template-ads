@@ -137,6 +137,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 18, 2025: Fixed smart guides glitching by disabling automatic snapping - guides now provide visual-only alignment feedback without forcing element positioning, giving users full control while maintaining helpful alignment hints
 - June 20, 2025: Fixed reset button functionality to preserve current template and orientation instead of always reverting to Classic template
 - June 20, 2025: Added redo functionality alongside existing undo - users now have both undo and redo buttons with proper state management and history tracking
+- June 20, 2025: Created compact attached undo/redo button group with icon-only design and tooltips for cleaner interface
+- June 20, 2025: Improved undo button logic to prevent interaction before user makes changes, with enhanced disabled button styling
 
 ## Changelog
 - June 16, 2025. Initial setup
