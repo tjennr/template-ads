@@ -1258,6 +1258,7 @@ class TemplateAdsEditor {
                     const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
                     if (ctaText) {
                         ctaText.set('fontFamily', e.target.value);
+                        this.resizeCtaButtonToFitText(this.selectedCtaObject);
                         this.canvas.renderAll();
                         this.saveState();
                     }
@@ -1272,6 +1273,7 @@ class TemplateAdsEditor {
                     const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
                     if (ctaText) {
                         ctaText.set('fontSize', parseInt(e.target.value) || 18);
+                        this.resizeCtaButtonToFitText(this.selectedCtaObject);
                         this.canvas.renderAll();
                         this.saveState();
                     }
@@ -1684,12 +1686,49 @@ class TemplateAdsEditor {
                     ctaBackground.set('fill', styling.ctaElement.backgroundColor);
                 }
                 
+                // Resize CTA button to fit the text
+                this.resizeCtaButtonToFitText(obj);
+                
                 // Update the group to reflect changes
                 obj.addWithUpdate();
             }
         });
         
         this.canvas.renderAll();
+    }
+    
+    resizeCtaButtonToFitText(ctaGroup) {
+        if (!ctaGroup || ctaGroup.id !== 'ctaGroup') return;
+        
+        const ctaText = ctaGroup.getObjects().find(item => item.id === 'cta');
+        const ctaBackground = ctaGroup.getObjects().find(item => item.id === 'ctaBackground');
+        
+        if (!ctaText || !ctaBackground) return;
+        
+        // Get text dimensions
+        const textWidth = ctaText.width * ctaText.scaleX;
+        const textHeight = ctaText.height * ctaText.scaleY;
+        
+        // Calculate button dimensions with padding
+        const padding = 20;
+        const minWidth = 120; // Minimum button width
+        const buttonWidth = Math.max(textWidth + (padding * 2), minWidth);
+        const buttonHeight = Math.max(textHeight + (padding * 1.2), 40);
+        
+        // Update background dimensions
+        ctaBackground.set({
+            width: buttonWidth,
+            height: buttonHeight
+        });
+        
+        // Center text within the button
+        ctaText.set({
+            left: 0,
+            top: 0
+        });
+        
+        // Update the group
+        ctaGroup.addWithUpdate();
     }
     
     loadTemplate(templateName) {
@@ -2912,6 +2951,8 @@ class TemplateAdsEditor {
                 if (this.ctaGroup && this.ctaGroup._objects && this.ctaGroup._objects[1]) {
                     this.ctaGroup._objects[1].set('text', value);
                     this.ctaGroup.addWithUpdate();
+                    // Resize button to fit new text
+                    this.updateCtaButtonSize();
                     this.canvas.renderAll();
                     this.saveState();
                     return;

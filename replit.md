@@ -141,6 +141,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 20, 2025: Created compact undo/redo button group with attached styling - removed text labels and kept only arrow icons for cleaner interface
 - June 20, 2025: Fixed font loading issue - added missing Google Fonts (Roboto, Open Sans, Lato, Montserrat) so all font options in the selector now display their actual typefaces instead of falling back to system fonts
 - June 20, 2025: Implemented styling preservation during template switching - text effects (font, size, color, shadow, outline), CTA button styling (text and button color), and background color are now maintained when changing between templates
+- June 20, 2025: Added dynamic CTA button resizing - buttons now automatically adjust their width and height to fit text content when changing templates, orientations, or modifying CTA text/font properties
 
 ## Changelog
 - June 16, 2025. Initial setup
