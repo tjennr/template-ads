@@ -120,9 +120,9 @@ class TemplateAdsEditor {
         let canvasWidth, canvasHeight;
         
         if (this.currentOrientation === 'horizontal') {
-            // Horizontal: 5:4 aspect ratio
+            // Horizontal: 1.91:1 aspect ratio
             canvasWidth = 1000;
-            canvasHeight = 800;
+            canvasHeight = 524; // 1000 / 1.91 ≈ 524
         } else if (this.currentOrientation === 'square') {
             // Square: 1:1 aspect ratio
             canvasWidth = 800;
@@ -2290,16 +2290,16 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Layout - Adapts based on orientation
+        // Split Bottom Layout - Adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         const isVertical = this.currentOrientation === 'vertical';
         
         if (isVertical) {
-            // Vertical: Image left half, text right half
+            // Vertical: Image top, text bottom
             this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
-                left: canvasWidth * 0.75,
-                top: canvasHeight * 0.4,
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.65,
                 fontSize: 40,
                 fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2308,13 +2308,13 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'title',
-                width: canvasWidth * 0.35,
+                width: canvasWidth * 0.8,
                 splitByGrapheme: false
             });
             
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-                left: canvasWidth * 0.75,
-                top: canvasHeight * 0.55,
+                left: canvasWidth / 2,
+                top: canvasHeight * 0.75,
                 fontSize: 24,
                 fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2322,7 +2322,7 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'subtitle',
-                width: canvasWidth * 0.35,
+                width: canvasWidth * 0.8,
                 splitByGrapheme: false
             });
             
