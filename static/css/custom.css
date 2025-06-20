@@ -247,18 +247,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .action-btn-compact:disabled {
-    background: #e9ecef !important;
-    color: #adb5bd !important;
-    cursor: not-allowed !important;
-    opacity: 0.5 !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    background: #f8f9fa;
+    color: #adb5bd;
+    cursor: not-allowed;
 }
 
 .action-btn-compact:disabled:hover {
-    background: #e9ecef !important;
-    color: #adb5bd !important;
-    opacity: 0.5 !important;
-    transform: none !important;
+    background: #f8f9fa;
+    color: #adb5bd;
 }
 
 .canvas-container-centered {
