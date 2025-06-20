@@ -22,6 +22,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
 </head>
 <body>
     <div class="container-fluid">
@@ -162,27 +163,7 @@
 
 
 
-                <div class="export-container">
-                    <button class="export-main-btn" id="exportMainBtn">
-                        <i class="fas fa-download"></i>
-                        <span>Export Design</span>
-                        <i class="fas fa-chevron-down export-chevron"></i>
-                    </button>
-                    <div class="export-dropdown hidden" id="exportDropdown">
-                        <button class="export-option" id="exportPng">
-                            <i class="fas fa-file-image"></i>
-                            <span>PNG</span>
-                        </button>
-                        <button class="export-option" id="exportJpg">
-                            <i class="fas fa-file-image"></i>
-                            <span>JPG</span>
-                        </button>
-                        <button class="export-option" id="exportPdf">
-                            <i class="fas fa-file-pdf"></i>
-                            <span>PDF</span>
-                        </button>
-                    </div>
-                </div>
+
             </div>
 
             <!-- Main Canvas Area -->
@@ -190,39 +171,13 @@
                 <div class="canvas-container">
                     <canvas id="designCanvas" width="800" height="1000"></canvas>
                 </div>
-                    <div class="canvas-actions">
-                        <div class="btn-group" role="group">
-                            <button class="action-btn-compact" id="undoCanvas" title="Undo">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                            <button class="action-btn-compact" id="redoCanvas" title="Redo">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                        </div>
-                        <button class="action-btn" id="resetCanvas">
-                            <i class="fas fa-refresh"></i>
-                            Reset
-                        </button>
-                        <div class="zoom-controls">
-                            <button class="zoom-btn" id="zoomOut">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <span class="zoom-level" id="zoomLevel">100%</span>
-                            <button class="zoom-btn" id="zoomIn">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <button class="zoom-btn" id="zoomFit">
-                                <i class="fas fa-expand-arrows-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            </div>
             </div>
         </div>
     </div>
 
-    <!-- Floating Text Toolbar -->
-    <div id="textToolbar" class="text-toolbar hidden">
+    <!-- Hidden placeholders for JavaScript compatibility -->
+    <div id="textToolbar" class="hidden">
         <div class="toolbar-section">
             <select class="toolbar-font-select" id="toolbarFontFamily">
                 <option value="Source Sans Pro">Source Sans Pro</option>
@@ -358,5 +313,6 @@
     
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/canvas-editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modern-adapter.js') }}"></script>
 </body>
 </html>
