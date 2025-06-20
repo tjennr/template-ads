@@ -2895,28 +2895,15 @@ class TemplateAdsEditor {
             this.mainImage = null;
             this.logo = null;
             
-            // Reset template and orientation to defaults
-            this.currentTemplate = 'template1';
-            this.currentOrientation = 'horizontal';
+            // Preserve current template and orientation
+            const currentTemplate = this.currentTemplate;
+            const currentOrientation = this.currentOrientation;
             
-            // Update UI to reflect reset state
-            document.querySelectorAll('.template-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            const template1Btn = document.querySelector('[data-template="template1"]');
-            if (template1Btn) template1Btn.classList.add('active');
-            
-            document.querySelectorAll('.orientation-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            const horizontalBtn = document.getElementById('horizontalBtn');
-            if (horizontalBtn) horizontalBtn.classList.add('active');
-            
-            // Set canvas dimensions for horizontal orientation
+            // Set canvas dimensions for current orientation
             this.setCanvasDimensions();
             
             // Reload current template with default values
-            this.loadTemplate('template1');
+            this.loadTemplate(currentTemplate);
             
             // Load default images after template is loaded
             setTimeout(() => {
