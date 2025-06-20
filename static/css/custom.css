@@ -860,6 +860,16 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
+.toolbar-align-select {
+    min-width: 120px;
+    font-family: 'Font Awesome 6 Free', 'Source Sans Pro', sans-serif;
+}
+
+.toolbar-align-select option {
+    padding: 0.5rem;
+    font-family: 'Font Awesome 6 Free', 'Source Sans Pro', sans-serif;
+}
+
 /* Background toolbar specific styling */
 #backgroundToolbar {
     min-width: 280px;
