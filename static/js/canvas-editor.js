@@ -120,9 +120,9 @@ class TemplateAdsEditor {
         let canvasWidth, canvasHeight;
         
         if (this.currentOrientation === 'horizontal') {
-            // Horizontal: 1.91:1 aspect ratio
+            // Horizontal: 5:4 aspect ratio
             canvasWidth = 1000;
-            canvasHeight = 524; // 1000 / 1.91 ≈ 524
+            canvasHeight = 800;
         } else if (this.currentOrientation === 'square') {
             // Square: 1:1 aspect ratio
             canvasWidth = 800;
@@ -1097,102 +1097,6 @@ class TemplateAdsEditor {
             });
         }
 
-        // Text formatting controls
-        const boldBtn = document.getElementById('toolbarBold');
-        const italicBtn = document.getElementById('toolbarItalic');
-        const underlineBtn = document.getElementById('toolbarUnderline');
-        const alignDropdownBtn = document.getElementById('alignDropdownBtn');
-        const alignDropdown = document.getElementById('alignDropdown');
-        const alignDropdownIcon = document.getElementById('alignDropdownIcon');
-        const alignOptions = document.querySelectorAll('.align-option');
-
-        if (boldBtn) {
-            boldBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (this.selectedTextObject) {
-                    const currentWeight = this.selectedTextObject.fontWeight || 'normal';
-                    const newWeight = currentWeight === 'bold' ? 'normal' : 'bold';
-                    this.selectedTextObject.set('fontWeight', newWeight);
-                    boldBtn.classList.toggle('active', newWeight === 'bold');
-                    this.canvas.renderAll();
-                    this.saveState();
-                }
-            });
-        }
-
-        if (italicBtn) {
-            italicBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (this.selectedTextObject) {
-                    const currentStyle = this.selectedTextObject.fontStyle || 'normal';
-                    const newStyle = currentStyle === 'italic' ? 'normal' : 'italic';
-                    this.selectedTextObject.set('fontStyle', newStyle);
-                    italicBtn.classList.toggle('active', newStyle === 'italic');
-                    this.canvas.renderAll();
-                    this.saveState();
-                }
-            });
-        }
-
-        if (underlineBtn) {
-            underlineBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (this.selectedTextObject) {
-                    const currentUnderline = this.selectedTextObject.underline || false;
-                    this.selectedTextObject.set('underline', !currentUnderline);
-                    underlineBtn.classList.toggle('active', !currentUnderline);
-                    this.canvas.renderAll();
-                    this.saveState();
-                }
-            });
-        }
-
-        // Text alignment dropdown
-        if (alignDropdownBtn) {
-            alignDropdownBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (alignDropdown) {
-                    const isHidden = alignDropdown.classList.contains('hidden');
-                    if (isHidden) {
-                        alignDropdown.classList.remove('hidden');
-                    } else {
-                        alignDropdown.classList.add('hidden');
-                    }
-                }
-            });
-        }
-
-        // Text alignment options
-        alignOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (this.selectedTextObject) {
-                    const alignment = option.getAttribute('data-align');
-                    this.selectedTextObject.set('textAlign', alignment);
-                    
-                    // Update dropdown icon
-                    if (alignDropdownIcon) {
-                        alignDropdownIcon.className = `fas fa-align-${alignment}`;
-                    }
-                    
-                    // Close dropdown
-                    if (alignDropdown) {
-                        alignDropdown.classList.add('hidden');
-                    }
-                    
-                    this.canvas.renderAll();
-                    this.saveState();
-                }
-            });
-        });
-
-        // Close alignment dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (alignDropdown && !alignDropdown.contains(e.target) && !alignDropdownBtn?.contains(e.target)) {
-                alignDropdown.classList.add('hidden');
-            }
-        });
-
         // Shadow button dropdown toggle
         if (shadowBtn) {
             shadowBtn.addEventListener('click', (e) => {
@@ -1548,30 +1452,6 @@ class TemplateAdsEditor {
         
         if (textColorInput) {
             textColorInput.value = this.selectedTextObject.fill || '#000000';
-        }
-
-        // Update formatting button states
-        const boldBtn = document.getElementById('toolbarBold');
-        const italicBtn = document.getElementById('toolbarItalic');
-        const underlineBtn = document.getElementById('toolbarUnderline');
-        const alignDropdownIcon = document.getElementById('alignDropdownIcon');
-
-        if (boldBtn) {
-            boldBtn.classList.toggle('active', this.selectedTextObject.fontWeight === 'bold');
-        }
-        
-        if (italicBtn) {
-            italicBtn.classList.toggle('active', this.selectedTextObject.fontStyle === 'italic');
-        }
-        
-        if (underlineBtn) {
-            underlineBtn.classList.toggle('active', this.selectedTextObject.underline === true);
-        }
-        
-        // Update alignment dropdown icon
-        const currentAlign = this.selectedTextObject.textAlign || 'center';
-        if (alignDropdownIcon) {
-            alignDropdownIcon.className = `fas fa-align-${currentAlign}`;
         }
         
         // Update shadow dropdown buttons
@@ -2082,36 +1962,7 @@ class TemplateAdsEditor {
         
         switch(templateName) {
             case 'template1': // Classic - full canvas
-                return {
-                    left: canvasWidth / 2,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
-                    width: canvasWidth,
-                    height: canvasHeight
-                };
-            case 'template2': // Left Aligned - right side image
-                if (isVertical) {
-                    // Vertical: right half for image
-                    return {
-                        left: canvasWidth * 0.75,
-                        top: canvasHeight / 2,
-                        originX: 'center',
-                        originY: 'center',
-                        width: canvasWidth * 0.5,
-                        height: canvasHeight
-                    };
-                } else {
-                    // Horizontal: right 55% for image
-                    return {
-                        left: canvasWidth * 0.725,
-                        top: canvasHeight / 2,
-                        originX: 'center',
-                        originY: 'center',
-                        width: canvasWidth * 0.55,
-                        height: canvasHeight
-                    };
-                }
+            case 'template2': // Modern Grid - full canvas
             case 'template3': // Minimalist - full canvas
                 return {
                     left: canvasWidth / 2,
@@ -2276,73 +2127,46 @@ class TemplateAdsEditor {
     }
     
     createTemplate2() {
-        // Left Aligned template - text aligned to left side with right-side image
-        this.canvas.clear();
+        // Modern Grid - Split layout
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
         
-        const canvasWidth = this.canvas.width;
-        const canvasHeight = this.canvas.height;
-        
-        // Add background image
-        const imageConfig = this.getImageConfigForTemplate('template2', canvasWidth, canvasHeight);
-        this.addExistingImageToCanvas(this.defaultImageElement, 'background', imageConfig);
-
-        // Add logo
-        const logoPosition = this.getLogoPositionForTemplate('template2', canvasWidth, canvasHeight);
-        this.addExistingImageToCanvas(this.logoImageElement, 'logo', logoPosition);
-
-        // Title text - positioned on left side with white text over dark overlay
-        const titleLeft = canvasWidth * 0.08;
-        const titleTop = canvasWidth > canvasHeight ? canvasHeight * 0.45 : canvasHeight * 0.35;
-        const titleText = new fabric.Text('Your Title Here', {
-            left: titleLeft,
-            top: titleTop,
-            fontFamily: 'Source Sans Pro',
-            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.06 : canvasWidth * 0.08,
-            fontWeight: 'bold',
+        // Title - white text over image
+        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
+            left: canvasWidth * 0.1,
+            top: canvasHeight * 0.6,
+            fontSize: 40,
             fill: '#ffffff',
+            fontFamily: 'Source Sans Pro, sans-serif',
+            fontWeight: 'bold',
             textAlign: 'left',
-            width: canvasWidth * 0.45,
-            selectable: true,
-            hasControls: true,
-            hasBorders: true,
+            originX: 'left',
+            originY: 'center',
             id: 'title'
         });
-        this.canvas.add(titleText);
-
-        // Subtitle text - positioned below title on left
-        const subtitleLeft = canvasWidth * 0.08;
-        const subtitleTop = canvasWidth > canvasHeight ? canvasHeight * 0.6 : canvasHeight * 0.5;
-        const subtitleText = new fabric.Text('Your subtitle text goes here and can span multiple lines', {
-            left: subtitleLeft,
-            top: subtitleTop,
-            fontFamily: 'Source Sans Pro',
-            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.03 : canvasWidth * 0.04,
+        
+        // Subtitle - white text over image
+        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+            left: canvasWidth * 0.1,
+            top: canvasHeight * 0.7,
+            fontSize: 24,
             fill: '#ffffff',
+            fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'left',
-            width: canvasWidth * 0.45,
-            selectable: true,
-            hasControls: true,
-            hasBorders: true,
+            originX: 'left',
+            originY: 'center',
             id: 'subtitle'
         });
-        this.canvas.add(subtitleText);
-
-        // CTA Button
+        
+        // Calculate responsive button width based on text
         const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        const tempText = new fabric.Text(ctaTextValue, {
-            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.025 : canvasWidth * 0.035,
-            fontFamily: 'Source Sans Pro',
-            fontWeight: 'bold'
-        });
-        const textWidth = tempText.width;
-        const buttonWidth = Math.max(80, textWidth + 32);
-        const buttonHeight = canvasWidth > canvasHeight ? 35 : 40;
-
+        
+        // CTA Button - Create rounded rectangle background
         const ctaButtonBg = new fabric.Rect({
             left: 0,
             top: 0,
-            width: buttonWidth,
-            height: buttonHeight,
+            width: 120,
+            height: 40,
             fill: '#0077B5',
             rx: 8,
             ry: 8,
@@ -2353,12 +2177,13 @@ class TemplateAdsEditor {
             id: 'ctaBackground'
         });
 
-        const ctaText = new fabric.Text(ctaTextValue, {
+        // CTA Button Text
+        this.ctaText = new fabric.Text('Shop Now', {
             left: 0,
             top: 0,
-            fontSize: canvasWidth > canvasHeight ? canvasWidth * 0.025 : canvasWidth * 0.035,
+            fontSize: 18,
             fill: '#ffffff',
-            fontFamily: 'Source Sans Pro',
+            fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
             originX: 'center',
@@ -2366,16 +2191,16 @@ class TemplateAdsEditor {
             id: 'cta'
         });
 
-        const ctaGroup = new fabric.Group([ctaButtonBg, ctaText], {
-            left: canvasWidth * 0.08 + buttonWidth/2,
-            top: canvasWidth > canvasHeight ? canvasHeight * 0.78 : canvasHeight * 0.7,
+        // Group them together
+        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+            left: canvasWidth * 0.1 + 60,
+            top: canvasHeight * 0.85,
             originX: 'center',
             originY: 'center',
             id: 'ctaGroup'
         });
-        this.canvas.add(ctaGroup);
-
-        this.enforceProperLayering();
+        
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
         this.canvas.renderAll();
     }
     
@@ -2465,16 +2290,16 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Bottom Layout - Adapts based on orientation
+        // Split Layout - Adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         const isVertical = this.currentOrientation === 'vertical';
         
         if (isVertical) {
-            // Vertical: Image top, text bottom
+            // Vertical: Image left half, text right half
             this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
-                left: canvasWidth / 2,
-                top: canvasHeight * 0.65,
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.4,
                 fontSize: 40,
                 fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2483,13 +2308,13 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'title',
-                width: canvasWidth * 0.8,
+                width: canvasWidth * 0.35,
                 splitByGrapheme: false
             });
             
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-                left: canvasWidth / 2,
-                top: canvasHeight * 0.75,
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.55,
                 fontSize: 24,
                 fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
@@ -2497,7 +2322,7 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'subtitle',
-                width: canvasWidth * 0.8,
+                width: canvasWidth * 0.35,
                 splitByGrapheme: false
             });
             
@@ -2530,8 +2355,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-                left: canvasWidth / 2,
-                top: canvasHeight * 0.88,
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.7,
                 originX: 'center',
                 originY: 'center',
                 id: 'ctaGroup'
@@ -2931,18 +2756,10 @@ class TemplateAdsEditor {
 
                 // Add clipping for split templates, remove for full templates
                 if (this.currentTemplate === 'template4') {
-                    // Split Bottom: Clip based on orientation
-                    if (this.currentOrientation === 'vertical') {
-                        // Vertical: Clip to top 60%
-                        clonedImg.clipPath = new fabric.Rect({
-                            left: 0, top: 0, width: canvasWidth, height: canvasHeight * 0.6, absolutePositioned: true
-                        });
-                    } else {
-                        // Horizontal: Clip to left half
-                        clonedImg.clipPath = new fabric.Rect({
-                            left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
-                        });
-                    }
+                    // Split Left: Clip to left half
+                    clonedImg.clipPath = new fabric.Rect({
+                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
+                    });
                 } else if (this.currentTemplate === 'template5') {
                     // Split Right: Clip to right half
                     clonedImg.clipPath = new fabric.Rect({
@@ -3040,7 +2857,7 @@ class TemplateAdsEditor {
                 // For split templates, scale to fill entire canvas then clip
                 // For full templates, scale to fit designated area
                 let scale;
-                if (this.currentTemplate === 'template2' || this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
+                if (this.currentTemplate === 'template4' || this.currentTemplate === 'template5' || this.currentTemplate === 'template6') {
                     // Split templates: scale to fill entire canvas for proper coverage
                     const scaleToFitWidth = canvasWidth / img.width;
                     const scaleToFitHeight = canvasHeight / img.height;

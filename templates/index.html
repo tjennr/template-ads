@@ -52,7 +52,7 @@
                                             <rect x="14" y="9" width="10" height="3" rx="1" fill="currentColor" opacity="0.4"/>
                                             <rect x="20" y="14" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
                                         </svg>
-                                        <span>1.91:1</span>
+                                        <span>5:4</span>
                                     </div>
                                     <i class="fas fa-chevron-down dropdown-chevron"></i>
                                 </button>
@@ -65,7 +65,7 @@
                                             <rect x="14" y="9" width="10" height="3" rx="1" fill="currentColor" opacity="0.4"/>
                                             <rect x="20" y="14" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
                                         </svg>
-                                        <span>1.91:1</span>
+                                        <span>5:4</span>
                                     </button>
                                     <button class="control-option" data-orientation="square">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,10 +106,13 @@
                                         <span>Classic</span>
                                     </button>
                                     <button class="control-option" data-template="template2">
-                                        <span>Left Aligned</span>
+                                        <span>Grid</span>
+                                    </button>
+                                    <button class="control-option" data-template="template3">
+                                        <span>Minimal</span>
                                     </button>
                                     <button class="control-option" data-template="template4">
-                                        <span>Split Bottom</span>
+                                        <span>Split Left</span>
                                     </button>
                                     <button class="control-option" data-template="template5">
                                         <span>Split Right</span>
@@ -254,39 +257,6 @@
         
         <div class="toolbar-section">
             <input type="color" class="toolbar-color-input" id="toolbarTextColor" title="Text Color">
-        </div>
-        
-        <div class="toolbar-section">
-            <button class="toolbar-btn format-btn" id="toolbarBold" title="Bold">
-                <i class="fas fa-bold"></i>
-            </button>
-            <button class="toolbar-btn format-btn" id="toolbarItalic" title="Italic">
-                <i class="fas fa-italic"></i>
-            </button>
-            <button class="toolbar-btn format-btn" id="toolbarUnderline" title="Underline">
-                <i class="fas fa-underline"></i>
-            </button>
-        </div>
-        
-        <div class="toolbar-section align-dropdown-container">
-            <button class="toolbar-btn format-btn align-dropdown-btn" id="alignDropdownBtn" title="Text Alignment">
-                <i class="fas fa-align-center" id="alignDropdownIcon"></i>
-                <i class="fas fa-chevron-down align-chevron"></i>
-            </button>
-            <div class="align-dropdown hidden" id="alignDropdown">
-                <button class="align-option" data-align="left">
-                    <i class="fas fa-align-left"></i>
-                    <span>Left</span>
-                </button>
-                <button class="align-option" data-align="center">
-                    <i class="fas fa-align-center"></i>
-                    <span>Center</span>
-                </button>
-                <button class="align-option" data-align="right">
-                    <i class="fas fa-align-right"></i>
-                    <span>Right</span>
-                </button>
-            </div>
         </div>
         
         <div class="toolbar-section effect-dropdown-container">

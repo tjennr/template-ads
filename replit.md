@@ -147,15 +147,6 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 20, 2025: Removed redundant state saving from template and orientation switching - eliminated duplicate saveState calls that created problematic undo points during template/orientation changes
 - June 20, 2025: Fixed canvas event handlers to respect template loading flag - prevented automatic state saving during template operations by checking isLoadingTemplate flag in object:added, object:removed, object:modified, and path:created events
 - June 20, 2025: Removed final saveState call from loadTemplate function - eliminated the last source of problematic undo states during template switching
-- June 20, 2025: Updated aspect ratio from 5:4 to 1.91:1 for horizontal orientation - changed canvas dimensions and updated orientation labels in UI
-- June 20, 2025: Removed Grid template (template2) from template selection dropdown - simplified template options
-- June 20, 2025: Changed Split Left template to Split Bottom for vertical orientation - template4 now shows image in top 60% and text in bottom area when in 4:5 orientation
-- June 20, 2025: Added canvas styling with rounded corners and drop shadow - implemented 12px border radius with layered shadow effects for modern appearance
-- June 20, 2025: Enhanced text toolbar with formatting controls - added bold, italic, underline buttons and text alignment dropdown for comprehensive text styling
-- June 20, 2025: Implemented text formatting functionality - bold, italic, underline, and text alignment controls now properly update text objects with visual feedback in toolbar
-- June 20, 2025: Reorganized text toolbar layout - moved text color control after font size and replaced text alignment dropdown with intuitive icon buttons for left, center, and right alignment
-- June 20, 2025: Converted text alignment to dropdown format - replaced side-by-side alignment buttons with dropdown menu showing current alignment icon as trigger, providing cleaner interface while maintaining icon-based selection
-- June 20, 2025: Restored Grid template as "Left Aligned" and removed Minimal template - updated template dropdown to include Left Aligned option with proper image positioning and text layout for left-side text placement
 
 ## Changelog
 - June 16, 2025. Initial setup
