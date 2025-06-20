@@ -147,6 +147,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 20, 2025: Removed redundant state saving from template and orientation switching - eliminated duplicate saveState calls that created problematic undo points during template/orientation changes
 - June 20, 2025: Fixed canvas event handlers to respect template loading flag - prevented automatic state saving during template operations by checking isLoadingTemplate flag in object:added, object:removed, object:modified, and path:created events
 - June 20, 2025: Removed final saveState call from loadTemplate function - eliminated the last source of problematic undo states during template switching
+- June 20, 2025: Added comprehensive text formatting controls to floating toolbar - implemented bold, italic, underline toggle buttons and text alignment dropdown selector
+- June 20, 2025: Enhanced text formatting functionality - formatting buttons show active/inactive states based on current text selection, alignment dropdown reflects current text alignment
 
 ## Changelog
 - June 16, 2025. Initial setup
