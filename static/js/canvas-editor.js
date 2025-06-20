@@ -1468,7 +1468,7 @@ class TemplateAdsEditor {
         }
         
         this.historyStep = this.history.length - 1;
-        this.updateUndoButtonState();
+        this.updateUndoRedoButtonStates();
     }
 
     undo() {
@@ -2951,7 +2951,7 @@ class TemplateAdsEditor {
             
             // Clear history and save the reset state
             this.history = [];
-            this.currentHistoryIndex = -1;
+            this.historyStep = -1;
             this.saveState();
             
             // Update focusable objects for keyboard navigation
