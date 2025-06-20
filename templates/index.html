@@ -269,16 +269,25 @@
             </button>
         </div>
         
-        <div class="toolbar-section">
-            <button class="toolbar-btn format-btn" id="toolbarAlignLeft" data-align="left" title="Align Left">
-                <i class="fas fa-align-left"></i>
+        <div class="toolbar-section align-dropdown-container">
+            <button class="toolbar-btn format-btn align-dropdown-btn" id="alignDropdownBtn" title="Text Alignment">
+                <i class="fas fa-align-center" id="alignDropdownIcon"></i>
+                <i class="fas fa-chevron-down align-chevron"></i>
             </button>
-            <button class="toolbar-btn format-btn" id="toolbarAlignCenter" data-align="center" title="Align Center">
-                <i class="fas fa-align-center"></i>
-            </button>
-            <button class="toolbar-btn format-btn" id="toolbarAlignRight" data-align="right" title="Align Right">
-                <i class="fas fa-align-right"></i>
-            </button>
+            <div class="align-dropdown hidden" id="alignDropdown">
+                <button class="align-option" data-align="left">
+                    <i class="fas fa-align-left"></i>
+                    <span>Left</span>
+                </button>
+                <button class="align-option" data-align="center">
+                    <i class="fas fa-align-center"></i>
+                    <span>Center</span>
+                </button>
+                <button class="align-option" data-align="right">
+                    <i class="fas fa-align-right"></i>
+                    <span>Right</span>
+                </button>
+            </div>
         </div>
         
         <div class="toolbar-section effect-dropdown-container">
