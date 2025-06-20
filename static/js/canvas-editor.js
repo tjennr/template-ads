@@ -1596,7 +1596,106 @@ class TemplateAdsEditor {
         });
     }
     
+    captureCurrentStyling() {
+        const styling = {
+            backgroundColor: this.canvas.backgroundColor || '#ffffff',
+            textElements: {},
+            ctaElement: null
+        };
+        
+        // Capture text element styling
+        const objects = this.canvas.getObjects();
+        objects.forEach(obj => {
+            if (obj.id === 'title' || obj.id === 'subtitle') {
+                styling.textElements[obj.id] = {
+                    fontFamily: obj.fontFamily,
+                    fontSize: obj.fontSize,
+                    fill: obj.fill,
+                    shadow: obj.shadow ? {
+                        color: obj.shadow.color,
+                        blur: obj.shadow.blur,
+                        offsetX: obj.shadow.offsetX,
+                        offsetY: obj.shadow.offsetY
+                    } : null,
+                    stroke: obj.stroke,
+                    strokeWidth: obj.strokeWidth,
+                    text: obj.text
+                };
+            } else if (obj.id === 'ctaGroup') {
+                // Find the CTA text and background within the group
+                const ctaText = obj.getObjects().find(item => item.id === 'cta');
+                const ctaBackground = obj.getObjects().find(item => item.id === 'ctaBackground');
+                
+                if (ctaText && ctaBackground) {
+                    styling.ctaElement = {
+                        text: ctaText.text,
+                        fontFamily: ctaText.fontFamily,
+                        fontSize: ctaText.fontSize,
+                        fill: ctaText.fill,
+                        backgroundColor: ctaBackground.fill
+                    };
+                }
+            }
+        });
+        
+        return styling;
+    }
+    
+    restoreCurrentStyling(styling) {
+        if (!styling) return;
+        
+        // Restore background color
+        this.canvas.setBackgroundColor(styling.backgroundColor, this.canvas.renderAll.bind(this.canvas));
+        
+        // Restore text element styling
+        const objects = this.canvas.getObjects();
+        objects.forEach(obj => {
+            if (obj.id === 'title' || obj.id === 'subtitle') {
+                const savedStyle = styling.textElements[obj.id];
+                if (savedStyle) {
+                    obj.set({
+                        fontFamily: savedStyle.fontFamily,
+                        fontSize: savedStyle.fontSize,
+                        fill: savedStyle.fill,
+                        shadow: savedStyle.shadow,
+                        stroke: savedStyle.stroke,
+                        strokeWidth: savedStyle.strokeWidth
+                    });
+                    // Preserve custom text if it exists
+                    if (savedStyle.text && savedStyle.text !== obj.text) {
+                        obj.set('text', savedStyle.text);
+                    }
+                }
+            } else if (obj.id === 'ctaGroup' && styling.ctaElement) {
+                // Restore CTA styling
+                const ctaText = obj.getObjects().find(item => item.id === 'cta');
+                const ctaBackground = obj.getObjects().find(item => item.id === 'ctaBackground');
+                
+                if (ctaText) {
+                    ctaText.set({
+                        text: styling.ctaElement.text,
+                        fontFamily: styling.ctaElement.fontFamily,
+                        fontSize: styling.ctaElement.fontSize,
+                        fill: styling.ctaElement.fill
+                    });
+                }
+                
+                if (ctaBackground) {
+                    ctaBackground.set('fill', styling.ctaElement.backgroundColor);
+                }
+                
+                // Update the group to reflect changes
+                obj.addWithUpdate();
+            }
+        });
+        
+        this.canvas.renderAll();
+    }
+    
     loadTemplate(templateName) {
+        // Preserve current styling before clearing canvas
+        const currentStyling = this.captureCurrentStyling();
+        
         // Clear canvas completely to prevent formatting issues
         this.canvas.clear();
         this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
@@ -1631,6 +1730,9 @@ class TemplateAdsEditor {
         if (this.logo) {
             this.addExistingImageToCanvas(this.logo, 'logo');
         }
+        
+        // Restore preserved styling after template creation
+        this.restoreCurrentStyling(currentStyling);
         
         // Ensure proper final layering: background images at bottom, text on top
         this.enforceProperLayering();
