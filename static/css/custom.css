@@ -662,7 +662,7 @@ textarea.clean-input {
 /* Brand control row styling */
 .brand-control-row {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
 }
 
@@ -696,7 +696,7 @@ textarea.clean-input {
     border: 1px solid #ced4da;
     border-radius: 4px;
     cursor: pointer;
-    padding: 0;
+    padding: 2px;
     background: none;
     appearance: none;
     -webkit-appearance: none;
@@ -706,33 +706,29 @@ textarea.clean-input {
 .brand-color-input::-webkit-color-swatch-wrapper {
     padding: 0;
     border: none;
-    border-radius: 6px;
+    border-radius: 2px;
 }
 
 .brand-color-input::-webkit-color-swatch {
     border: none;
-    border-radius: 6px;
+    border-radius: 2px;
 }
 
 .brand-color-input::-moz-color-swatch {
     border: none;
-    border-radius: 6px;
+    border-radius: 2px;
 }
 
 .brand-color-wrapper {
-    position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .color-arrow {
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 8px;
+    font-size: 10px;
     color: #6b7280;
     pointer-events: none;
-    z-index: 10;
 }
 
 /* Style Controls */
