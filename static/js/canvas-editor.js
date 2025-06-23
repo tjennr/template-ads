@@ -2,7 +2,7 @@ class TemplateAdsEditor {
     constructor() {
         this.canvas = null;
         this.currentTemplate = 'template1';
-        this.currentOrientation = 'horizontal';
+        this.currentOrientation = 'vertical';
         this.mainImage = null;
         this.logo = null;
         this.titleText = null;
@@ -144,8 +144,8 @@ class TemplateAdsEditor {
         let canvasWidth, canvasHeight;
         
         if (this.currentOrientation === 'horizontal') {
-            // Horizontal: 5:4 aspect ratio
-            canvasWidth = 1000;
+            // Horizontal: 1.91:1 aspect ratio
+            canvasWidth = 1528;
             canvasHeight = 800;
         } else if (this.currentOrientation === 'square') {
             // Square: 1:1 aspect ratio
