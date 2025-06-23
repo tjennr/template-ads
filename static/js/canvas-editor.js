@@ -4122,6 +4122,20 @@ class TemplateAdsEditor {
         const stockTab = document.getElementById('stockTab');
         const generateTab = document.getElementById('generateTab');
         
+        // Initialize tab visibility - show only upload tab by default
+        if (uploadTab && stockTab && generateTab) {
+            uploadTab.classList.remove('hidden');
+            stockTab.classList.add('hidden');
+            generateTab.classList.add('hidden');
+            
+            // Ensure upload tab is marked as active
+            const uploadTabButton = document.querySelector('.image-tab[data-tab="upload"]');
+            if (uploadTabButton) {
+                imageTabs.forEach(t => t.classList.remove('active'));
+                uploadTabButton.classList.add('active');
+            }
+        }
+        
         imageTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const tabType = tab.getAttribute('data-tab');
@@ -4131,16 +4145,16 @@ class TemplateAdsEditor {
                 tab.classList.add('active');
                 
                 // Hide all tab content first
-                uploadTab.classList.add('hidden');
-                stockTab.classList.add('hidden');
-                generateTab.classList.add('hidden');
+                if (uploadTab) uploadTab.classList.add('hidden');
+                if (stockTab) stockTab.classList.add('hidden');
+                if (generateTab) generateTab.classList.add('hidden');
                 
                 // Show the selected tab content
-                if (tabType === 'upload') {
+                if (tabType === 'upload' && uploadTab) {
                     uploadTab.classList.remove('hidden');
-                } else if (tabType === 'stock') {
+                } else if (tabType === 'stock' && stockTab) {
                     stockTab.classList.remove('hidden');
-                } else if (tabType === 'generate') {
+                } else if (tabType === 'generate' && generateTab) {
                     generateTab.classList.remove('hidden');
                 }
             });

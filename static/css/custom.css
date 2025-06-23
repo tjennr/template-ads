@@ -1509,6 +1509,10 @@ input[type="checkbox"]:focus {
     margin-top: 0.5rem;
 }
 
+.image-tab-content.hidden {
+    display: none !important;
+}
+
 .stock-search {
     display: flex;
     gap: 0.5rem;
