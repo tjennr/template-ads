@@ -380,26 +380,36 @@
         </div>
         
         <div class="toolbar-section">
-            <div class="effect-control-wrapper">
+            <div class="effect-dropdown-wrapper">
                 <select class="clean-dropdown" id="shadowType">
                     <option value="none">No Shadow</option>
                     <option value="light">Light Shadow</option>
                     <option value="medium">Medium Shadow</option>
                     <option value="heavy">Heavy Shadow</option>
                 </select>
-                <input type="color" class="effect-color-input" id="shadowColor" value="#000000" style="display: none;">
+                <div class="effect-dropdown-content" id="shadowDropdownContent">
+                    <div class="effect-color-picker">
+                        <label>Color:</label>
+                        <input type="color" id="shadowColor" value="#000000">
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="toolbar-section">
-            <div class="effect-control-wrapper">
+            <div class="effect-dropdown-wrapper">
                 <select class="clean-dropdown" id="outlineType">
                     <option value="none">No Outline</option>
                     <option value="thin">Thin Outline</option>
                     <option value="medium">Medium Outline</option>
                     <option value="thick">Thick Outline</option>
                 </select>
-                <input type="color" class="effect-color-input" id="outlineColor" value="#ffffff" style="display: none;">
+                <div class="effect-dropdown-content" id="outlineDropdownContent">
+                    <div class="effect-color-picker">
+                        <label>Color:</label>
+                        <input type="color" id="outlineColor" value="#ffffff">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
