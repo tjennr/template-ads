@@ -165,6 +165,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Implemented auto-hiding scrollbar that appears only when user hovers over sidebar panel
 - June 23, 2025: Added rounded corners (12px border-radius) to ad canvas for modern, polished appearance
 - June 23, 2025: Added brand consistency controls in Template section with font and color dropdowns for title and subtitle, ensuring synchronization between sidebar controls and floating toolbars for unified brand management
+- June 23, 2025: Enhanced floating toolbar with numeric font size input (replacing slider), matching color selector styling, and redesigned shadow/outline dropdowns with clean select menus and conditional color pickers
+- June 23, 2025: Integrated Shutterstock API for stock image search - added tabbed interface in main image section with "Upload" and "Stock Images" tabs, enabling users to search professional stock photos by keyword with orientation filtering
 
 ## Changelog
 - June 16, 2025. Initial setup

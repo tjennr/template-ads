@@ -1467,6 +1467,132 @@ input[type="checkbox"]:focus {
     text-align: center;
 }
 
+/* Stock Image Interface */
+.image-source-tabs {
+    display: flex;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+}
+
+.image-tab {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: #f8f9fa;
+    color: #495057;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.image-tab:not(:last-child) {
+    border-right: 1px solid #dee2e6;
+}
+
+.image-tab.active {
+    background: white;
+    color: var(--brand-primary);
+}
+
+.image-tab:hover:not(.active) {
+    background: #e9ecef;
+}
+
+.image-tab-content {
+    margin-top: 0.5rem;
+}
+
+.stock-search {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.stock-search .clean-input {
+    flex: 1;
+}
+
+.search-btn {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--brand-primary);
+    border-radius: 6px;
+    background: var(--brand-primary);
+    color: white;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.search-btn:hover {
+    background: var(--brand-primary-hover);
+    border-color: var(--brand-primary-hover);
+}
+
+.stock-results {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: white;
+}
+
+.stock-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+    padding: 0.75rem;
+}
+
+.stock-image-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.stock-image-item:hover {
+    transform: scale(1.05);
+}
+
+.stock-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.stock-loading {
+    padding: 2rem;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.stock-error {
+    padding: 1rem;
+    text-align: center;
+    color: #dc3545;
+    font-size: 0.875rem;
+    background: #f8d7da;
+    border-radius: 4px;
+    margin: 0.5rem;
+}
+
+.stock-empty {
+    padding: 2rem;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .canvas-wrapper {

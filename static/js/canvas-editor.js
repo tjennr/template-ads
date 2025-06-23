@@ -578,6 +578,7 @@ class TemplateAdsEditor {
         
         // Setup brand font and color controls
         this.setupBrandControls();
+        this.setupStockImageInterface();
     }
 
     setupCanvasEvents() {
@@ -4111,6 +4112,145 @@ class TemplateAdsEditor {
                 subtitleFontSelect.value = fontFamily;
                 console.log('Maintained subtitle font selector value:', fontFamily);
             }
+        }
+    }
+
+    setupStockImageInterface() {
+        // Setup tab switching
+        const imageTabs = document.querySelectorAll('.image-tab');
+        const uploadTab = document.getElementById('uploadTab');
+        const stockTab = document.getElementById('stockTab');
+        
+        imageTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabType = tab.getAttribute('data-tab');
+                
+                // Update tab active states
+                imageTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show/hide tab content
+                if (tabType === 'upload') {
+                    uploadTab.classList.remove('hidden');
+                    stockTab.classList.add('hidden');
+                } else if (tabType === 'stock') {
+                    uploadTab.classList.add('hidden');
+                    stockTab.classList.remove('hidden');
+                }
+            });
+        });
+        
+        // Setup stock image search
+        const stockSearchInput = document.getElementById('stockSearchInput');
+        const stockSearchBtn = document.getElementById('stockSearchBtn');
+        
+        const performSearch = () => {
+            const query = stockSearchInput.value.trim();
+            if (!query) return;
+            
+            this.searchStockImages(query);
+        };
+        
+        stockSearchBtn.addEventListener('click', performSearch);
+        stockSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    }
+
+    async searchStockImages(query) {
+        const stockResults = document.getElementById('stockResults');
+        
+        // Show loading state
+        stockResults.innerHTML = '<div class="stock-loading"><i class="fas fa-spinner fa-spin"></i> Searching stock images...</div>';
+        
+        try {
+            const orientation = this.currentOrientation === 'horizontal' ? 'horizontal' : 
+                              this.currentOrientation === 'vertical' ? 'vertical' : null;
+            
+            const params = new URLSearchParams({
+                query: query,
+                per_page: 20
+            });
+            
+            if (orientation) {
+                params.append('orientation', orientation);
+            }
+            
+            const response = await fetch(`/api/shutterstock/search?${params}`);
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Search failed');
+            }
+            
+            this.displayStockImages(data.images);
+            
+        } catch (error) {
+            console.error('Stock search error:', error);
+            let errorMessage = 'Failed to search stock images';
+            
+            if (error.message.includes('credentials not configured')) {
+                errorMessage = 'Shutterstock API credentials not configured. Please contact support.';
+            }
+            
+            stockResults.innerHTML = `<div class="stock-error">${errorMessage}</div>`;
+        }
+    }
+
+    displayStockImages(images) {
+        const stockResults = document.getElementById('stockResults');
+        
+        if (!images || images.length === 0) {
+            stockResults.innerHTML = '<div class="stock-empty">No images found. Try a different search term.</div>';
+            return;
+        }
+        
+        const gridHTML = `
+            <div class="stock-grid">
+                ${images.map(image => `
+                    <div class="stock-image-item" data-url="${image.preview_url}" data-id="${image.id}">
+                        <img src="${image.preview_url}" alt="${image.description}" loading="lazy">
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        stockResults.innerHTML = gridHTML;
+        
+        // Add click handlers for stock images
+        const stockItems = stockResults.querySelectorAll('.stock-image-item');
+        stockItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const imageUrl = item.getAttribute('data-url');
+                this.useStockImage(imageUrl);
+            });
+        });
+    }
+
+    async useStockImage(imageUrl) {
+        try {
+            const response = await fetch(`/api/shutterstock/download?url=${encodeURIComponent(imageUrl)}`);
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Download failed');
+            }
+            
+            // Add the stock image to canvas
+            this.addImageToCanvas(data.image_data, 'mainImage');
+            
+            // Switch back to upload tab
+            const uploadTab = document.querySelector('.image-tab[data-tab="upload"]');
+            if (uploadTab) {
+                uploadTab.click();
+            }
+            
+        } catch (error) {
+            console.error('Stock image download error:', error);
+            alert('Failed to download stock image. Please try again.');
         }
     }
 
