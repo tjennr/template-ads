@@ -151,9 +151,14 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 20, 2025: Enhanced text formatting functionality - formatting buttons show active/inactive states based on current text selection, alignment dropdown reflects current text alignment
 - June 20, 2025: Finalized text alignment dropdown with clean text labels - reverted to simple text options (Left, Center, Right, Justify) for clarity and user preference
 - June 23, 2025: Restructured sidebar interface into unified single-section design with three main headings - Template (orientation, templates, logo), Content (main image, title, subtitle, CTA), and Export (export button) for cleaner organization and improved user experience
-- June 23, 2025: Implemented three-section layout with fixed header, left sidebar panel (350px), and right canvas area (#F5F5F5 background)
+- June 23, 2025: Implemented three-section layout with fixed header, left sidebar panel (400px), and right canvas area (#F5F5F5 background)
 - June 23, 2025: Updated color scheme - white backgrounds for header and sidebar with improved text contrast (#495057, #212529) for better readability
 - June 23, 2025: Reorganized sidebar layout - orientation and template dropdowns now in same row, CTA checkbox moved to left of text input, removed tagline from header
+- June 23, 2025: Enhanced input field widths with full-width styling for title and subtitle inputs for better usability
+- June 23, 2025: Added drop shadow to ad canvas borders for enhanced visual depth and professional appearance
+- June 23, 2025: Changed horizontal orientation from 5:4 to 1.91:1 aspect ratio with descriptive labels: "Horizontal (1.91:1)", "Square (1:1)", "Vertical (4:5)"
+- June 23, 2025: Set vertical template as default selection on page load instead of horizontal
+- June 23, 2025: Increased left sidebar panel width from 350px to 400px for better control spacing and usability
 
 ## Changelog
 - June 16, 2025. Initial setup
