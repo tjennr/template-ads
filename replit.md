@@ -167,6 +167,10 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Added brand consistency controls in Template section with font and color dropdowns for title and subtitle, ensuring synchronization between sidebar controls and floating toolbars for unified brand management
 - June 23, 2025: Enhanced floating toolbar with numeric font size input (replacing slider), matching color selector styling, and redesigned shadow/outline dropdowns with clean select menus and conditional color pickers
 - June 23, 2025: Integrated Shutterstock API for stock image search - added tabbed interface in main image section with "Upload" and "Stock Images" tabs, enabling users to search professional stock photos by keyword with orientation filtering
+- June 23, 2025: Implemented three-tab image source interface - Upload, Shutterstock Image, and Generate Image tabs with proper content visibility switching
+- June 23, 2025: Fixed stock image integration - images now properly load into ad canvas when selected, removed automatic tab switching to maintain user context
+- June 23, 2025: Added OpenAI DALL-E 3 integration for AI image generation with orientation-aware sizing (1024x1024, 1792x1024, 1024x1792)
+- June 23, 2025: Enhanced tab interface styling - removed gray bars from empty result containers, improved loading states, and maintained consistent user experience
 
 ## Changelog
 - June 16, 2025. Initial setup

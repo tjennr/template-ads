@@ -271,12 +271,12 @@ def generate_ai_image():
         client = openai.OpenAI(api_key=api_key)
         
         # Determine image size based on orientation
-        size_map = {
-            'horizontal': '1792x1024',
-            'square': '1024x1024', 
-            'vertical': '1024x1792'
-        }
-        size = size_map.get(orientation, '1024x1024')
+        if orientation == 'horizontal':
+            size = '1792x1024'
+        elif orientation == 'vertical':
+            size = '1024x1792'
+        else:
+            size = '1024x1024'
         
         # Generate image with DALL-E 3
         # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
