@@ -2452,6 +2452,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'title',
                 width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2466,6 +2468,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'subtitle',
                 width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2518,6 +2522,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'title',
                 width: canvasWidth * 0.35, // Match Split Right width
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2532,6 +2538,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'subtitle',
                 width: canvasWidth * 0.35, // Match Split Right width
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2605,6 +2613,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'title',
                 width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2619,6 +2629,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'subtitle',
                 width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2671,6 +2683,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'title',
                 width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
@@ -2685,6 +2699,8 @@ class TemplateAdsEditor {
                 originY: 'center',
                 id: 'subtitle',
                 width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
                 splitByGrapheme: false
             });
             
