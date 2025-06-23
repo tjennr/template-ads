@@ -575,6 +575,9 @@ class TemplateAdsEditor {
         
         // Add keyboard accessibility for CTA checkbox
         this.setupCtaCheckboxAccessibility();
+        
+        // Setup brand font and color controls
+        this.setupBrandControls();
     }
 
     setupCanvasEvents() {
@@ -3907,6 +3910,76 @@ class TemplateAdsEditor {
             this.guidelines = [];
             this.showingGuidelines = false;
             this.canvas.renderAll();
+        }
+    }
+
+    setupBrandControls() {
+        // Title font and color controls
+        const titleFontSelect = document.getElementById('titleFontSelect');
+        const titleColorSelect = document.getElementById('titleColorSelect');
+        const subtitleFontSelect = document.getElementById('subtitleFontSelect');
+        const subtitleColorSelect = document.getElementById('subtitleColorSelect');
+
+        if (titleFontSelect) {
+            titleFontSelect.addEventListener('change', (e) => {
+                this.updateTextStyle('title', 'fontFamily', e.target.value);
+                this.updateFloatingToolbarFont('title', e.target.value);
+            });
+        }
+
+        if (titleColorSelect) {
+            titleColorSelect.addEventListener('input', (e) => {
+                this.updateTextStyle('title', 'fill', e.target.value);
+                this.updateFloatingToolbarColor('title', e.target.value);
+            });
+        }
+
+        if (subtitleFontSelect) {
+            subtitleFontSelect.addEventListener('change', (e) => {
+                this.updateTextStyle('subtitle', 'fontFamily', e.target.value);
+                this.updateFloatingToolbarFont('subtitle', e.target.value);
+            });
+        }
+
+        if (subtitleColorSelect) {
+            subtitleColorSelect.addEventListener('input', (e) => {
+                this.updateTextStyle('subtitle', 'fill', e.target.value);
+                this.updateFloatingToolbarColor('subtitle', e.target.value);
+            });
+        }
+    }
+
+    updateFloatingToolbarFont(textType, fontFamily) {
+        // Update floating toolbar font selector if it's currently showing
+        const toolbarFontSelect = document.getElementById('toolbarFontFamily');
+        if (toolbarFontSelect && this.selectedTextObject && this.selectedTextObject.id === textType) {
+            toolbarFontSelect.value = fontFamily;
+        }
+    }
+
+    updateFloatingToolbarColor(textType, color) {
+        // Update floating toolbar color picker if it's currently showing
+        const toolbarColorInput = document.getElementById('toolbarTextColor');
+        if (toolbarColorInput && this.selectedTextObject && this.selectedTextObject.id === textType) {
+            toolbarColorInput.value = color;
+        }
+    }
+
+    updateBrandControlsFromCanvas(textType) {
+        // Update sidebar brand controls when canvas elements change
+        const textObj = this.canvas.getObjects().find(obj => obj.id === textType);
+        if (!textObj) return;
+
+        if (textType === 'title') {
+            const titleFontSelect = document.getElementById('titleFontSelect');
+            const titleColorSelect = document.getElementById('titleColorSelect');
+            if (titleFontSelect) titleFontSelect.value = textObj.fontFamily || 'Source Sans Pro';
+            if (titleColorSelect) titleColorSelect.value = textObj.fill || '#ffffff';
+        } else if (textType === 'subtitle') {
+            const subtitleFontSelect = document.getElementById('subtitleFontSelect');
+            const subtitleColorSelect = document.getElementById('subtitleColorSelect');
+            if (subtitleFontSelect) subtitleFontSelect.value = textObj.fontFamily || 'Source Sans Pro';
+            if (subtitleColorSelect) subtitleColorSelect.value = textObj.fill || '#ffffff';
         }
     }
 
