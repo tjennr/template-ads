@@ -1116,12 +1116,12 @@ class TemplateAdsEditor {
         const outlineBtn = document.getElementById('outlineBtn');
         
         // Effect dropdown elements
-        const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');
-        const shadowControls = document.getElementById('shadowControls');
-        const shadowColorInput = document.getElementById('toolbarShadowColor');
-        const outlineToggleBtns = document.querySelectorAll('#outlineDropdown .effect-toggle-btn');
-        const outlineControls = document.getElementById('outlineControls');
-        const outlineColorInput = document.getElementById('toolbarOutlineColor');
+        const shadowTypeSelect = document.getElementById('shadowType');
+        const shadowColorInput = document.getElementById('shadowColor');
+        const shadowColorWrapper = document.getElementById('shadowColorWrapper');
+        const outlineTypeSelect = document.getElementById('outlineType');
+        const outlineColorInput = document.getElementById('outlineColor');
+        const outlineColorWrapper = document.getElementById('outlineColorWrapper');
 
         // Font family change
         if (fontFamilySelect) {
@@ -1135,13 +1135,17 @@ class TemplateAdsEditor {
             });
         }
 
-        // Font size change
+        // Font size change (now number input instead of slider)
         if (fontSizeInput) {
             fontSizeInput.addEventListener('input', (e) => {
                 if (this.selectedTextObject && e.target.value) {
-                    this.selectedTextObject.set('fontSize', parseInt(e.target.value));
-                    this.canvas.renderAll();
-                    this.updateToolbarPosition();
+                    const newSize = parseInt(e.target.value);
+                    if (newSize >= 10 && newSize <= 80) {
+                        this.selectedTextObject.set('fontSize', newSize);
+                        this.canvas.renderAll();
+                        this.updateToolbarPosition();
+                        this.saveState();
+                    }
                 }
             });
         }
@@ -1218,28 +1222,28 @@ class TemplateAdsEditor {
                 e.stopPropagation();
                 const shadowDropdown = document.getElementById('shadowDropdown');
                 const outlineDropdown = document.getElementById('outlineDropdown');
-                // outlineBtn already declared at function start
                 
                 // Close outline dropdown if open
-                if (outlineDropdown && !outlineDropdown.classList.contains('hidden')) {
-                    outlineDropdown.classList.add('hidden');
+                if (outlineDropdown && outlineDropdown.classList.contains('show')) {
+                    outlineDropdown.classList.remove('show');
                     if (outlineBtn) outlineBtn.classList.remove('active');
                 }
                 
+                // Toggle shadow dropdown
                 if (shadowDropdown) {
-                    const isHidden = shadowDropdown.classList.contains('hidden');
-                    if (isHidden) {
-                        shadowDropdown.classList.remove('hidden');
-                        shadowBtn.classList.add('active');
-                    } else {
-                        shadowDropdown.classList.add('hidden');
+                    const isVisible = shadowDropdown.classList.contains('show');
+                    if (isVisible) {
+                        shadowDropdown.classList.remove('show');
                         shadowBtn.classList.remove('active');
+                    } else {
+                        shadowDropdown.classList.add('show');
+                        shadowBtn.classList.add('active');
                     }
                 }
             });
         }
 
-        // Outline button dropdown toggle - using outlineBtn from function start
+        // Outline button dropdown toggle
         if (outlineBtn) {
             outlineBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -1247,76 +1251,88 @@ class TemplateAdsEditor {
                 const shadowDropdown = document.getElementById('shadowDropdown');
                 
                 // Close shadow dropdown if open
-                if (shadowDropdown && !shadowDropdown.classList.contains('hidden')) {
-                    shadowDropdown.classList.add('hidden');
+                if (shadowDropdown && shadowDropdown.classList.contains('show')) {
+                    shadowDropdown.classList.remove('show');
                     if (shadowBtn) shadowBtn.classList.remove('active');
                 }
                 
+                // Toggle outline dropdown
                 if (outlineDropdown) {
-                    const isHidden = outlineDropdown.classList.contains('hidden');
-                    if (isHidden) {
-                        outlineDropdown.classList.remove('hidden');
-                        outlineBtn.classList.add('active');
-                    } else {
-                        outlineDropdown.classList.add('hidden');
+                    const isVisible = outlineDropdown.classList.contains('show');
+                    if (isVisible) {
+                        outlineDropdown.classList.remove('show');
                         outlineBtn.classList.remove('active');
+                    } else {
+                        outlineDropdown.classList.add('show');
+                        outlineBtn.classList.add('active');
                     }
                 }
             });
         }
 
-        // Shadow effect toggle buttons - using variables declared at function start
-
-        shadowToggleBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
+        // Shadow type select change
+        if (shadowTypeSelect) {
+            shadowTypeSelect.addEventListener('change', (e) => {
                 if (!this.selectedTextObject) return;
 
-                const effect = e.target.getAttribute('data-effect');
+                const shadowType = e.target.value;
                 
-                // Remove active class from all shadow buttons
-                shadowToggleBtns.forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-
-                if (effect === 'none') {
+                if (shadowType === 'none') {
                     this.selectedTextObject.set('shadow', null);
-                    if (shadowControls) shadowControls.classList.add('hidden');
+                    if (shadowColorWrapper) shadowColorWrapper.style.display = 'none';
                 } else {
+                    let blur, offsetX, offsetY;
+                    switch (shadowType) {
+                        case 'light':
+                            blur = 2;
+                            offsetX = 1;
+                            offsetY = 1;
+                            break;
+                        case 'medium':
+                            blur = 4;
+                            offsetX = 2;
+                            offsetY = 2;
+                            break;
+                        case 'heavy':
+                            blur = 8;
+                            offsetX = 4;
+                            offsetY = 4;
+                            break;
+                        default:
+                            blur = 4;
+                            offsetX = 2;
+                            offsetY = 2;
+                    }
+                    
                     const shadowColor = shadowColorInput ? shadowColorInput.value : '#000000';
                     this.selectedTextObject.set('shadow', {
                         color: shadowColor,
-                        blur: 4,
-                        offsetX: 2,
-                        offsetY: 2
+                        blur: blur,
+                        offsetX: offsetX,
+                        offsetY: offsetY
                     });
-                    if (shadowControls) shadowControls.classList.remove('hidden');
+                    if (shadowColorWrapper) shadowColorWrapper.style.display = 'block';
                 }
 
                 this.canvas.renderAll();
                 this.saveState();
             });
-        });
+        }
 
-        // Outline effect toggle buttons - using shared variables from top of function
-
-        outlineToggleBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
+        // Outline type select change
+        if (outlineTypeSelect) {
+            outlineTypeSelect.addEventListener('change', (e) => {
                 if (!this.selectedTextObject) return;
 
-                const effect = e.target.getAttribute('data-effect');
+                const outlineType = e.target.value;
                 
-                // Remove active class from all outline buttons
-                outlineToggleBtns.forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-
-                if (effect === 'none') {
+                if (outlineType === 'none') {
                     this.selectedTextObject.set('stroke', '');
                     this.selectedTextObject.set('strokeWidth', 0);
-                    if (outlineControls) outlineControls.classList.add('hidden');
+                    if (outlineColorWrapper) outlineColorWrapper.style.display = 'none';
                 } else {
                     let strokeWidth;
-                    switch (effect) {
+                    switch (outlineType) {
                         case 'thin':
                             strokeWidth = 1;
                             break;
@@ -1330,16 +1346,16 @@ class TemplateAdsEditor {
                             strokeWidth = 2;
                     }
                     
-                    const outlineColor = outlineColorInput ? outlineColorInput.value : '#000000';
+                    const outlineColor = outlineColorInput ? outlineColorInput.value : '#ffffff';
                     this.selectedTextObject.set('stroke', outlineColor);
                     this.selectedTextObject.set('strokeWidth', strokeWidth);
-                    if (outlineControls) outlineControls.classList.remove('hidden');
+                    if (outlineColorWrapper) outlineColorWrapper.style.display = 'block';
                 }
 
                 this.canvas.renderAll();
                 this.saveState();
             });
-        });
+        }
 
         // Shadow color change
         if (shadowColorInput) {
@@ -1367,17 +1383,23 @@ class TemplateAdsEditor {
         document.addEventListener('click', (e) => {
             const shadowDropdown = document.getElementById('shadowDropdown');
             const outlineDropdown = document.getElementById('outlineDropdown');
-            const shadowBtn = document.getElementById('toolbarShadow');
-            // outlineBtn already declared at function start
 
-            if (shadowDropdown && !shadowDropdown.classList.contains('hidden')) {
-                shadowDropdown.classList.add('hidden');
-                if (shadowBtn) shadowBtn.classList.remove('active');
+            // Check if click is outside shadow dropdown
+            if (shadowDropdown && shadowDropdown.classList.contains('show')) {
+                const shadowContainer = shadowDropdown.closest('.effect-dropdown-container');
+                if (!shadowContainer || !shadowContainer.contains(e.target)) {
+                    shadowDropdown.classList.remove('show');
+                    if (shadowBtn) shadowBtn.classList.remove('active');
+                }
             }
 
-            if (outlineDropdown && !outlineDropdown.classList.contains('hidden')) {
-                outlineDropdown.classList.add('hidden');
-                if (outlineBtn) outlineBtn.classList.remove('active');
+            // Check if click is outside outline dropdown
+            if (outlineDropdown && outlineDropdown.classList.contains('show')) {
+                const outlineContainer = outlineDropdown.closest('.effect-dropdown-container');
+                if (!outlineContainer || !outlineContainer.contains(e.target)) {
+                    outlineDropdown.classList.remove('show');
+                    if (outlineBtn) outlineBtn.classList.remove('active');
+                }
             }
         });
     }
@@ -1542,13 +1564,13 @@ class TemplateAdsEditor {
         const underlineBtn = document.getElementById('toolbarUnderline');
         const textAlignSelect = document.getElementById('toolbarTextAlign');
         
-        // Get effect elements for this function only
-        const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');
-        const shadowControls = document.getElementById('shadowControls');
-        const shadowColorInput = document.getElementById('toolbarShadowColor');
-        const outlineToggleBtns = document.querySelectorAll('#outlineDropdown .effect-toggle-btn');
-        const outlineControlsUpdate = document.getElementById('outlineControls');
-        const outlineColorInput = document.getElementById('toolbarOutlineColor');
+        // Get effect elements for new structure
+        const shadowTypeSelect = document.getElementById('shadowType');
+        const shadowColorInput = document.getElementById('shadowColor');
+        const shadowColorWrapper = document.getElementById('shadowColorWrapper');
+        const outlineTypeSelect = document.getElementById('outlineType');
+        const outlineColorInput = document.getElementById('outlineColor');
+        const outlineColorWrapper = document.getElementById('outlineColorWrapper');
 
         // Check if elements exist before setting values
         if (fontFamilySelect) {
