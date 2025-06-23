@@ -1552,9 +1552,11 @@ class TemplateAdsEditor {
             if (!Array.from(fontFamilySelect.options).some(option => option.value === currentFont)) {
                 const option = document.createElement('option');
                 option.value = currentFont;
-                option.textContent = currentFont;
-                fontFamilySelect.appendChild(option);
-                fontFamilySelect.value = currentFont;
+                if (option) {
+                    option.textContent = currentFont;
+                    fontFamilySelect.appendChild(option);
+                    fontFamilySelect.value = currentFont;
+                }
             }
         }
         

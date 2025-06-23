@@ -227,6 +227,8 @@ h1, h2, h3, h4, h5, h6 {
 .canvas-wrapper-zoom {
     position: relative;
     transform-origin: center;
+    /* Add drop shadow behind the ad borders */
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
 }
 
 .canvas-actions {
@@ -617,6 +619,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .clean-input::placeholder {
     color: #6c757d;
+}
+
+/* Wide input styling for title and subtitle */
+.wide-input {
+    width: 100% !important;
+    box-sizing: border-box;
 }
 
 /* Style Controls */
