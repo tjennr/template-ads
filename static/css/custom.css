@@ -173,7 +173,16 @@ body {
     background-color: #e3f2fd;
 }
 
-/* Hide sidebar scrollbar while keeping functionality */
+/* Position sidebar scrollbar on the left side */
+.sidebar-panel {
+    direction: rtl; /* Right-to-left to move scrollbar to left */
+}
+
+.sidebar-panel > * {
+    direction: ltr; /* Reset content direction to left-to-right */
+}
+
+/* Style the left-side scrollbar */
 .sidebar-panel::-webkit-scrollbar {
     width: 6px;
 }
