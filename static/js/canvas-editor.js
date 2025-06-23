@@ -1619,46 +1619,55 @@ class TemplateAdsEditor {
             textAlignSelect.value = currentAlign;
         }
         
-        // Update shadow dropdown buttons
-        shadowToggleBtns.forEach(btn => btn.classList.remove('active'));
-        if (this.selectedTextObject.shadow) {
-            const shadowBtn = document.querySelector('#shadowDropdown .effect-toggle-btn[data-effect="shadow"]');
-            if (shadowBtn) shadowBtn.classList.add('active');
-            if (shadowControls) shadowControls.classList.remove('hidden');
-            if (shadowColorInput) {
-                shadowColorInput.value = this.selectedTextObject.shadow.color || '#000000';
+        // Update shadow dropdown
+        if (shadowTypeSelect) {
+            if (this.selectedTextObject.shadow) {
+                const blur = this.selectedTextObject.shadow.blur || 4;
+                let shadowType = 'medium';
+                
+                if (blur <= 2) {
+                    shadowType = 'light';
+                } else if (blur >= 8) {
+                    shadowType = 'heavy';
+                } else {
+                    shadowType = 'medium';
+                }
+                
+                shadowTypeSelect.value = shadowType;
+                if (shadowColorWrapper) shadowColorWrapper.style.display = 'block';
+                if (shadowColorInput) {
+                    shadowColorInput.value = this.selectedTextObject.shadow.color || '#000000';
+                }
+            } else {
+                shadowTypeSelect.value = 'none';
+                if (shadowColorWrapper) shadowColorWrapper.style.display = 'none';
             }
-        } else {
-            const noShadowBtn = document.querySelector('#shadowDropdown .effect-toggle-btn[data-effect="none"]');
-            if (noShadowBtn) noShadowBtn.classList.add('active');
-            if (shadowControls) shadowControls.classList.add('hidden');
         }
         
-        // Update outline dropdown buttons
-        outlineToggleBtns.forEach(btn => btn.classList.remove('active'));
-        const hasStroke = this.selectedTextObject.stroke && this.selectedTextObject.strokeWidth > 0;
-        
-        if (!hasStroke) {
-            const noOutlineBtn = document.querySelector('#outlineDropdown .effect-toggle-btn[data-effect="none"]');
-            if (noOutlineBtn) noOutlineBtn.classList.add('active');
-            if (outlineControlsUpdate) outlineControlsUpdate.classList.add('hidden');
-        } else {
-            const strokeWidth = this.selectedTextObject.strokeWidth;
-            let outlineType = 'medium';
+        // Update outline dropdown
+        if (outlineTypeSelect) {
+            const hasStroke = this.selectedTextObject.stroke && this.selectedTextObject.strokeWidth > 0;
             
-            if (strokeWidth <= 1) {
-                outlineType = 'thin';
-            } else if (strokeWidth >= 4) {
-                outlineType = 'thick';
+            if (!hasStroke) {
+                outlineTypeSelect.value = 'none';
+                if (outlineColorWrapper) outlineColorWrapper.style.display = 'none';
             } else {
-                outlineType = 'medium';
-            }
-            
-            const activeOutlineBtn = document.querySelector(`#outlineDropdown .effect-toggle-btn[data-effect="${outlineType}"]`);
-            if (activeOutlineBtn) activeOutlineBtn.classList.add('active');
-            if (outlineControlsUpdate) outlineControlsUpdate.classList.remove('hidden');
-            if (outlineColorInput) {
-                outlineColorInput.value = this.selectedTextObject.stroke || '#000000';
+                const strokeWidth = this.selectedTextObject.strokeWidth;
+                let outlineType = 'medium';
+                
+                if (strokeWidth <= 1) {
+                    outlineType = 'thin';
+                } else if (strokeWidth >= 4) {
+                    outlineType = 'thick';
+                } else {
+                    outlineType = 'medium';
+                }
+                
+                outlineTypeSelect.value = outlineType;
+                if (outlineColorWrapper) outlineColorWrapper.style.display = 'block';
+                if (outlineColorInput) {
+                    outlineColorInput.value = this.selectedTextObject.stroke || '#ffffff';
+                }
             }
         }
     }
