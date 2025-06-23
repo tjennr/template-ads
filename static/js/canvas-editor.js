@@ -62,45 +62,64 @@ class TemplateAdsEditor {
         // Set loading flag to prevent undo states during initialization
         this.isLoadingTemplate = true;
         
-        // Create initial template content without waiting for image load
+        // Load the default template first
         this.loadTemplate(this.currentTemplate);
         
-        // Load default image in background
-        const defaultImagePath = '/static/images/default-placeholder.png';
-        fabric.Image.fromURL(defaultImagePath, (img) => {
-            const canvasWidth = this.canvas.width;
-            const canvasHeight = this.canvas.height;
-            
-            // Scale and position the main image
-            const scaleX = canvasWidth / img.width;
-            const scaleY = canvasHeight / img.height;
-            const scale = Math.max(scaleX, scaleY);
-            
-            img.set({
-                left: canvasWidth / 2,
-                top: canvasHeight / 2,
-                originX: 'center',
-                originY: 'center',
-                scaleX: scale,
-                scaleY: scale,
-                selectable: true,
-                evented: true,
-                id: 'mainImage'
+        // Small delay to ensure template is loaded before adding default image
+        setTimeout(() => {
+            const defaultImagePath = '/static/images/default-placeholder.png';
+            fabric.Image.fromURL(defaultImagePath, (img) => {
+                if (!img) {
+                    console.error('Failed to load default image');
+                    this.isLoadingTemplate = false;
+                    return;
+                }
+                
+                const canvasWidth = this.canvas.width;
+                const canvasHeight = this.canvas.height;
+                
+                // Scale and position the main image
+                const scaleX = canvasWidth / img.width;
+                const scaleY = canvasHeight / img.height;
+                const scale = Math.max(scaleX, scaleY);
+                
+                img.set({
+                    left: canvasWidth / 2,
+                    top: canvasHeight / 2,
+                    originX: 'center',
+                    originY: 'center',
+                    scaleX: scale,
+                    scaleY: scale,
+                    selectable: true,
+                    evented: true,
+                    id: 'mainImage'
+                });
+                
+                // Remove any existing main image
+                const existingImage = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
+                if (existingImage) {
+                    this.canvas.remove(existingImage);
+                }
+                
+                this.canvas.add(img);
+                this.canvas.sendToBack(img);
+                this.mainImage = img;
+                this.canvas.renderAll();
+                
+                // Now enable undo system and save the complete initial state
+                this.isLoadingTemplate = false;
+                
+                // Clear any existing history and set this as the baseline
+                this.history = [];
+                this.historyStep = -1;
+                this.saveState();
+                
+                console.log('Default template loaded successfully');
+            }, (error) => {
+                console.error('Error loading default image:', error);
+                this.isLoadingTemplate = false;
             });
-            
-            this.canvas.add(img);
-            this.canvas.sendToBack(img);
-            this.mainImage = img;
-            this.canvas.renderAll();
-            
-            // Now enable undo system and save the complete initial state
-            this.isLoadingTemplate = false;
-            
-            // Clear any existing history and set this as the baseline
-            this.history = [];
-            this.historyStep = -1;
-            this.saveState();
-        });
+        }, 100);
         
         this.updateFontFamilyDisplay();
         this.applyZoom();
