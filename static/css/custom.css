@@ -182,6 +182,15 @@ body {
     direction: ltr; /* Reset content direction to left-to-right */
 }
 
+/* Ensure floating toolbars are not affected by direction changes */
+.floating-toolbar {
+    direction: ltr !important;
+}
+
+.floating-toolbar * {
+    direction: ltr !important;
+}
+
 /* Style the left-side scrollbar */
 .sidebar-panel::-webkit-scrollbar {
     width: 6px;
