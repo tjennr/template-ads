@@ -2203,12 +2203,9 @@ class TemplateAdsEditor {
         this.titleText = new fabric.Text(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.6 : canvasHeight * 0.65,
-            fontSize: 24,
-            fill: 'rgba(0, 0, 0, 0.90)',
-            fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
-            fontWeight: 600,
-            lineHeight: 1.25,
-            charSpacing: 36,
+            fontSize: 40,
+            fill: '#ffffff',
+            fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
             textAlign: 'center',
             originX: 'center',
@@ -3987,7 +3984,7 @@ class TemplateAdsEditor {
                 const titleColorSelect = document.getElementById('titleColorSelect');
                 if (titleFontSelect) {
                     // Clean font family name
-                    let fontFamily = titleObj.fontFamily || 'SF Pro Display';
+                    let fontFamily = titleObj.fontFamily || 'Source Sans Pro';
                     if (fontFamily.includes(',')) {
                         fontFamily = fontFamily.split(',')[0].trim();
                     }
@@ -4066,7 +4063,7 @@ class TemplateAdsEditor {
         if (!textObj) return;
 
         // Clean font family name by removing fallback fonts
-        let fontFamily = textObj.fontFamily || 'SF Pro Display';
+        let fontFamily = textObj.fontFamily || 'Source Sans Pro';
         if (fontFamily.includes(',')) {
             fontFamily = fontFamily.split(',')[0].trim();
         }
