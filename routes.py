@@ -249,6 +249,57 @@ def shutterstock_download():
         current_app.logger.error(f"Shutterstock download error: {str(e)}")
         return jsonify({'error': 'Failed to download image'}), 500
 
+@app.route('/api/openai/generate-image', methods=['POST'])
+def generate_ai_image():
+    """Generate an AI image using OpenAI DALL-E"""
+    try:
+        import openai
+        
+        data = request.get_json()
+        prompt = data.get('prompt', '').strip()
+        orientation = data.get('orientation', 'square')
+        
+        if not prompt:
+            return jsonify({'error': 'Prompt is required'}), 400
+        
+        # Check if OpenAI API key is available
+        api_key = os.environ.get('OPENAI_API_KEY')
+        if not api_key:
+            return jsonify({'error': 'OpenAI API credentials not configured'}), 503
+        
+        # Initialize OpenAI client
+        client = openai.OpenAI(api_key=api_key)
+        
+        # Determine image size based on orientation
+        size_map = {
+            'horizontal': '1792x1024',
+            'square': '1024x1024', 
+            'vertical': '1024x1792'
+        }
+        size = size_map.get(orientation, '1024x1024')
+        
+        # Generate image with DALL-E 3
+        # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
+        # do not change this unless explicitly requested by the user
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            n=1,
+            size=size,
+            quality="standard"
+        )
+        
+        return jsonify({
+            'success': True,
+            'image_url': response.data[0].url
+        })
+        
+    except ImportError:
+        return jsonify({'error': 'OpenAI library not available'}), 503
+    except Exception as e:
+        current_app.logger.error(f"OpenAI image generation error: {str(e)}")
+        return jsonify({'error': 'Failed to generate AI image'}), 500
+
 @app.errorhandler(413)
 def too_large(e):
     return jsonify({'success': False, 'error': 'File too large. Maximum size is 16MB.'}), 413

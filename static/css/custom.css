@@ -1547,6 +1547,11 @@ input[type="checkbox"]:focus {
     background: white;
 }
 
+.stock-results:empty {
+    border: none;
+    background: transparent;
+}
+
 .stock-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -1614,6 +1619,11 @@ input[type="checkbox"]:focus {
     border: 1px solid #dee2e6;
     border-radius: 6px;
     background: white;
+}
+
+.generate-results:empty {
+    border: none;
+    background: transparent;
 }
 
 .generated-image-container {
