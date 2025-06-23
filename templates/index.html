@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Ads - Advertisement Designer</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="{{ url_for('static', filename='linkedin-logo.webp') }}">
+    <title>Template Ads - Create Professional Advertisements</title>
     
     <!-- Bootstrap CSS with Replit theme -->
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     
-    <!-- Font Awesome for icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts - Multiple font families -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Fabric.js for canvas manipulation -->
+    <!-- Fabric.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     
     <!-- Custom CSS -->
@@ -183,30 +180,28 @@
                     <div class="sidebar-section">
                         <h5 class="section-heading">Export</h5>
                         <div class="control-item">
-
-
-
-
-
-                <div class="export-container">
-                    <button class="export-main-btn" id="exportMainBtn">
-                        <i class="fas fa-download"></i>
-                        <span>Export Design</span>
-                        <i class="fas fa-chevron-down export-chevron"></i>
-                    </button>
-                    <div class="export-dropdown hidden" id="exportDropdown">
-                        <button class="export-option" id="exportPng">
-                            <i class="fas fa-file-image"></i>
-                            <span>PNG</span>
-                        </button>
-                        <button class="export-option" id="exportJpg">
-                            <i class="fas fa-file-image"></i>
-                            <span>JPG</span>
-                        </button>
-                        <button class="export-option" id="exportPdf">
-                            <i class="fas fa-file-pdf"></i>
-                            <span>PDF</span>
-                        </button>
+                            <div class="export-container">
+                                <button class="export-main-btn" id="exportMainBtn">
+                                    <i class="fas fa-download"></i>
+                                    <span>Export Design</span>
+                                    <i class="fas fa-chevron-down export-chevron"></i>
+                                </button>
+                                <div class="export-dropdown hidden" id="exportDropdown">
+                                    <button class="export-option" id="exportPng">
+                                        <i class="fas fa-file-image"></i>
+                                        <span>PNG</span>
+                                    </button>
+                                    <button class="export-option" id="exportJpg">
+                                        <i class="fas fa-file-image"></i>
+                                        <span>JPG</span>
+                                    </button>
+                                    <button class="export-option" id="exportPdf">
+                                        <i class="fas fa-file-pdf"></i>
+                                        <span>PDF</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -233,15 +228,14 @@
                             Reset
                         </button>
                         <div class="zoom-controls">
-                            <button class="zoom-btn" id="zoomOut">
-                                <i class="fas fa-minus"></i>
+                            <button class="zoom-btn" id="zoomIn" title="Zoom In">
+                                <i class="fas fa-search-plus"></i>
                             </button>
-                            <span class="zoom-level" id="zoomLevel">100%</span>
-                            <button class="zoom-btn" id="zoomIn">
-                                <i class="fas fa-plus"></i>
+                            <button class="zoom-btn" id="zoomOut" title="Zoom Out">
+                                <i class="fas fa-search-minus"></i>
                             </button>
-                            <button class="zoom-btn" id="zoomFit">
-                                <i class="fas fa-expand-arrows-alt"></i>
+                            <button class="zoom-btn" id="zoomToFit" title="Zoom to Fit">
+                                <i class="fas fa-expand"></i>
                             </button>
                         </div>
                     </div>
@@ -251,14 +245,10 @@
     </div>
 
     <!-- Floating Text Toolbar -->
-    <div id="textToolbar" class="text-toolbar hidden">
+    <div class="floating-toolbar" id="textToolbar">
         <div class="toolbar-section">
-            <select class="toolbar-font-select" id="toolbarFontFamily">
+            <select class="toolbar-select" id="toolbarFontFamily">
                 <option value="Source Sans Pro">Source Sans Pro</option>
-                <option value="Arial">Arial</option>
-                <option value="Helvetica">Helvetica</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Times New Roman">Times New Roman</option>
                 <option value="Roboto">Roboto</option>
                 <option value="Open Sans">Open Sans</option>
                 <option value="Lato">Lato</option>
@@ -267,21 +257,22 @@
         </div>
         
         <div class="toolbar-section">
-            <input type="number" class="toolbar-size-input" id="toolbarFontSize" min="12" max="80" placeholder="Size">
+            <input type="range" class="toolbar-slider" id="toolbarFontSize" min="10" max="80" value="24">
+            <span class="toolbar-label" id="fontSizeLabel">24px</span>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color-input" id="toolbarTextColor" title="Text Color">
+            <input type="color" class="toolbar-color" id="toolbarTextColor" value="#000000">
         </div>
-        
+
         <div class="toolbar-section">
-            <button class="toolbar-btn" id="toolbarBold" title="Bold">
+            <button class="toolbar-btn format-btn" id="toolbarBold" title="Bold">
                 <i class="fas fa-bold"></i>
             </button>
-            <button class="toolbar-btn" id="toolbarItalic" title="Italic">
+            <button class="toolbar-btn format-btn" id="toolbarItalic" title="Italic">
                 <i class="fas fa-italic"></i>
             </button>
-            <button class="toolbar-btn" id="toolbarUnderline" title="Underline">
+            <button class="toolbar-btn format-btn" id="toolbarUnderline" title="Underline">
                 <i class="fas fa-underline"></i>
             </button>
         </div>
@@ -295,73 +286,46 @@
             </select>
         </div>
         
-        <div class="toolbar-section effect-dropdown-container">
-            <button class="toolbar-btn effect-btn" id="toolbarShadow" title="Shadow Effects">
-                <i class="fas fa-cloud"></i>
-                <i class="fas fa-chevron-down effect-chevron"></i>
+        <div class="toolbar-section">
+            <button class="toolbar-btn" id="shadowBtn">
+                <i class="fas fa-clone"></i>
+                Shadow
+                <i class="fas fa-chevron-down"></i>
             </button>
             <div class="effect-dropdown hidden" id="shadowDropdown">
-                <div class="effect-option">
-                    <button class="effect-toggle-btn" data-effect="none">No Shadow</button>
-                </div>
-                <div class="effect-option">
-                    <button class="effect-toggle-btn" data-effect="shadow">Drop Shadow</button>
-                </div>
-                <div class="effect-controls shadow-controls hidden" id="shadowControls">
-                    <label class="effect-label">Shadow Color:</label>
-                    <input type="color" class="toolbar-color-input" id="toolbarShadowColor" title="Shadow Color" value="#000000">
-                </div>
+                <select class="effect-select" id="shadowType">
+                    <option value="none">None</option>
+                    <option value="light">Light</option>
+                    <option value="medium">Medium</option>
+                    <option value="heavy">Heavy</option>
+                </select>
+                <input type="color" class="effect-color hidden" id="shadowColor" value="#000000">
             </div>
         </div>
         
-        <div class="toolbar-section effect-dropdown-container">
-            <button class="toolbar-btn effect-btn" id="toolbarOutline" title="Outline Effects">
-                <i class="far fa-circle"></i>
-                <i class="fas fa-chevron-down effect-chevron"></i>
+        <div class="toolbar-section">
+            <button class="toolbar-btn" id="outlineBtn">
+                <i class="fas fa-circle"></i>
+                Outline
+                <i class="fas fa-chevron-down"></i>
             </button>
             <div class="effect-dropdown hidden" id="outlineDropdown">
-                <div class="effect-option">
-                    <button class="effect-toggle-btn" data-effect="none">No Outline</button>
-                </div>
-                <div class="effect-option">
-                    <button class="effect-toggle-btn" data-effect="thin">Thin Outline</button>
-                </div>
-                <div class="effect-option">
-                    <button class="effect-toggle-btn" data-effect="medium">Medium Outline</button>
-                </div>
-                <div class="effect-option">
-                    <button class="effect-toggle-btn" data-effect="thick">Thick Outline</button>
-                </div>
-                <div class="effect-controls outline-controls hidden" id="outlineControls">
-                    <label class="effect-label">Outline Color:</label>
-                    <input type="color" class="toolbar-color-input" id="toolbarOutlineColor" title="Outline Color" value="#000000">
-                </div>
+                <select class="effect-select" id="outlineType">
+                    <option value="none">None</option>
+                    <option value="thin">Thin</option>
+                    <option value="medium">Medium</option>
+                    <option value="thick">Thick</option>
+                </select>
+                <input type="color" class="effect-color hidden" id="outlineColor" value="#ffffff">
             </div>
         </div>
     </div>
 
-    <!-- Background Color Floating Toolbar -->
-    <div class="floating-toolbar hidden" id="backgroundToolbar">
+    <!-- Floating CTA Toolbar -->
+    <div class="floating-toolbar" id="ctaToolbar">
         <div class="toolbar-section">
-            <label for="backgroundColorPicker" class="toolbar-label">Background Color:</label>
-            <input type="color" class="toolbar-color-input" id="backgroundColorPicker" value="#ffffff" title="Background Color">
-        </div>
-        <div class="toolbar-section">
-            <button class="toolbar-btn" id="resetBackgroundColor" title="Reset to White">
-                <i class="fas fa-undo"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- CTA Button Floating Toolbar -->
-    <div class="floating-toolbar hidden" id="ctaToolbar">
-        <div class="toolbar-section">
-            <select class="toolbar-font-select" id="ctaToolbarFontFamily">
-                <option value="Source Sans Pro, sans-serif">Source Sans Pro</option>
-                <option value="Arial, sans-serif">Arial</option>
-                <option value="Helvetica">Helvetica</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Times New Roman">Times New Roman</option>
+            <select class="toolbar-select" id="ctaFontFamily">
+                <option value="Source Sans Pro">Source Sans Pro</option>
                 <option value="Roboto">Roboto</option>
                 <option value="Open Sans">Open Sans</option>
                 <option value="Lato">Lato</option>
@@ -370,15 +334,26 @@
         </div>
         
         <div class="toolbar-section">
-            <input type="number" class="toolbar-size-input" id="ctaToolbarFontSize" min="12" max="30" placeholder="Size">
+            <input type="range" class="toolbar-slider" id="ctaFontSize" min="10" max="40" value="16">
+            <span class="toolbar-label" id="ctaFontSizeLabel">16px</span>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color-input" id="ctaToolbarTextColor" title="Text Color">
+            <input type="color" class="toolbar-color" id="ctaTextColor" value="#ffffff">
+            <label class="toolbar-label">Text</label>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color-input" id="ctaToolbarButtonColor" title="Button Color">
+            <input type="color" class="toolbar-color" id="ctaButtonColor" value="#0077B5">
+            <label class="toolbar-label">Button</label>
+        </div>
+    </div>
+
+    <!-- Background Toolbar -->
+    <div class="floating-toolbar" id="backgroundToolbar">
+        <div class="toolbar-section">
+            <input type="color" class="toolbar-color" id="backgroundColorPicker" value="#ffffff">
+            <label class="toolbar-label">Background Color</label>
         </div>
     </div>
 
