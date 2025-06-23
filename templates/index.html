@@ -35,13 +35,16 @@
         </header>
 
         <div class="row fixed-layout">
-            <!-- Left Sidebar - Controls -->
+            <!-- Left Sidebar - Unified Controls -->
             <div class="col-lg-3 col-md-4 sidebar-container">
-                <div class="sidebar-section mb-4">
-                    <div class="controls-row">
-                        <!-- Orientation Dropdown -->
-                        <div class="control-dropdown-container">
-                            <h6 class="control-title">Orientation</h6>
+                <div class="unified-sidebar">
+                    <!-- Template Section -->
+                    <div class="sidebar-section">
+                        <h5 class="section-heading">Template</h5>
+                        
+                        <!-- Orientation -->
+                        <div class="control-item">
+                            <label class="control-label">Orientation</label>
                             <div class="control-dropdown" id="orientationDropdown">
                                 <button class="control-dropdown-btn" id="orientationBtn">
                                     <div class="control-option-display">
@@ -91,9 +94,9 @@
                             </div>
                         </div>
 
-                        <!-- Templates Dropdown -->
-                        <div class="control-dropdown-container">
-                            <h6 class="control-title">Templates</h6>
+                        <!-- Templates -->
+                        <div class="control-item">
+                            <label class="control-label">Template</label>
                             <div class="control-dropdown" id="templateDropdown">
                                 <button class="control-dropdown-btn" id="templateBtn">
                                     <div class="control-option-display">
@@ -123,8 +126,17 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Logo Upload -->
+                        <div class="control-item">
+                            <label class="control-label">Logo</label>
+                            <label class="upload-label" tabindex="0">
+                                <i class="fas fa-copyright"></i>
+                                <span>Upload Logo</span>
+                                <input type="file" class="upload-input" id="logoUpload" accept="image/*">
+                            </label>
+                        </div>
                     </div>
-                </div>
 
                 <div class="sidebar-section mb-4">
                     <h6 class="sidebar-title">Images</h6>
