@@ -11,8 +11,8 @@ body {
 
 /* App Layout Structure */
 .app-header {
-    background: var(--bs-body-bg);
-    border-bottom: 1px solid var(--bs-border-color);
+    background: #ffffff;
+    border-bottom: 1px solid #e9ecef;
     padding: 15px 0;
     position: fixed;
     top: 0;
@@ -38,8 +38,8 @@ body {
 /* Left Sidebar Panel */
 .sidebar-panel {
     width: 350px;
-    background: var(--bs-body-bg);
-    border-right: 1px solid var(--bs-border-color);
+    background: #ffffff;
+    border-right: 1px solid #e9ecef;
     flex-shrink: 0;
     height: 100%;
     overflow-y: auto;
@@ -48,7 +48,7 @@ body {
 /* Right Canvas Area Panel */
 .canvas-area-panel {
     flex: 1;
-    background: #f8f9fa;
+    background: #F5F5F5;
     height: 100%;
     position: relative;
 }
@@ -70,10 +70,10 @@ body {
 .section-heading {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--bs-emphasis-color);
+    color: #212529;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 2px solid var(--bs-primary);
+    border-bottom: 2px solid #0077B5;
 }
 
 .control-item {
@@ -88,7 +88,7 @@ body {
     display: block;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--bs-body-color);
+    color: #495057;
     margin-bottom: 6px;
 }
 
@@ -113,6 +113,54 @@ body {
 .cta-toggle .form-check-label {
     font-size: 0.8rem;
     margin: 0;
+    color: #495057;
+}
+
+/* Sidebar Text and Input Styling */
+.clean-input {
+    background: #ffffff;
+    border: 1px solid #ced4da;
+    color: #495057;
+}
+
+.clean-input:focus {
+    border-color: #0077B5;
+    box-shadow: 0 0 0 0.2rem rgba(0, 119, 181, 0.25);
+    color: #495057;
+}
+
+.upload-label {
+    color: #495057;
+}
+
+.upload-label:hover {
+    color: #0077B5;
+}
+
+/* Dropdown styling for better visibility */
+.control-dropdown-btn {
+    color: #495057;
+    background: #ffffff;
+    border: 1px solid #ced4da;
+}
+
+.control-dropdown-btn:hover {
+    color: #0077B5;
+    border-color: #0077B5;
+}
+
+.control-option {
+    color: #495057;
+}
+
+.control-option:hover {
+    color: #0077B5;
+    background-color: #f8f9fa;
+}
+
+.control-option.active {
+    color: #0077B5;
+    background-color: #e3f2fd;
 }
 
 /* Hide sidebar scrollbar while keeping functionality */
@@ -155,7 +203,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     position: relative;
-    background: #f8f9fa;
+    background: #F5F5F5;
 }
 
 .canvas-container-centered {
