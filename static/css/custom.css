@@ -672,7 +672,7 @@ textarea.clean-input {
     flex: 1;
     padding: 8px 12px;
     border: 1px solid #ced4da;
-    border-radius: 8px;
+    border-radius: 4px;
     background: #ffffff;
     color: #495057;
     font-size: 14px;
@@ -696,7 +696,7 @@ textarea.clean-input {
     width: 36px;
     height: 36px;
     border: 1px solid #ced4da;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     padding: 0;
     background: none;
@@ -732,10 +732,9 @@ textarea.clean-input {
     top: 50%;
     transform: translateY(-50%);
     font-size: 8px;
-    color: #ffffff;
+    color: #6b7280;
     pointer-events: none;
     z-index: 10;
-    text-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 
 /* Style Controls */

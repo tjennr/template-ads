@@ -1129,6 +1129,8 @@ class TemplateAdsEditor {
                 if (this.selectedTextObject) {
                     this.selectedTextObject.set('fontFamily', e.target.value);
                     this.canvas.renderAll();
+                    // Update sidebar brand controls
+                    this.updateBrandControlsFromCanvas(this.selectedTextObject.id);
                 }
             });
         }
@@ -1151,6 +1153,8 @@ class TemplateAdsEditor {
                     this.selectedTextObject.set('fill', e.target.value);
                     this.canvas.renderAll();
                     this.saveState();
+                    // Update sidebar brand controls
+                    this.updateBrandControlsFromCanvas(this.selectedTextObject.id);
                 }
             });
         }
@@ -4034,15 +4038,21 @@ class TemplateAdsEditor {
         const textObj = this.canvas.getObjects().find(obj => obj.id === textType);
         if (!textObj) return;
 
+        // Clean font family name
+        let fontFamily = textObj.fontFamily || 'Source Sans Pro';
+        if (fontFamily.includes(',')) {
+            fontFamily = fontFamily.split(',')[0].trim();
+        }
+
         if (textType === 'title') {
             const titleFontSelect = document.getElementById('titleFontSelect');
             const titleColorSelect = document.getElementById('titleColorSelect');
-            if (titleFontSelect) titleFontSelect.value = textObj.fontFamily || 'Source Sans Pro';
+            if (titleFontSelect) titleFontSelect.value = fontFamily;
             if (titleColorSelect) titleColorSelect.value = textObj.fill || '#ffffff';
         } else if (textType === 'subtitle') {
             const subtitleFontSelect = document.getElementById('subtitleFontSelect');
             const subtitleColorSelect = document.getElementById('subtitleColorSelect');
-            if (subtitleFontSelect) subtitleFontSelect.value = textObj.fontFamily || 'Source Sans Pro';
+            if (subtitleFontSelect) subtitleFontSelect.value = fontFamily;
             if (subtitleColorSelect) subtitleColorSelect.value = textObj.fill || '#ffffff';
         }
     }
