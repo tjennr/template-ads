@@ -355,10 +355,7 @@
         </div>
         
         <div class="toolbar-section">
-            <div class="color-selector-wrapper">
-                <input type="color" class="color-selector" id="toolbarTextColor" value="#000000">
-                <div class="color-arrow"></div>
-            </div>
+            <input type="color" class="clean-color-input" id="toolbarTextColor" value="#000000">
         </div>
 
         <div class="toolbar-section">
@@ -383,47 +380,23 @@
         </div>
         
         <div class="toolbar-section">
-            <div class="effect-dropdown-container">
-                <button class="toolbar-btn dropdown-btn" id="shadowBtn">
-                    <i class="fas fa-clone"></i>
-                    Shadow
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="effect-dropdown" id="shadowDropdown">
-                    <select class="effect-select" id="shadowType">
-                        <option value="none">None</option>
-                        <option value="light">Light</option>
-                        <option value="medium">Medium</option>
-                        <option value="heavy">Heavy</option>
-                    </select>
-                    <div class="color-selector-wrapper" id="shadowColorWrapper" style="display: none;">
-                        <input type="color" class="color-selector" id="shadowColor" value="#000000">
-                        <div class="color-arrow"></div>
-                    </div>
-                </div>
-            </div>
+            <select class="clean-dropdown" id="shadowType">
+                <option value="none">No Shadow</option>
+                <option value="light">Light Shadow</option>
+                <option value="medium">Medium Shadow</option>
+                <option value="heavy">Heavy Shadow</option>
+            </select>
+            <input type="color" class="clean-color-input shadow-color" id="shadowColor" value="#000000" style="display: none;">
         </div>
         
         <div class="toolbar-section">
-            <div class="effect-dropdown-container">
-                <button class="toolbar-btn dropdown-btn" id="outlineBtn">
-                    <i class="fas fa-circle"></i>
-                    Outline
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="effect-dropdown" id="outlineDropdown">
-                    <select class="effect-select" id="outlineType">
-                        <option value="none">None</option>
-                        <option value="thin">Thin</option>
-                        <option value="medium">Medium</option>
-                        <option value="thick">Thick</option>
-                    </select>
-                    <div class="color-selector-wrapper" id="outlineColorWrapper" style="display: none;">
-                        <input type="color" class="color-selector" id="outlineColor" value="#ffffff">
-                        <div class="color-arrow"></div>
-                    </div>
-                </div>
-            </div>
+            <select class="clean-dropdown" id="outlineType">
+                <option value="none">No Outline</option>
+                <option value="thin">Thin Outline</option>
+                <option value="medium">Medium Outline</option>
+                <option value="thick">Thick Outline</option>
+            </select>
+            <input type="color" class="clean-color-input outline-color" id="outlineColor" value="#ffffff" style="display: none;">
         </div>
     </div>
 
@@ -440,17 +413,17 @@
         </div>
         
         <div class="toolbar-section">
-            <input type="range" class="toolbar-slider" id="ctaFontSize" min="10" max="40" value="16">
-            <span class="toolbar-label" id="ctaFontSizeLabel">16px</span>
+            <input type="number" class="toolbar-number" id="ctaFontSize" min="10" max="40" value="16" style="width: 60px;">
+            <span class="toolbar-label">px</span>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color" id="ctaTextColor" value="#ffffff">
+            <input type="color" class="clean-color-input" id="ctaTextColor" value="#ffffff">
             <label class="toolbar-label">Text</label>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color" id="ctaButtonColor" value="#0077B5">
+            <input type="color" class="clean-color-input" id="ctaButtonColor" value="#0077B5">
             <label class="toolbar-label">Button</label>
         </div>
     </div>

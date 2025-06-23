@@ -1280,7 +1280,7 @@ class TemplateAdsEditor {
                 
                 if (shadowType === 'none') {
                     this.selectedTextObject.set('shadow', null);
-                    if (shadowColorWrapper) shadowColorWrapper.style.display = 'none';
+                    if (shadowColorInput) shadowColorInput.style.display = 'none';
                 } else {
                     let blur, offsetX, offsetY;
                     switch (shadowType) {
@@ -1312,7 +1312,7 @@ class TemplateAdsEditor {
                         offsetX: offsetX,
                         offsetY: offsetY
                     });
-                    if (shadowColorWrapper) shadowColorWrapper.style.display = 'block';
+                    if (shadowColorInput) shadowColorInput.style.display = 'inline-block';
                 }
 
                 this.canvas.renderAll();

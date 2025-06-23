@@ -1211,13 +1211,14 @@ textarea.clean-input {
     white-space: nowrap;
 }
 
-/* Floating toolbar input styling fixes */
-.floating-toolbar .toolbar-size-input,
-.floating-toolbar .toolbar-font-select,
-.floating-toolbar .toolbar-outline-select,
+/* Clean floating toolbar styling */
+.floating-toolbar .clean-color-input,
+.floating-toolbar .clean-dropdown,
+.floating-toolbar .toolbar-number,
+.floating-toolbar .toolbar-select,
 .floating-toolbar input[type="number"],
+.floating-toolbar input[type="color"],
 .floating-toolbar select,
-.floating-toolbar input,
 #textToolbar input[type="number"],
 #ctaToolbar input[type="number"],
 #backgroundToolbar input[type="number"] {
@@ -1228,6 +1229,27 @@ textarea.clean-input {
     border-radius: 6px !important;
     padding: 6px 12px !important;
     font-family: 'Source Sans Pro', sans-serif !important;
+    cursor: pointer;
+}
+
+/* Clean color input specific styling */
+.floating-toolbar .clean-color-input {
+    width: 40px;
+    height: 32px;
+    padding: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Clean dropdown styling */
+.floating-toolbar .clean-dropdown {
+    min-width: 140px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 32px;
 }
 
 /* Outline dropdown specific styling */
