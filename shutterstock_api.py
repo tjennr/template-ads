@@ -5,18 +5,15 @@ from urllib.parse import urlencode
 
 class ShutterstockAPI:
     def __init__(self):
-        self.api_key = os.environ.get('SHUTTERSTOCK_API_KEY')
-        self.secret_key = os.environ.get('SHUTTERSTOCK_SECRET_KEY')
+        self.api_token = os.environ.get('SHUTTERSTOCK_API_TOKEN')
         self.base_url = 'https://api.shutterstock.com/v2'
         
-        if not self.api_key or not self.secret_key:
-            raise ValueError("Shutterstock API credentials not found in environment variables")
+        if not self.api_token:
+            raise ValueError("Shutterstock API token not found in environment variables")
     
     def get_auth_header(self):
-        """Create Basic Auth header for Shutterstock API"""
-        credentials = f"{self.api_key}:{self.secret_key}"
-        encoded_credentials = base64.b64encode(credentials.encode()).decode()
-        return {"Authorization": f"Basic {encoded_credentials}"}
+        """Create Bearer token header for Shutterstock API"""
+        return {"Authorization": f"Bearer {self.api_token}"}
     
     def search_images(self, query, page=1, per_page=20, category=None, orientation=None):
         """
