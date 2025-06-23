@@ -174,6 +174,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Restored floating toolbar to previous clean design - replaced font size slider with numeric input, updated color selectors to match sidebar styling, simplified shadow/outline dropdowns with clean functionality and conditional color pickers
 - June 23, 2025: Created unified Effects dropdown combining shadow and outline controls with color pickers in single menu, reduced toolbar spacing to 1px gap, removed "px" label from font size input for compact design
 - June 23, 2025: Added CSS rules to forcefully remove any pseudo-element content adding "px" text after font size inputs in floating toolbar
+- June 23, 2025: Removed "px" labels from both text and CTA floating toolbars for consistent compact spacing
 
 ## Changelog
 - June 16, 2025. Initial setup
