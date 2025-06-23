@@ -27,7 +27,6 @@
             <div class="d-flex align-items-center">
                 <img src="{{ url_for('static', filename='linkedin-logo.webp') }}" alt="LinkedIn Logo" class="me-2" style="width: 32px; height: 32px; object-fit: contain;">
                 <h1 class="mb-0" style="color: #212529;">Template Ads</h1>
-                <small class="text-muted ms-3">Create professional advertisements with ease</small>
             </div>
         </div>
     </header>
@@ -42,87 +41,90 @@
                     <div class="sidebar-section">
                         <h5 class="section-heading">Template</h5>
                         
-                        <!-- Orientation -->
+                        <!-- Orientation and Template Row -->
                         <div class="control-item">
-                            <label class="control-label">Orientation</label>
-                            <div class="control-dropdown" id="orientationDropdown">
-                                <button class="control-dropdown-btn" id="orientationBtn">
-                                    <div class="control-option-display">
-                                        <svg width="28" height="20" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="1" y="1" width="30" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                                            <rect x="4" y="4" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                            <rect x="14" y="4" width="14" height="3" rx="1" fill="currentColor" opacity="0.5"/>
-                                            <rect x="14" y="9" width="10" height="3" rx="1" fill="currentColor" opacity="0.4"/>
-                                            <rect x="20" y="14" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
-                                        </svg>
-                                        <span>5:4</span>
+                            <div class="dropdown-row">
+                                <div class="dropdown-col">
+                                    <label class="control-label">Orientation</label>
+                                    <div class="control-dropdown" id="orientationDropdown">
+                                        <button class="control-dropdown-btn" id="orientationBtn">
+                                            <div class="control-option-display">
+                                                <svg width="28" height="20" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="1" y="1" width="30" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                                    <rect x="4" y="4" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                                    <rect x="14" y="4" width="14" height="3" rx="1" fill="currentColor" opacity="0.5"/>
+                                                    <rect x="14" y="9" width="10" height="3" rx="1" fill="currentColor" opacity="0.4"/>
+                                                    <rect x="20" y="14" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
+                                                </svg>
+                                                <span>5:4</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down dropdown-chevron"></i>
+                                        </button>
+                                        <div class="control-dropdown-menu hidden" id="orientationMenu">
+                                            <button class="control-option active" data-orientation="horizontal">
+                                                <svg width="28" height="20" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="1" y="1" width="30" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                                    <rect x="4" y="4" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                                    <rect x="14" y="4" width="14" height="3" rx="1" fill="currentColor" opacity="0.5"/>
+                                                    <rect x="14" y="9" width="10" height="3" rx="1" fill="currentColor" opacity="0.4"/>
+                                                    <rect x="20" y="14" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
+                                                </svg>
+                                                <span>5:4</span>
+                                            </button>
+                                            <button class="control-option" data-orientation="square">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="1" y="1" width="22" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                                    <rect x="4" y="4" width="6" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                                    <rect x="12" y="4" width="8" height="3" rx="1" fill="currentColor" opacity="0.5"/>
+                                                    <rect x="12" y="9" width="6" height="3" rx="1" fill="currentColor" opacity="0.4"/>
+                                                    <rect x="14" y="14" width="6" height="6" rx="2" fill="currentColor" opacity="0.6"/>
+                                                </svg>
+                                                <span>1:1</span>
+                                            </button>
+                                            <button class="control-option" data-orientation="vertical">
+                                                <svg width="20" height="26" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="1" y="1" width="22" height="30" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                                    <rect x="4" y="4" width="16" height="8" rx="1" fill="currentColor" opacity="0.3"/>
+                                                    <rect x="4" y="14" width="12" height="3" rx="1" fill="currentColor" opacity="0.5"/>
+                                                    <rect x="4" y="19" width="8" height="3" rx="1" fill="currentColor" opacity="0.4"/>
+                                                    <rect x="10" y="24" width="10" height="6" rx="2" fill="currentColor" opacity="0.6"/>
+                                                </svg>
+                                                <span>4:5</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <i class="fas fa-chevron-down dropdown-chevron"></i>
-                                </button>
-                                <div class="control-dropdown-menu hidden" id="orientationMenu">
-                                    <button class="control-option active" data-orientation="horizontal">
-                                        <svg width="28" height="20" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="1" y="1" width="30" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                                            <rect x="4" y="4" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                            <rect x="14" y="4" width="14" height="3" rx="1" fill="currentColor" opacity="0.5"/>
-                                            <rect x="14" y="9" width="10" height="3" rx="1" fill="currentColor" opacity="0.4"/>
-                                            <rect x="20" y="14" width="8" height="6" rx="2" fill="currentColor" opacity="0.6"/>
-                                        </svg>
-                                        <span>5:4</span>
-                                    </button>
-                                    <button class="control-option" data-orientation="square">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="1" y="1" width="22" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                                            <rect x="4" y="4" width="6" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                            <rect x="12" y="4" width="8" height="3" rx="1" fill="currentColor" opacity="0.5"/>
-                                            <rect x="12" y="9" width="6" height="3" rx="1" fill="currentColor" opacity="0.4"/>
-                                            <rect x="14" y="14" width="6" height="6" rx="2" fill="currentColor" opacity="0.6"/>
-                                        </svg>
-                                        <span>1:1</span>
-                                    </button>
-                                    <button class="control-option" data-orientation="vertical">
-                                        <svg width="20" height="26" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="1" y="1" width="22" height="30" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-                                            <rect x="4" y="4" width="16" height="8" rx="1" fill="currentColor" opacity="0.3"/>
-                                            <rect x="4" y="14" width="12" height="3" rx="1" fill="currentColor" opacity="0.5"/>
-                                            <rect x="4" y="19" width="8" height="3" rx="1" fill="currentColor" opacity="0.4"/>
-                                            <rect x="10" y="24" width="10" height="6" rx="2" fill="currentColor" opacity="0.6"/>
-                                        </svg>
-                                        <span>4:5</span>
-                                    </button>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Templates -->
-                        <div class="control-item">
-                            <label class="control-label">Template</label>
-                            <div class="control-dropdown" id="templateDropdown">
-                                <button class="control-dropdown-btn" id="templateBtn">
-                                    <div class="control-option-display">
-                                        <span>Classic</span>
+                                
+                                <div class="dropdown-col">
+                                    <label class="control-label">Template</label>
+                                    <div class="control-dropdown" id="templateDropdown">
+                                        <button class="control-dropdown-btn" id="templateBtn">
+                                            <div class="control-option-display">
+                                                <span>Classic</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down dropdown-chevron"></i>
+                                        </button>
+                                        <div class="control-dropdown-menu hidden" id="templateMenu">
+                                            <button class="control-option active" data-template="template1">
+                                                <span>Classic</span>
+                                            </button>
+                                            <button class="control-option" data-template="template2">
+                                                <span>Grid</span>
+                                            </button>
+                                            <button class="control-option" data-template="template3">
+                                                <span>Minimal</span>
+                                            </button>
+                                            <button class="control-option" data-template="template4">
+                                                <span>Split Left</span>
+                                            </button>
+                                            <button class="control-option" data-template="template5">
+                                                <span>Split Right</span>
+                                            </button>
+                                            <button class="control-option" data-template="template6">
+                                                <span>Split Top</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <i class="fas fa-chevron-down dropdown-chevron"></i>
-                                </button>
-                                <div class="control-dropdown-menu hidden" id="templateMenu">
-                                    <button class="control-option active" data-template="template1">
-                                        <span>Classic</span>
-                                    </button>
-                                    <button class="control-option" data-template="template2">
-                                        <span>Grid</span>
-                                    </button>
-                                    <button class="control-option" data-template="template3">
-                                        <span>Minimal</span>
-                                    </button>
-                                    <button class="control-option" data-template="template4">
-                                        <span>Split Left</span>
-                                    </button>
-                                    <button class="control-option" data-template="template5">
-                                        <span>Split Right</span>
-                                    </button>
-                                    <button class="control-option" data-template="template6">
-                                        <span>Split Top</span>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -166,14 +168,14 @@
 
                         <!-- Call to Action -->
                         <div class="control-item">
+                            <label class="control-label">Call to Action</label>
                             <div class="cta-row">
-                                <div class="cta-input-wrapper">
-                                    <label class="control-label">Call to Action</label>
-                                    <input type="text" class="clean-input" id="ctaText" placeholder="Enter CTA text" value="Learn More">
-                                </div>
                                 <div class="cta-toggle">
                                     <input class="form-check-input" type="checkbox" id="ctaCheckbox" checked>
                                     <label class="form-check-label" for="ctaCheckbox">Show</label>
+                                </div>
+                                <div class="cta-input-wrapper">
+                                    <input type="text" class="clean-input" id="ctaText" placeholder="Enter CTA text" value="Learn More">
                                 </div>
                             </div>
                         </div>

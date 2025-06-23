@@ -95,7 +95,7 @@ body {
 .cta-row {
     display: flex;
     gap: 12px;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .cta-input-wrapper {
@@ -108,6 +108,16 @@ body {
     align-items: center;
     gap: 4px;
     min-width: 60px;
+}
+
+/* Dropdown Row Layout */
+.dropdown-row {
+    display: flex;
+    gap: 12px;
+}
+
+.dropdown-col {
+    flex: 1;
 }
 
 .cta-toggle .form-check-label {
