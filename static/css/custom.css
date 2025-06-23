@@ -8,6 +8,72 @@ body {
     overflow: hidden;
 }
 
+/* Unified Sidebar Styling */
+.unified-sidebar {
+    background: var(--bs-body-bg);
+    border-radius: 8px;
+    padding: 20px;
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    border: 1px solid var(--bs-border-color);
+}
+
+.sidebar-section {
+    margin-bottom: 32px;
+}
+
+.sidebar-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--bs-emphasis-color);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--bs-primary);
+}
+
+.control-item {
+    margin-bottom: 16px;
+}
+
+.control-item:last-child {
+    margin-bottom: 0;
+}
+
+.control-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--bs-body-color);
+    margin-bottom: 6px;
+}
+
+.cta-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.cta-input-wrapper {
+    flex: 1;
+}
+
+.cta-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 60px;
+}
+
+.cta-toggle .form-check-label {
+    font-size: 0.8rem;
+    margin: 0;
+}
+
 /* Fixed layout styling */
 .fixed-layout {
     height: calc(100vh - 120px); /* Account for header height */
