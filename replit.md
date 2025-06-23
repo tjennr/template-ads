@@ -172,6 +172,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Added OpenAI DALL-E 3 integration for AI image generation with orientation-aware sizing (1024x1024, 1792x1024, 1024x1792)
 - June 23, 2025: Enhanced tab interface styling - removed gray bars from empty result containers, improved loading states, and maintained consistent user experience
 - June 23, 2025: Restored floating toolbar to previous clean design - replaced font size slider with numeric input, updated color selectors to match sidebar styling, simplified shadow/outline dropdowns with clean functionality and conditional color pickers
+- June 23, 2025: Created unified Effects dropdown combining shadow and outline controls with color pickers in single menu, reduced toolbar spacing to 1px gap, removed "px" label from font size input for compact design
 
 ## Changelog
 - June 16, 2025. Initial setup
