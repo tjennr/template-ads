@@ -4271,11 +4271,6 @@ class TemplateAdsEditor {
 
     async useStockImage(imageUrl) {
         try {
-            // Show loading state
-            const stockResults = document.getElementById('stockResults');
-            const originalContent = stockResults.innerHTML;
-            stockResults.innerHTML = '<div class="stock-loading"><i class="fas fa-spinner fa-spin"></i> Adding image to canvas...</div>';
-            
             const response = await fetch(`/api/shutterstock/download?url=${encodeURIComponent(imageUrl)}`);
             const data = await response.json();
             
@@ -4286,24 +4281,9 @@ class TemplateAdsEditor {
             // Add the stock image to canvas
             this.addImageToCanvas(data.image_data, 'main');
             
-            // Restore original content (don't switch tabs)
-            stockResults.innerHTML = originalContent;
-            
-            // Re-attach event listeners to restored content
-            const stockItems = stockResults.querySelectorAll('.stock-image-item');
-            stockItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const imageUrl = item.getAttribute('data-url');
-                    this.useStockImage(imageUrl);
-                });
-            });
-            
         } catch (error) {
             console.error('Stock image download error:', error);
-            
-            // Show error message
-            const stockResults = document.getElementById('stockResults');
-            stockResults.innerHTML = '<div class="stock-error">Failed to add image to canvas. Please try again.</div>';
+            alert('Failed to add image to canvas. Please try again.');
         }
     }
 
@@ -4373,11 +4353,6 @@ class TemplateAdsEditor {
 
     async useGeneratedImage(imageUrl) {
         try {
-            // Show loading state
-            const generateResults = document.getElementById('generateResults');
-            const originalContent = generateResults.innerHTML;
-            generateResults.innerHTML = '<div class="stock-loading"><i class="fas fa-spinner fa-spin"></i> Adding image to canvas...</div>';
-            
             // Convert image URL to base64 for canvas
             const response = await fetch(imageUrl);
             const blob = await response.blob();
@@ -4385,27 +4360,12 @@ class TemplateAdsEditor {
             const reader = new FileReader();
             reader.onload = () => {
                 this.addImageToCanvas(reader.result, 'main');
-                
-                // Restore original content (don't switch tabs)
-                generateResults.innerHTML = originalContent;
-                
-                // Re-attach event listener to restored content
-                const generateItem = generateResults.querySelector('.generated-image-item');
-                if (generateItem) {
-                    generateItem.addEventListener('click', () => {
-                        const imageUrl = generateItem.getAttribute('data-url');
-                        this.useGeneratedImage(imageUrl);
-                    });
-                }
             };
             reader.readAsDataURL(blob);
             
         } catch (error) {
             console.error('Generated image use error:', error);
-            
-            // Show error message
-            const generateResults = document.getElementById('generateResults');
-            generateResults.innerHTML = '<div class="stock-error">Failed to add image to canvas. Please try again.</div>';
+            alert('Failed to add image to canvas. Please try again.');
         }
     }
 
