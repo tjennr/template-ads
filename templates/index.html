@@ -14,6 +14,15 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     
+    <!-- SF Pro Display Font -->
+    <style>
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local('SF Pro Display'), local('-apple-system'), local('BlinkMacSystemFont');
+            font-weight: 100 900;
+        }
+    </style>
+    
     <!-- Fabric.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     
@@ -144,6 +153,7 @@
                             <label class="control-label">Title style</label>
                             <div class="brand-control-row">
                                 <select class="brand-font-select" id="titleFontSelect">
+                                    <option value="SF Pro Display">SF Pro Display</option>
                                     <option value="Source Sans Pro">Source Sans Pro</option>
                                     <option value="Roboto">Roboto</option>
                                     <option value="Open Sans">Open Sans</option>
@@ -291,6 +301,7 @@
     <div class="floating-toolbar" id="textToolbar">
         <div class="toolbar-section">
             <select class="toolbar-select" id="toolbarFontFamily">
+                <option value="SF Pro Display">SF Pro Display</option>
                 <option value="Source Sans Pro">Source Sans Pro</option>
                 <option value="Roboto">Roboto</option>
                 <option value="Open Sans">Open Sans</option>
