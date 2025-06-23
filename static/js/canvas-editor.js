@@ -2182,7 +2182,7 @@ class TemplateAdsEditor {
         const isVertical = this.currentOrientation === 'vertical';
         
         // Title - white text over image, positioned for both orientations
-        this.titleText = new fabric.Text(document.getElementById('titleText').value, {
+        this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.6 : canvasHeight * 0.65,
             fontSize: 40,
@@ -2192,11 +2192,14 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'title'
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText').value, {
+        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.7 : canvasHeight * 0.75,
             fontSize: 24,
@@ -2205,6 +2208,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'subtitle'
         });
         
@@ -2257,7 +2263,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - white text over image
-        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
+        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.6,
             fontSize: 40,
@@ -2267,11 +2273,14 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'title'
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth * 0.1,
             top: canvasHeight * 0.7,
             fontSize: 24,
@@ -2280,6 +2289,9 @@ class TemplateAdsEditor {
             textAlign: 'left',
             originX: 'left',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'subtitle'
         });
         
@@ -2335,7 +2347,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - white text over image
-        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
+        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.5,
             fontSize: 40,
@@ -2345,11 +2357,14 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'title'
         });
         
         // Subtitle - white text over image
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: 24,
@@ -2358,6 +2373,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'subtitle'
         });
         
@@ -2726,7 +2744,7 @@ class TemplateAdsEditor {
         const canvasHeight = this.canvas.getHeight();
         
         // Title - positioned in bottom text area, using color scheme
-        this.titleText = new fabric.Text(document.getElementById('titleText')?.value || 'Your Title Here', {
+        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
             fontSize: 40,
@@ -2736,11 +2754,14 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'title'
         });
         
         // Subtitle - positioned in bottom text area, using color scheme
-        this.subtitleText = new fabric.Text(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.78,
             fontSize: 24,
@@ -2749,6 +2770,9 @@ class TemplateAdsEditor {
             textAlign: 'center',
             originX: 'center',
             originY: 'center',
+            width: canvasWidth * 0.8,
+            lockScalingFlip: true,
+            noScaleCache: false,
             id: 'subtitle'
         });
         
