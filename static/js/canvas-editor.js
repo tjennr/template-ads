@@ -3930,6 +3930,8 @@ class TemplateAdsEditor {
                 this.updateTextStyle('title', 'fontFamily', e.target.value);
                 this.updateFloatingToolbarFont('title', e.target.value);
                 this.saveState();
+                // Ensure font selector maintains value
+                setTimeout(() => this.maintainBrandFontSelection('title'), 100);
             });
         }
 
@@ -3938,6 +3940,8 @@ class TemplateAdsEditor {
                 this.updateTextStyle('title', 'fill', e.target.value);
                 this.updateFloatingToolbarColor('title', e.target.value);
                 this.saveState();
+                // Maintain font selector value
+                this.maintainBrandFontSelection('title');
             });
         }
 
@@ -3946,6 +3950,8 @@ class TemplateAdsEditor {
                 this.updateTextStyle('subtitle', 'fontFamily', e.target.value);
                 this.updateFloatingToolbarFont('subtitle', e.target.value);
                 this.saveState();
+                // Ensure font selector maintains value
+                setTimeout(() => this.maintainBrandFontSelection('subtitle'), 100);
             });
         }
 
@@ -3954,6 +3960,8 @@ class TemplateAdsEditor {
                 this.updateTextStyle('subtitle', 'fill', e.target.value);
                 this.updateFloatingToolbarColor('subtitle', e.target.value);
                 this.saveState();
+                // Maintain font selector value
+                this.maintainBrandFontSelection('subtitle');
             });
         }
         
@@ -3971,8 +3979,13 @@ class TemplateAdsEditor {
                 const titleFontSelect = document.getElementById('titleFontSelect');
                 const titleColorSelect = document.getElementById('titleColorSelect');
                 if (titleFontSelect) {
-                    titleFontSelect.value = titleObj.fontFamily || 'Source Sans Pro';
-                    console.log('Title font initialized to:', titleObj.fontFamily);
+                    // Clean font family name
+                    let fontFamily = titleObj.fontFamily || 'Source Sans Pro';
+                    if (fontFamily.includes(',')) {
+                        fontFamily = fontFamily.split(',')[0].trim();
+                    }
+                    titleFontSelect.value = fontFamily;
+                    console.log('Title font initialized to:', fontFamily);
                 }
                 if (titleColorSelect) {
                     titleColorSelect.value = titleObj.fill || '#ffffff';
@@ -3984,8 +3997,13 @@ class TemplateAdsEditor {
                 const subtitleFontSelect = document.getElementById('subtitleFontSelect');
                 const subtitleColorSelect = document.getElementById('subtitleColorSelect');
                 if (subtitleFontSelect) {
-                    subtitleFontSelect.value = subtitleObj.fontFamily || 'Source Sans Pro';
-                    console.log('Subtitle font initialized to:', subtitleObj.fontFamily);
+                    // Clean font family name
+                    let fontFamily = subtitleObj.fontFamily || 'Source Sans Pro';
+                    if (fontFamily.includes(',')) {
+                        fontFamily = fontFamily.split(',')[0].trim();
+                    }
+                    subtitleFontSelect.value = fontFamily;
+                    console.log('Subtitle font initialized to:', fontFamily);
                 }
                 if (subtitleColorSelect) {
                     subtitleColorSelect.value = subtitleObj.fill || '#ffffff';
@@ -4026,6 +4044,32 @@ class TemplateAdsEditor {
             const subtitleColorSelect = document.getElementById('subtitleColorSelect');
             if (subtitleFontSelect) subtitleFontSelect.value = textObj.fontFamily || 'Source Sans Pro';
             if (subtitleColorSelect) subtitleColorSelect.value = textObj.fill || '#ffffff';
+        }
+    }
+
+    maintainBrandFontSelection(textType) {
+        // Ensure font selector displays current font after any changes
+        const textObj = this.canvas.getObjects().find(obj => obj.id === textType);
+        if (!textObj) return;
+
+        // Clean font family name by removing fallback fonts
+        let fontFamily = textObj.fontFamily || 'Source Sans Pro';
+        if (fontFamily.includes(',')) {
+            fontFamily = fontFamily.split(',')[0].trim();
+        }
+        
+        if (textType === 'title') {
+            const titleFontSelect = document.getElementById('titleFontSelect');
+            if (titleFontSelect && titleFontSelect.value !== fontFamily) {
+                titleFontSelect.value = fontFamily;
+                console.log('Maintained title font selector value:', fontFamily);
+            }
+        } else if (textType === 'subtitle') {
+            const subtitleFontSelect = document.getElementById('subtitleFontSelect');
+            if (subtitleFontSelect && subtitleFontSelect.value !== fontFamily) {
+                subtitleFontSelect.value = fontFamily;
+                console.log('Maintained subtitle font selector value:', fontFamily);
+            }
         }
     }
 
