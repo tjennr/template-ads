@@ -1455,6 +1455,14 @@ input[type="checkbox"]:focus {
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
 }
 
+/* Remove any pseudo-element content from toolbar number inputs */
+.toolbar-number::after,
+#toolbarFontSize::after,
+input[type="number"]::after {
+    content: none !important;
+    display: none !important;
+}
+
 /* Effect Dropdown Container */
 .effect-dropdown-container {
     position: relative;
