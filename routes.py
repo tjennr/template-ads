@@ -9,6 +9,7 @@ from reportlab.lib.utils import ImageReader
 from flask import render_template, request, jsonify, send_file, current_app
 from werkzeug.utils import secure_filename
 from app import app
+from shutterstock_api import ShutterstockAPI
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}
 
@@ -171,6 +172,82 @@ def export_pdf():
     except Exception as e:
         current_app.logger.error(f'PDF export error: {str(e)}')
         return jsonify({'success': False, 'error': 'PDF export failed. Please try again.'})
+
+@app.route('/api/shutterstock/search')
+def shutterstock_search():
+    """Search Shutterstock for stock images"""
+    try:
+        query = request.args.get('query', '')
+        page = int(request.args.get('page', 1))
+        per_page = min(int(request.args.get('per_page', 20)), 50)
+        orientation = request.args.get('orientation')
+        
+        if not query:
+            return jsonify({'error': 'Search query is required'}), 400
+        
+        # Initialize Shutterstock API
+        shutterstock = ShutterstockAPI()
+        
+        # Search for images
+        results = shutterstock.search_images(
+            query=query,
+            page=page,
+            per_page=per_page,
+            orientation=orientation
+        )
+        
+        # Format results for frontend
+        formatted_results = {
+            'total_count': results.get('total_count', 0),
+            'page': results.get('page', 1),
+            'per_page': results.get('per_page', 20),
+            'images': []
+        }
+        
+        for image in results.get('data', []):
+            formatted_results['images'].append({
+                'id': image['id'],
+                'description': image.get('description', ''),
+                'preview_url': image['assets']['preview']['url'],
+                'thumbnail_url': image['assets']['preview_1000']['url'],
+                'width': image['assets']['preview']['width'],
+                'height': image['assets']['preview']['height'],
+                'aspect_ratio': image['aspect']
+            })
+        
+        return jsonify(formatted_results)
+        
+    except ValueError as e:
+        return jsonify({'error': 'Shutterstock API credentials not configured'}), 503
+    except Exception as e:
+        current_app.logger.error(f"Shutterstock search error: {str(e)}")
+        return jsonify({'error': 'Failed to search stock images'}), 500
+
+@app.route('/api/shutterstock/download')
+def shutterstock_download():
+    """Download a Shutterstock image for use in the editor"""
+    try:
+        image_url = request.args.get('url')
+        if not image_url:
+            return jsonify({'error': 'Image URL is required'}), 400
+        
+        # Initialize Shutterstock API
+        shutterstock = ShutterstockAPI()
+        
+        # Download the image
+        image_data = shutterstock.download_image_preview(image_url)
+        
+        # Convert to base64 for frontend
+        image_b64 = base64.b64encode(image_data).decode('utf-8')
+        
+        return jsonify({
+            'success': True,
+            'image_data': f"data:image/jpeg;base64,{image_b64}"
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Shutterstock download error: {str(e)}")
+        return jsonify({'error': 'Failed to download image'}), 500
 
 @app.errorhandler(413)
 def too_large(e):
