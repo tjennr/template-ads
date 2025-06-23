@@ -159,6 +159,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Changed horizontal orientation from 5:4 to 1.91:1 aspect ratio with descriptive labels: "Horizontal (1.91:1)", "Square (1:1)", "Vertical (4:5)"
 - June 23, 2025: Set vertical template as default selection on page load instead of horizontal
 - June 23, 2025: Increased left sidebar panel width from 350px to 400px for better control spacing and usability
+- June 23, 2025: Changed subtitle input from single-line text input to textarea for paragraph text support with text wrapping and multi-line capability
 
 ## Changelog
 - June 16, 2025. Initial setup
