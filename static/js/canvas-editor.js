@@ -3388,11 +3388,16 @@ class TemplateAdsEditor {
         canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
         
         // Update zoom level display
-        document.getElementById('zoomLevel').textContent = Math.round(this.zoomLevel * 100) + '%';
+        const zoomLevelElement = document.getElementById('zoomLevel');
+        if (zoomLevelElement) {
+            zoomLevelElement.textContent = Math.round(this.zoomLevel * 100) + '%';
+        }
         
         // Update zoom button states
-        document.getElementById('zoomIn').disabled = this.zoomLevel >= this.maxZoom;
-        document.getElementById('zoomOut').disabled = this.zoomLevel <= this.minZoom;
+        const zoomInBtn = document.getElementById('zoomIn');
+        const zoomOutBtn = document.getElementById('zoomOut');
+        if (zoomInBtn) zoomInBtn.disabled = this.zoomLevel >= this.maxZoom;
+        if (zoomOutBtn) zoomOutBtn.disabled = this.zoomLevel <= this.minZoom;
     }
 
     repositionElementsForOrientation() {
