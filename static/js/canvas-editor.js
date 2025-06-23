@@ -4120,6 +4120,7 @@ class TemplateAdsEditor {
         const imageTabs = document.querySelectorAll('.image-tab');
         const uploadTab = document.getElementById('uploadTab');
         const stockTab = document.getElementById('stockTab');
+        const generateTab = document.getElementById('generateTab');
         
         imageTabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -4129,13 +4130,18 @@ class TemplateAdsEditor {
                 imageTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 
-                // Show/hide tab content
+                // Hide all tab content first
+                uploadTab.classList.add('hidden');
+                stockTab.classList.add('hidden');
+                generateTab.classList.add('hidden');
+                
+                // Show the selected tab content
                 if (tabType === 'upload') {
                     uploadTab.classList.remove('hidden');
-                    stockTab.classList.add('hidden');
                 } else if (tabType === 'stock') {
-                    uploadTab.classList.add('hidden');
                     stockTab.classList.remove('hidden');
+                } else if (tabType === 'generate') {
+                    generateTab.classList.remove('hidden');
                 }
             });
         });
@@ -4156,6 +4162,25 @@ class TemplateAdsEditor {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 performSearch();
+            }
+        });
+        
+        // Setup AI image generation
+        const generatePromptInput = document.getElementById('generatePromptInput');
+        const generateImageBtn = document.getElementById('generateImageBtn');
+        
+        const performGeneration = () => {
+            const prompt = generatePromptInput.value.trim();
+            if (!prompt) return;
+            
+            this.generateAIImage(prompt);
+        };
+        
+        generateImageBtn.addEventListener('click', performGeneration);
+        generatePromptInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performGeneration();
             }
         });
     }
@@ -4251,6 +4276,94 @@ class TemplateAdsEditor {
         } catch (error) {
             console.error('Stock image download error:', error);
             alert('Failed to download stock image. Please try again.');
+        }
+    }
+
+    async generateAIImage(prompt) {
+        const generateResults = document.getElementById('generateResults');
+        
+        // Show loading state
+        generateResults.innerHTML = '<div class="stock-loading"><i class="fas fa-spinner fa-spin"></i> Generating AI image...</div>';
+        
+        try {
+            const response = await fetch('/api/openai/generate-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prompt: prompt,
+                    orientation: this.currentOrientation
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Generation failed');
+            }
+            
+            this.displayGeneratedImage(data.image_url);
+            
+        } catch (error) {
+            console.error('AI generation error:', error);
+            let errorMessage = 'Failed to generate AI image';
+            
+            if (error.message.includes('credentials not configured')) {
+                errorMessage = 'OpenAI API credentials not configured. Please contact support.';
+            }
+            
+            generateResults.innerHTML = `<div class="stock-error">${errorMessage}</div>`;
+        }
+    }
+
+    displayGeneratedImage(imageUrl) {
+        const generateResults = document.getElementById('generateResults');
+        
+        const imageHTML = `
+            <div class="generated-image-container">
+                <div class="generated-image-item" data-url="${imageUrl}">
+                    <img src="${imageUrl}" alt="Generated image" loading="lazy">
+                    <div class="use-image-overlay">
+                        <button class="use-image-btn">Use This Image</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        generateResults.innerHTML = imageHTML;
+        
+        // Add click handler for generated image
+        const generateItem = generateResults.querySelector('.generated-image-item');
+        if (generateItem) {
+            generateItem.addEventListener('click', () => {
+                const imageUrl = generateItem.getAttribute('data-url');
+                this.useGeneratedImage(imageUrl);
+            });
+        }
+    }
+
+    async useGeneratedImage(imageUrl) {
+        try {
+            // Convert image URL to base64 for canvas
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.addImageToCanvas(reader.result, 'mainImage');
+                
+                // Switch back to upload tab
+                const uploadTab = document.querySelector('.image-tab[data-tab="upload"]');
+                if (uploadTab) {
+                    uploadTab.click();
+                }
+            };
+            reader.readAsDataURL(blob);
+            
+        } catch (error) {
+            console.error('Generated image use error:', error);
+            alert('Failed to use generated image. Please try again.');
         }
     }
 

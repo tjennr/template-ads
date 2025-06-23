@@ -1593,6 +1593,83 @@ input[type="checkbox"]:focus {
     font-size: 0.875rem;
 }
 
+/* Generate Image Interface */
+.generate-search {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.generate-search .clean-input {
+    flex: 1;
+}
+
+.generate-results {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: white;
+}
+
+.generated-image-container {
+    padding: 0.75rem;
+}
+
+.generated-image-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    max-width: 100%;
+}
+
+.generated-image-item:hover {
+    transform: scale(1.02);
+}
+
+.generated-image-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.use-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.generated-image-item:hover .use-image-overlay {
+    opacity: 1;
+}
+
+.use-image-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--brand-primary);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.use-image-btn:hover {
+    background: var(--brand-primary-hover);
+    transform: scale(1.05);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .canvas-wrapper {

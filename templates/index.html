@@ -203,6 +203,10 @@
                                     <i class="fas fa-search"></i>
                                     Stock Images
                                 </button>
+                                <button class="image-tab" data-tab="generate">
+                                    <i class="fas fa-magic"></i>
+                                    Generate Image
+                                </button>
                             </div>
                             
                             <!-- Upload Tab Content -->
@@ -223,6 +227,18 @@
                                     </button>
                                 </div>
                                 <div class="stock-results" id="stockResults"></div>
+                            </div>
+                            
+                            <!-- Generate Image Tab Content -->
+                            <div class="image-tab-content hidden" id="generateTab">
+                                <div class="generate-search">
+                                    <input type="text" class="clean-input" id="generatePromptInput" placeholder="Describe the image you want to generate...">
+                                    <button class="search-btn" id="generateImageBtn">
+                                        <i class="fas fa-magic"></i>
+                                        Generate
+                                    </button>
+                                </div>
+                                <div class="generate-results" id="generateResults"></div>
                             </div>
                         </div>
 
