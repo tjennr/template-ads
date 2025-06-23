@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 class ShutterstockAPI:
     def __init__(self):
         self.api_token = os.environ.get('SHUTTERSTOCK_API_TOKEN')
-        self.base_url = 'https://api.shutterstock.com/v2'
+        self.base_url = 'https://api-sandbox.shutterstock.com/v2'
         
         if not self.api_token:
             raise ValueError("Shutterstock API token not found in environment variables")
