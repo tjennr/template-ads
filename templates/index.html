@@ -21,19 +21,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 </head>
 <body>
-    <div class="container-fluid">
-        <!-- Header -->
-        <header class="py-3 mb-4 border-bottom">
+    <!-- Header Section -->
+    <header class="app-header">
+        <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <img src="{{ url_for('static', filename='linkedin-logo.webp') }}" alt="LinkedIn Logo" class="me-2" style="width: 32px; height: 32px; object-fit: contain;">
                 <h1 class="mb-0" style="color: #212529;">Template Ads</h1>
                 <small class="text-muted ms-3">Create professional advertisements with ease</small>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <div class="row fixed-layout">
-            <!-- Left Sidebar - Unified Controls -->
-            <div class="col-lg-3 col-md-4 sidebar-container">
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="content-layout">
+            <!-- Left Sidebar Panel -->
+            <div class="sidebar-panel">
                 <div class="unified-sidebar">
                     <!-- Template Section -->
                     <div class="sidebar-section">
@@ -206,8 +209,8 @@
                 </div>
             </div>
 
-            <!-- Main Canvas Area -->
-            <div class="col-lg-9 col-md-8 canvas-main-area">
+            <!-- Right Canvas Area -->
+            <div class="canvas-area-panel">
                 <div class="canvas-area">
                     <div class="canvas-container-centered">
                         <div class="canvas-wrapper-zoom">
