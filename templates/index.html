@@ -380,34 +380,36 @@
         </div>
         
         <div class="toolbar-section">
-            <div class="effect-dropdown-wrapper">
-                <select class="clean-dropdown" id="shadowType">
-                    <option value="none">No Shadow</option>
-                    <option value="light">Light Shadow</option>
-                    <option value="medium">Medium Shadow</option>
-                    <option value="heavy">Heavy Shadow</option>
-                </select>
-                <div class="effect-dropdown-content" id="shadowDropdownContent">
-                    <div class="effect-color-picker">
-                        <label>Color:</label>
-                        <input type="color" id="shadowColor" value="#000000">
+            <div class="unified-effect-dropdown">
+                <button class="effect-dropdown-btn" id="effectsBtn">
+                    <i class="fas fa-magic"></i>
+                    Effects
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="unified-effect-content" id="effectsDropdown">
+                    <div class="effect-group">
+                        <label>Shadow:</label>
+                        <select class="effect-select" id="shadowType">
+                            <option value="none">None</option>
+                            <option value="light">Light</option>
+                            <option value="medium">Medium</option>
+                            <option value="heavy">Heavy</option>
+                        </select>
+                        <div class="color-input-wrapper" id="shadowColorWrapper" style="display: none;">
+                            <input type="color" id="shadowColor" value="#000000">
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="toolbar-section">
-            <div class="effect-dropdown-wrapper">
-                <select class="clean-dropdown" id="outlineType">
-                    <option value="none">No Outline</option>
-                    <option value="thin">Thin Outline</option>
-                    <option value="medium">Medium Outline</option>
-                    <option value="thick">Thick Outline</option>
-                </select>
-                <div class="effect-dropdown-content" id="outlineDropdownContent">
-                    <div class="effect-color-picker">
-                        <label>Color:</label>
-                        <input type="color" id="outlineColor" value="#ffffff">
+                    <div class="effect-group">
+                        <label>Outline:</label>
+                        <select class="effect-select" id="outlineType">
+                            <option value="none">None</option>
+                            <option value="thin">Thin</option>
+                            <option value="medium">Medium</option>
+                            <option value="thick">Thick</option>
+                        </select>
+                        <div class="color-input-wrapper" id="outlineColorWrapper" style="display: none;">
+                            <input type="color" id="outlineColor" value="#ffffff">
+                        </div>
                     </div>
                 </div>
             </div>

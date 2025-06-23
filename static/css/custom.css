@@ -1108,7 +1108,7 @@ textarea.clean-input {
 .toolbar-section {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 1px;
     padding: 0;
 }
 
@@ -1270,45 +1270,87 @@ textarea.clean-input {
     padding-right: 32px;
 }
 
-/* Effect dropdown container with inline color picker */
-.effect-dropdown-wrapper {
+/* Unified effects dropdown */
+.unified-effect-dropdown {
     position: relative;
     display: inline-block;
 }
 
-.effect-dropdown-content {
+.effect-dropdown-btn {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Source Sans Pro', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.effect-dropdown-btn:hover {
+    border-color: var(--brand-primary);
+}
+
+.effect-dropdown-btn.active {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-light);
+}
+
+.unified-effect-content {
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
     background: white;
     border: 1px solid #dee2e6;
-    border-top: none;
-    border-radius: 0 0 6px 6px;
-    padding: 8px;
+    border-radius: 6px;
+    padding: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 1001;
     display: none;
+    min-width: 180px;
 }
 
-.effect-dropdown-content.show {
+.unified-effect-content.show {
     display: block;
 }
 
-.effect-color-picker {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
+.effect-group {
+    margin-bottom: 12px;
 }
 
-.effect-color-picker label {
+.effect-group:last-child {
+    margin-bottom: 0;
+}
+
+.effect-group label {
+    display: block;
     font-size: 12px;
     color: #666;
-    white-space: nowrap;
+    margin-bottom: 4px;
+    font-weight: 500;
 }
 
-.effect-color-picker input[type="color"] {
+.effect-select {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 12px;
+    background: white;
+    margin-bottom: 6px;
+}
+
+.color-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.color-input-wrapper input[type="color"] {
     width: 32px !important;
     height: 24px !important;
     padding: 0 !important;

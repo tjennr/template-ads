@@ -1113,8 +1113,8 @@ class TemplateAdsEditor {
         const italicBtn = document.getElementById('toolbarItalic');
         const underlineBtn = document.getElementById('toolbarUnderline');
         const textAlignSelect = document.getElementById('toolbarTextAlign');
-        const shadowBtn = document.getElementById('shadowBtn');
-        const outlineBtn = document.getElementById('outlineBtn');
+        const effectsBtn = document.getElementById('effectsBtn');
+        const effectsDropdown = document.getElementById('effectsDropdown');
         
         // Effect dropdown elements
         const shadowTypeSelect = document.getElementById('shadowType');
@@ -1219,17 +1219,31 @@ class TemplateAdsEditor {
 
 
 
+        // Effects button toggle
+        if (effectsBtn && effectsDropdown) {
+            effectsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isVisible = effectsDropdown.classList.contains('show');
+                if (isVisible) {
+                    effectsDropdown.classList.remove('show');
+                    effectsBtn.classList.remove('active');
+                } else {
+                    effectsDropdown.classList.add('show');
+                    effectsBtn.classList.add('active');
+                }
+            });
+        }
+
         // Shadow type select change
         if (shadowTypeSelect) {
             shadowTypeSelect.addEventListener('change', (e) => {
                 if (!this.selectedTextObject) return;
 
                 const shadowType = e.target.value;
-                const shadowDropdownContent = document.getElementById('shadowDropdownContent');
                 
                 if (shadowType === 'none') {
                     this.selectedTextObject.set('shadow', null);
-                    if (shadowDropdownContent) shadowDropdownContent.classList.remove('show');
+                    if (shadowColorWrapper) shadowColorWrapper.style.display = 'none';
                 } else {
                     let blur, offsetX, offsetY;
                     switch (shadowType) {
@@ -1261,7 +1275,7 @@ class TemplateAdsEditor {
                         offsetX: offsetX,
                         offsetY: offsetY
                     });
-                    if (shadowDropdownContent) shadowDropdownContent.classList.add('show');
+                    if (shadowColorWrapper) shadowColorWrapper.style.display = 'flex';
                 }
 
                 this.canvas.renderAll();
@@ -1275,12 +1289,11 @@ class TemplateAdsEditor {
                 if (!this.selectedTextObject) return;
 
                 const outlineType = e.target.value;
-                const outlineDropdownContent = document.getElementById('outlineDropdownContent');
                 
                 if (outlineType === 'none') {
                     this.selectedTextObject.set('stroke', '');
                     this.selectedTextObject.set('strokeWidth', 0);
-                    if (outlineDropdownContent) outlineDropdownContent.classList.remove('show');
+                    if (outlineColorWrapper) outlineColorWrapper.style.display = 'none';
                 } else {
                     let strokeWidth;
                     switch (outlineType) {
@@ -1300,7 +1313,7 @@ class TemplateAdsEditor {
                     const outlineColor = outlineColorInput ? outlineColorInput.value : '#ffffff';
                     this.selectedTextObject.set('stroke', outlineColor);
                     this.selectedTextObject.set('strokeWidth', strokeWidth);
-                    if (outlineDropdownContent) outlineDropdownContent.classList.add('show');
+                    if (outlineColorWrapper) outlineColorWrapper.style.display = 'flex';
                 }
 
                 this.canvas.renderAll();
@@ -1330,24 +1343,13 @@ class TemplateAdsEditor {
             });
         }
 
-        // Close dropdowns when clicking outside
+        // Close effects dropdown when clicking outside
         document.addEventListener('click', (e) => {
-            const shadowDropdownContent = document.getElementById('shadowDropdownContent');
-            const outlineDropdownContent = document.getElementById('outlineDropdownContent');
-
-            // Check if click is outside shadow dropdown
-            if (shadowDropdownContent && shadowDropdownContent.classList.contains('show')) {
-                const shadowWrapper = shadowDropdownContent.closest('.effect-dropdown-wrapper');
-                if (!shadowWrapper || !shadowWrapper.contains(e.target)) {
-                    shadowDropdownContent.classList.remove('show');
-                }
-            }
-
-            // Check if click is outside outline dropdown
-            if (outlineDropdownContent && outlineDropdownContent.classList.contains('show')) {
-                const outlineWrapper = outlineDropdownContent.closest('.effect-dropdown-wrapper');
-                if (!outlineWrapper || !outlineWrapper.contains(e.target)) {
-                    outlineDropdownContent.classList.remove('show');
+            if (effectsDropdown && effectsDropdown.classList.contains('show')) {
+                const effectsWrapper = effectsDropdown.closest('.unified-effect-dropdown');
+                if (!effectsWrapper || !effectsWrapper.contains(e.target)) {
+                    effectsDropdown.classList.remove('show');
+                    if (effectsBtn) effectsBtn.classList.remove('active');
                 }
             }
         });
