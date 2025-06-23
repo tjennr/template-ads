@@ -48,7 +48,7 @@ body {
 /* Right Canvas Area Panel */
 .canvas-area-panel {
     flex: 1;
-    background: #F5F5F5;
+    background: #F2F2F2;
     height: 100%;
     position: relative;
 }
@@ -1305,6 +1305,77 @@ input[type="checkbox"]:focus {
     background: var(--brand-primary);
     color: #ffffff;
     border-color: var(--brand-primary);
+}
+
+/* Toolbar Number Input */
+.toolbar-number {
+    width: 60px;
+    padding: 6px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: white;
+    color: #333;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.toolbar-number:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+/* Effect Dropdown Container */
+.effect-dropdown-container {
+    position: relative;
+}
+
+.effect-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    min-width: 120px;
+    z-index: 1000;
+    display: none;
+}
+
+.effect-dropdown.show {
+    display: block;
+}
+
+.effect-select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: white;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.effect-select:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+}
+
+.dropdown-btn {
+    position: relative;
+}
+
+.dropdown-btn i.fa-chevron-down {
+    margin-left: 4px;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-btn.active i.fa-chevron-down {
+    transform: rotate(180deg);
 }
 
 /* Export Container */

@@ -1112,8 +1112,8 @@ class TemplateAdsEditor {
         const italicBtn = document.getElementById('toolbarItalic');
         const underlineBtn = document.getElementById('toolbarUnderline');
         const textAlignSelect = document.getElementById('toolbarTextAlign');
-        const shadowBtn = document.getElementById('toolbarShadow');
-        const outlineBtn = document.getElementById('toolbarOutline');
+        const shadowBtn = document.getElementById('shadowBtn');
+        const outlineBtn = document.getElementById('outlineBtn');
         
         // Effect dropdown elements
         const shadowToggleBtns = document.querySelectorAll('#shadowDropdown .effect-toggle-btn');

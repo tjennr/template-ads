@@ -309,12 +309,15 @@
         </div>
         
         <div class="toolbar-section">
-            <input type="range" class="toolbar-slider" id="toolbarFontSize" min="10" max="80" value="24">
-            <span class="toolbar-label" id="fontSizeLabel">24px</span>
+            <input type="number" class="toolbar-number" id="toolbarFontSize" min="10" max="80" value="24" style="width: 60px;">
+            <span class="toolbar-label">px</span>
         </div>
         
         <div class="toolbar-section">
-            <input type="color" class="toolbar-color" id="toolbarTextColor" value="#000000">
+            <div class="color-selector-wrapper">
+                <input type="color" class="color-selector" id="toolbarTextColor" value="#000000">
+                <div class="color-arrow"></div>
+            </div>
         </div>
 
         <div class="toolbar-section">
@@ -339,36 +342,46 @@
         </div>
         
         <div class="toolbar-section">
-            <button class="toolbar-btn" id="shadowBtn">
-                <i class="fas fa-clone"></i>
-                Shadow
-                <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="effect-dropdown hidden" id="shadowDropdown">
-                <select class="effect-select" id="shadowType">
-                    <option value="none">None</option>
-                    <option value="light">Light</option>
-                    <option value="medium">Medium</option>
-                    <option value="heavy">Heavy</option>
-                </select>
-                <input type="color" class="effect-color hidden" id="shadowColor" value="#000000">
+            <div class="effect-dropdown-container">
+                <button class="toolbar-btn dropdown-btn" id="shadowBtn">
+                    <i class="fas fa-clone"></i>
+                    Shadow
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="effect-dropdown" id="shadowDropdown">
+                    <select class="effect-select" id="shadowType">
+                        <option value="none">None</option>
+                        <option value="light">Light</option>
+                        <option value="medium">Medium</option>
+                        <option value="heavy">Heavy</option>
+                    </select>
+                    <div class="color-selector-wrapper" id="shadowColorWrapper" style="display: none;">
+                        <input type="color" class="color-selector" id="shadowColor" value="#000000">
+                        <div class="color-arrow"></div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="toolbar-section">
-            <button class="toolbar-btn" id="outlineBtn">
-                <i class="fas fa-circle"></i>
-                Outline
-                <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="effect-dropdown hidden" id="outlineDropdown">
-                <select class="effect-select" id="outlineType">
-                    <option value="none">None</option>
-                    <option value="thin">Thin</option>
-                    <option value="medium">Medium</option>
-                    <option value="thick">Thick</option>
-                </select>
-                <input type="color" class="effect-color hidden" id="outlineColor" value="#ffffff">
+            <div class="effect-dropdown-container">
+                <button class="toolbar-btn dropdown-btn" id="outlineBtn">
+                    <i class="fas fa-circle"></i>
+                    Outline
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="effect-dropdown" id="outlineDropdown">
+                    <select class="effect-select" id="outlineType">
+                        <option value="none">None</option>
+                        <option value="thin">Thin</option>
+                        <option value="medium">Medium</option>
+                        <option value="thick">Thick</option>
+                    </select>
+                    <div class="color-selector-wrapper" id="outlineColorWrapper" style="display: none;">
+                        <input type="color" class="color-selector" id="outlineColor" value="#ffffff">
+                        <div class="color-arrow"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
