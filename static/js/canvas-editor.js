@@ -1217,59 +1217,7 @@ class TemplateAdsEditor {
             });
         }
 
-        // Shadow button dropdown toggle
-        if (shadowBtn) {
-            shadowBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const shadowDropdown = document.getElementById('shadowDropdown');
-                const outlineDropdown = document.getElementById('outlineDropdown');
-                
-                // Close outline dropdown if open
-                if (outlineDropdown && outlineDropdown.classList.contains('show')) {
-                    outlineDropdown.classList.remove('show');
-                    if (outlineBtn) outlineBtn.classList.remove('active');
-                }
-                
-                // Toggle shadow dropdown
-                if (shadowDropdown) {
-                    const isVisible = shadowDropdown.classList.contains('show');
-                    if (isVisible) {
-                        shadowDropdown.classList.remove('show');
-                        shadowBtn.classList.remove('active');
-                    } else {
-                        shadowDropdown.classList.add('show');
-                        shadowBtn.classList.add('active');
-                    }
-                }
-            });
-        }
 
-        // Outline button dropdown toggle
-        if (outlineBtn) {
-            outlineBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const outlineDropdown = document.getElementById('outlineDropdown');
-                const shadowDropdown = document.getElementById('shadowDropdown');
-                
-                // Close shadow dropdown if open
-                if (shadowDropdown && shadowDropdown.classList.contains('show')) {
-                    shadowDropdown.classList.remove('show');
-                    if (shadowBtn) shadowBtn.classList.remove('active');
-                }
-                
-                // Toggle outline dropdown
-                if (outlineDropdown) {
-                    const isVisible = outlineDropdown.classList.contains('show');
-                    if (isVisible) {
-                        outlineDropdown.classList.remove('show');
-                        outlineBtn.classList.remove('active');
-                    } else {
-                        outlineDropdown.classList.add('show');
-                        outlineBtn.classList.add('active');
-                    }
-                }
-            });
-        }
 
         // Shadow type select change
         if (shadowTypeSelect) {
@@ -1330,7 +1278,7 @@ class TemplateAdsEditor {
                 if (outlineType === 'none') {
                     this.selectedTextObject.set('stroke', '');
                     this.selectedTextObject.set('strokeWidth', 0);
-                    if (outlineColorWrapper) outlineColorWrapper.style.display = 'none';
+                    if (outlineColorInput) outlineColorInput.style.display = 'none';
                 } else {
                     let strokeWidth;
                     switch (outlineType) {
@@ -1350,7 +1298,7 @@ class TemplateAdsEditor {
                     const outlineColor = outlineColorInput ? outlineColorInput.value : '#ffffff';
                     this.selectedTextObject.set('stroke', outlineColor);
                     this.selectedTextObject.set('strokeWidth', strokeWidth);
-                    if (outlineColorWrapper) outlineColorWrapper.style.display = 'block';
+                    if (outlineColorInput) outlineColorInput.style.display = 'inline-block';
                 }
 
                 this.canvas.renderAll();
