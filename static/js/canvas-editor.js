@@ -3924,6 +3924,7 @@ class TemplateAdsEditor {
             titleFontSelect.addEventListener('change', (e) => {
                 this.updateTextStyle('title', 'fontFamily', e.target.value);
                 this.updateFloatingToolbarFont('title', e.target.value);
+                this.saveState();
             });
         }
 
@@ -3931,6 +3932,7 @@ class TemplateAdsEditor {
             titleColorSelect.addEventListener('input', (e) => {
                 this.updateTextStyle('title', 'fill', e.target.value);
                 this.updateFloatingToolbarColor('title', e.target.value);
+                this.saveState();
             });
         }
 
@@ -3938,6 +3940,7 @@ class TemplateAdsEditor {
             subtitleFontSelect.addEventListener('change', (e) => {
                 this.updateTextStyle('subtitle', 'fontFamily', e.target.value);
                 this.updateFloatingToolbarFont('subtitle', e.target.value);
+                this.saveState();
             });
         }
 
@@ -3945,8 +3948,34 @@ class TemplateAdsEditor {
             subtitleColorSelect.addEventListener('input', (e) => {
                 this.updateTextStyle('subtitle', 'fill', e.target.value);
                 this.updateFloatingToolbarColor('subtitle', e.target.value);
+                this.saveState();
             });
         }
+        
+        // Initialize brand controls with current canvas values
+        this.initializeBrandControlValues();
+    }
+
+    initializeBrandControlValues() {
+        // Set initial values based on canvas text objects
+        setTimeout(() => {
+            const titleObj = this.canvas.getObjects().find(obj => obj.id === 'title');
+            const subtitleObj = this.canvas.getObjects().find(obj => obj.id === 'subtitle');
+            
+            if (titleObj) {
+                const titleFontSelect = document.getElementById('titleFontSelect');
+                const titleColorSelect = document.getElementById('titleColorSelect');
+                if (titleFontSelect) titleFontSelect.value = titleObj.fontFamily || 'Source Sans Pro';
+                if (titleColorSelect) titleColorSelect.value = titleObj.fill || '#ffffff';
+            }
+            
+            if (subtitleObj) {
+                const subtitleFontSelect = document.getElementById('subtitleFontSelect');
+                const subtitleColorSelect = document.getElementById('subtitleColorSelect');
+                if (subtitleFontSelect) subtitleFontSelect.value = subtitleObj.fontFamily || 'Source Sans Pro';
+                if (subtitleColorSelect) subtitleColorSelect.value = subtitleObj.fill || '#ffffff';
+            }
+        }, 1000);
     }
 
     updateFloatingToolbarFont(textType, fontFamily) {
