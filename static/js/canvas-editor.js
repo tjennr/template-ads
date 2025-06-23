@@ -59,67 +59,72 @@ class TemplateAdsEditor {
     }
 
     initializeDefaultContent() {
+        console.log('Initializing default content...');
         // Set loading flag to prevent undo states during initialization
         this.isLoadingTemplate = true;
         
-        // Load the default template first
+        // First, ensure the canvas is properly set up
+        this.canvas.clear();
+        this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+        
+        // Load the default template structure
         this.loadTemplate(this.currentTemplate);
         
-        // Small delay to ensure template is loaded before adding default image
-        setTimeout(() => {
-            const defaultImagePath = '/static/images/default-placeholder.png';
-            fabric.Image.fromURL(defaultImagePath, (img) => {
-                if (!img) {
-                    console.error('Failed to load default image');
-                    this.isLoadingTemplate = false;
-                    return;
-                }
-                
-                const canvasWidth = this.canvas.width;
-                const canvasHeight = this.canvas.height;
-                
-                // Scale and position the main image
-                const scaleX = canvasWidth / img.width;
-                const scaleY = canvasHeight / img.height;
-                const scale = Math.max(scaleX, scaleY);
-                
-                img.set({
-                    left: canvasWidth / 2,
-                    top: canvasHeight / 2,
-                    originX: 'center',
-                    originY: 'center',
-                    scaleX: scale,
-                    scaleY: scale,
-                    selectable: true,
-                    evented: true,
-                    id: 'mainImage'
-                });
-                
-                // Remove any existing main image
-                const existingImage = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
-                if (existingImage) {
-                    this.canvas.remove(existingImage);
-                }
-                
-                this.canvas.add(img);
-                this.canvas.sendToBack(img);
-                this.mainImage = img;
-                this.canvas.renderAll();
-                
-                // Now enable undo system and save the complete initial state
+        // Load default image with proper error handling
+        const defaultImagePath = 'static/images/default-placeholder.png';
+        console.log('Loading default image from:', defaultImagePath);
+        
+        fabric.Image.fromURL(defaultImagePath, (img) => {
+            if (!img) {
+                console.error('Failed to load default image from:', defaultImagePath);
                 this.isLoadingTemplate = false;
-                
-                // Clear any existing history and set this as the baseline
-                this.history = [];
-                this.historyStep = -1;
-                this.saveState();
-                
-                console.log('Default template loaded successfully');
-            }, (error) => {
-                console.error('Error loading default image:', error);
-                this.isLoadingTemplate = false;
+                return;
+            }
+            
+            console.log('Default image loaded successfully');
+            const canvasWidth = this.canvas.width;
+            const canvasHeight = this.canvas.height;
+            
+            // Scale and position the main image
+            const scaleX = canvasWidth / img.width;
+            const scaleY = canvasHeight / img.height;
+            const scale = Math.max(scaleX, scaleY);
+            
+            img.set({
+                left: canvasWidth / 2,
+                top: canvasHeight / 2,
+                originX: 'center',
+                originY: 'center',
+                scaleX: scale,
+                scaleY: scale,
+                selectable: true,
+                evented: true,
+                id: 'mainImage'
             });
-        }, 100);
+            
+            // Remove any existing main image
+            const existingImage = this.canvas.getObjects().find(obj => obj.id === 'mainImage');
+            if (existingImage) {
+                this.canvas.remove(existingImage);
+            }
+            
+            this.canvas.add(img);
+            this.canvas.sendToBack(img);
+            this.mainImage = img;
+            this.canvas.renderAll();
+            
+            // Now enable undo system and save the complete initial state
+            this.isLoadingTemplate = false;
+            
+            // Clear any existing history and set this as the baseline
+            this.history = [];
+            this.historyStep = -1;
+            this.saveState();
+            
+            console.log('Default template initialized successfully');
+        }, {
+            crossOrigin: 'anonymous'
+        });
         
         this.updateFontFamilyDisplay();
         this.applyZoom();
@@ -465,10 +470,10 @@ class TemplateAdsEditor {
             });
         }
         
-        // CTA toggle
-        const ctaEnabled = document.getElementById('ctaEnabled');
-        if (ctaEnabled) {
-            ctaEnabled.addEventListener('change', (e) => {
+        // CTA toggle - use correct ID
+        const ctaCheckbox = document.getElementById('ctaCheckbox');
+        if (ctaCheckbox) {
+            ctaCheckbox.addEventListener('change', (e) => {
                 this.toggleCTA(e.target.checked);
             });
         }
@@ -479,28 +484,37 @@ class TemplateAdsEditor {
         
         // Export dropdown functionality
         const exportMainBtn = document.getElementById('exportMainBtn');
-        const exportDropdown = document.getElementById('exportDropdown');
-        
-        exportMainBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleExportDropdown();
-        });
+        if (exportMainBtn) {
+            exportMainBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleExportDropdown();
+            });
+        }
         
         // Export buttons
-        document.getElementById('exportPng').addEventListener('click', () => {
-            this.exportImage('png');
-            this.hideExportDropdown();
-        });
+        const exportPng = document.getElementById('exportPng');
+        if (exportPng) {
+            exportPng.addEventListener('click', () => {
+                this.exportImage('png');
+                this.hideExportDropdown();
+            });
+        }
         
-        document.getElementById('exportJpg').addEventListener('click', () => {
-            this.exportImage('jpg');
-            this.hideExportDropdown();
-        });
+        const exportJpg = document.getElementById('exportJpg');
+        if (exportJpg) {
+            exportJpg.addEventListener('click', () => {
+                this.exportImage('jpg');
+                this.hideExportDropdown();
+            });
+        }
         
-        document.getElementById('exportPdf').addEventListener('click', () => {
-            this.exportPdf();
-            this.hideExportDropdown();
-        });
+        const exportPdf = document.getElementById('exportPdf');
+        if (exportPdf) {
+            exportPdf.addEventListener('click', () => {
+                this.exportPdf();
+                this.hideExportDropdown();
+            });
+        }
         
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
@@ -510,30 +524,48 @@ class TemplateAdsEditor {
         });
         
         // Zoom controls
-        document.getElementById('zoomIn').addEventListener('click', () => {
-            this.zoomIn();
-        });
+        const zoomIn = document.getElementById('zoomIn');
+        if (zoomIn) {
+            zoomIn.addEventListener('click', () => {
+                this.zoomIn();
+            });
+        }
         
-        document.getElementById('zoomOut').addEventListener('click', () => {
-            this.zoomOut();
-        });
+        const zoomOut = document.getElementById('zoomOut');
+        if (zoomOut) {
+            zoomOut.addEventListener('click', () => {
+                this.zoomOut();
+            });
+        }
         
-        document.getElementById('zoomFit').addEventListener('click', () => {
-            this.zoomToFit();
-        });
+        const zoomToFit = document.getElementById('zoomToFit');
+        if (zoomToFit) {
+            zoomToFit.addEventListener('click', () => {
+                this.zoomToFit();
+            });
+        }
         
         // Utility buttons
-        document.getElementById('undoCanvas').addEventListener('click', () => {
-            this.undo();
-        });
+        const undoCanvas = document.getElementById('undoCanvas');
+        if (undoCanvas) {
+            undoCanvas.addEventListener('click', () => {
+                this.undo();
+            });
+        }
         
-        document.getElementById('redoCanvas').addEventListener('click', () => {
-            this.redo();
-        });
+        const redoCanvas = document.getElementById('redoCanvas');
+        if (redoCanvas) {
+            redoCanvas.addEventListener('click', () => {
+                this.redo();
+            });
+        }
         
-        document.getElementById('resetCanvas').addEventListener('click', () => {
-            this.resetCanvas();
-        });
+        const resetCanvas = document.getElementById('resetCanvas');
+        if (resetCanvas) {
+            resetCanvas.addEventListener('click', () => {
+                this.resetCanvas();
+            });
+        }
         
         // Initialize slider fills on load
         this.initializeSliderFills();
