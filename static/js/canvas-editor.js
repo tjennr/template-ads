@@ -141,23 +141,41 @@ class TemplateAdsEditor {
     }
 
     setCanvasDimensions() {
-        let canvasWidth, canvasHeight;
+        // Get the available canvas area dimensions
+        const canvasArea = document.querySelector('.canvas-area-panel');
+        const availableWidth = canvasArea.clientWidth - 40; // Account for padding
+        const availableHeight = canvasArea.clientHeight - 40; // Account for padding
+        
+        let targetWidth, targetHeight;
+        let aspectRatio;
         
         if (this.currentOrientation === 'horizontal') {
             // Horizontal: 1.91:1 aspect ratio
-            canvasWidth = 1528;
-            canvasHeight = 800;
+            aspectRatio = 1.91;
+            targetWidth = 1528;
+            targetHeight = 800;
         } else if (this.currentOrientation === 'square') {
             // Square: 1:1 aspect ratio
-            canvasWidth = 800;
-            canvasHeight = 800;
+            aspectRatio = 1;
+            targetWidth = 800;
+            targetHeight = 800;
         } else {
             // Vertical: 4:5 aspect ratio
-            canvasWidth = 640;
-            canvasHeight = 800;
+            aspectRatio = 0.8;
+            targetWidth = 640;
+            targetHeight = 800;
         }
         
-        this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});
+        // Calculate scale to fit within available space
+        const scaleByWidth = availableWidth / targetWidth;
+        const scaleByHeight = availableHeight / targetHeight;
+        const scale = Math.min(scaleByWidth, scaleByHeight, 1); // Don't scale up beyond original size
+        
+        const finalWidth = targetWidth * scale;
+        const finalHeight = targetHeight * scale;
+        
+        this.canvas.setDimensions({width: finalWidth, height: finalHeight});
+        this.canvas.setZoom(scale);
         this.canvas.renderAll();
     }
 
@@ -3395,23 +3413,16 @@ class TemplateAdsEditor {
     }
     
     zoomToFit() {
-        const container = document.querySelector('.canvas-container-centered');
-        const containerWidth = container.clientWidth - 40; // Account for padding
-        const containerHeight = container.clientHeight - 40;
-        
-        const canvasWidth = this.canvas.getWidth();
-        const canvasHeight = this.canvas.getHeight();
-        
-        const scaleX = containerWidth / canvasWidth;
-        const scaleY = containerHeight / canvasHeight;
-        
-        this.zoomLevel = Math.min(scaleX, scaleY, 1); // Don't zoom in beyond 100%
-        this.applyZoom();
+        // Reset to fit the current responsive sizing
+        this.setCanvasDimensions();
     }
     
     applyZoom() {
-        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-        canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
+        // Apply additional zoom on top of responsive scaling
+        const canvasContainer = document.querySelector('.canvas-container');
+        if (canvasContainer) {
+            canvasContainer.style.transform = `scale(${this.zoomLevel})`;
+        }
         
         // Update zoom level display
         const zoomLevelElement = document.getElementById('zoomLevel');
