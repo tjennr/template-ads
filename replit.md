@@ -161,6 +161,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Increased left sidebar panel width from 350px to 400px for better control spacing and usability
 - June 23, 2025: Changed subtitle input from single-line text input to textarea for paragraph text support with text wrapping and multi-line capability
 - June 23, 2025: Moved sidebar scrollbar from right side to left side using CSS direction properties for better visual alignment
+- June 23, 2025: Restored floating toolbar styling to original glassmorphism design with proper spacing, colors, and backdrop-filter effects
 
 ## Changelog
 - June 16, 2025. Initial setup
