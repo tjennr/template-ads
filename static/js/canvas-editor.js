@@ -3965,17 +3965,29 @@ class TemplateAdsEditor {
             if (titleObj) {
                 const titleFontSelect = document.getElementById('titleFontSelect');
                 const titleColorSelect = document.getElementById('titleColorSelect');
-                if (titleFontSelect) titleFontSelect.value = titleObj.fontFamily || 'Source Sans Pro';
-                if (titleColorSelect) titleColorSelect.value = titleObj.fill || '#ffffff';
+                if (titleFontSelect) {
+                    titleFontSelect.value = titleObj.fontFamily || 'Source Sans Pro';
+                    console.log('Title font initialized to:', titleObj.fontFamily);
+                }
+                if (titleColorSelect) {
+                    titleColorSelect.value = titleObj.fill || '#ffffff';
+                    console.log('Title color initialized to:', titleObj.fill);
+                }
             }
             
             if (subtitleObj) {
                 const subtitleFontSelect = document.getElementById('subtitleFontSelect');
                 const subtitleColorSelect = document.getElementById('subtitleColorSelect');
-                if (subtitleFontSelect) subtitleFontSelect.value = subtitleObj.fontFamily || 'Source Sans Pro';
-                if (subtitleColorSelect) subtitleColorSelect.value = subtitleObj.fill || '#ffffff';
+                if (subtitleFontSelect) {
+                    subtitleFontSelect.value = subtitleObj.fontFamily || 'Source Sans Pro';
+                    console.log('Subtitle font initialized to:', subtitleObj.fontFamily);
+                }
+                if (subtitleColorSelect) {
+                    subtitleColorSelect.value = subtitleObj.fill || '#ffffff';
+                    console.log('Subtitle color initialized to:', subtitleObj.fill);
+                }
             }
-        }, 1000);
+        }, 1500);
     }
 
     updateFloatingToolbarFont(textType, fontFamily) {

@@ -721,6 +721,21 @@ textarea.clean-input {
     border-radius: 6px;
 }
 
+.brand-color-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.color-arrow {
+    position: absolute;
+    right: 8px;
+    font-size: 10px;
+    color: #6b7280;
+    pointer-events: none;
+    z-index: 1;
+}
+
 /* Style Controls */
 .style-controls {
     display: flex;
