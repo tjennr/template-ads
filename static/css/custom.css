@@ -37,7 +37,7 @@ body {
 
 /* Left Sidebar Panel */
 .sidebar-panel {
-    width: 400px;
+    width: 480px;
     background: #ffffff;
     border-right: 1px solid #e9ecef;
     flex-shrink: 0;
@@ -191,7 +191,7 @@ body {
     direction: ltr !important;
 }
 
-/* Style the left-side scrollbar */
+/* Auto-hiding scrollbar on the left side */
 .sidebar-panel::-webkit-scrollbar {
     width: 6px;
 }
@@ -201,8 +201,13 @@ body {
 }
 
 .sidebar-panel::-webkit-scrollbar-thumb {
-    background: var(--bs-border-color);
+    background: transparent;
     border-radius: 3px;
+    transition: background 0.3s ease;
+}
+
+.sidebar-panel:hover::-webkit-scrollbar-thumb {
+    background: var(--bs-border-color);
 }
 
 .sidebar-panel::-webkit-scrollbar-thumb:hover {
@@ -247,6 +252,9 @@ h1, h2, h3, h4, h5, h6 {
     transform-origin: center;
     /* Add drop shadow behind the ad borders */
     filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+    /* Round the corners of the ad */
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .canvas-actions {
