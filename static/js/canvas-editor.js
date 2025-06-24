@@ -1477,7 +1477,19 @@ class TemplateAdsEditor {
         const buttonColorInput = document.getElementById('ctaButtonColor');
 
         if (ctaText && fontFamilySelect) {
-            fontFamilySelect.value = ctaText.fontFamily || 'Source Sans Pro, sans-serif';
+            const currentFont = ctaText.fontFamily || 'Source Sans Pro';
+            // Clean up font family string - remove quotes and "sans-serif" suffix
+            const cleanFont = currentFont.replace(/["']/g, '').split(',')[0].trim();
+            fontFamilySelect.value = cleanFont;
+            
+            // If the current font isn't in the dropdown options, add it temporarily
+            if (!Array.from(fontFamilySelect.options).some(option => option.value === cleanFont)) {
+                const option = document.createElement('option');
+                option.value = cleanFont;
+                option.textContent = cleanFont;
+                fontFamilySelect.appendChild(option);
+                fontFamilySelect.value = cleanFont;
+            }
         }
         
         if (ctaText && fontSizeInput) {

@@ -186,6 +186,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 24, 2025: Removed all OpenAI code and dependencies - uninstalled openai package and cleaned up routes to use only Google Gemini for AI features
 - June 24, 2025: Fixed reset button to properly reload default image - added loadDefaultImage call after template reset to ensure the placeholder image is restored correctly
 - June 24, 2025: Fixed CTA floating toolbar functionality - corrected element ID mismatches between HTML and JavaScript, added console logging for debugging, updated reset function to properly reset title, subtitle, and CTA text values on canvas
+- June 24, 2025: Fixed CTA toolbar font dropdown pre-filling - toolbar now properly displays current font family when CTA button is selected, handles font string cleaning and adds missing fonts to dropdown if needed
 
 ## Changelog
 - June 16, 2025. Initial setup
