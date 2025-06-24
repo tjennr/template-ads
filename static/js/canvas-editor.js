@@ -4366,38 +4366,111 @@ class TemplateAdsEditor {
     }
 
     setupTextGeneration() {
+        // Title AI generation
         const generateTitleBtn = document.getElementById('generateTitleBtn');
-        const generateSubtitleBtn = document.getElementById('generateSubtitleBtn');
+        const titlePromptContainer = document.getElementById('titlePromptContainer');
+        const titlePromptInput = document.getElementById('titlePromptInput');
+        const titleGenerateBtn = document.getElementById('titleGenerateBtn');
+        const titleCancelBtn = document.getElementById('titleCancelBtn');
 
         if (generateTitleBtn) {
             generateTitleBtn.addEventListener('click', () => {
-                this.showTextPromptDialog('title');
+                this.showPromptContainer('title');
             });
         }
 
+        if (titleGenerateBtn) {
+            titleGenerateBtn.addEventListener('click', () => {
+                const prompt = titlePromptInput.value.trim();
+                if (prompt) {
+                    this.generateAIText(prompt, 'title');
+                }
+            });
+        }
+
+        if (titleCancelBtn) {
+            titleCancelBtn.addEventListener('click', () => {
+                this.hidePromptContainer('title');
+            });
+        }
+
+        // Subtitle AI generation
+        const generateSubtitleBtn = document.getElementById('generateSubtitleBtn');
+        const subtitlePromptContainer = document.getElementById('subtitlePromptContainer');
+        const subtitlePromptInput = document.getElementById('subtitlePromptInput');
+        const subtitleGenerateBtn = document.getElementById('subtitleGenerateBtn');
+        const subtitleCancelBtn = document.getElementById('subtitleCancelBtn');
+
         if (generateSubtitleBtn) {
             generateSubtitleBtn.addEventListener('click', () => {
-                this.showTextPromptDialog('subtitle');
+                this.showPromptContainer('subtitle');
+            });
+        }
+
+        if (subtitleGenerateBtn) {
+            subtitleGenerateBtn.addEventListener('click', () => {
+                const prompt = subtitlePromptInput.value.trim();
+                if (prompt) {
+                    this.generateAIText(prompt, 'subtitle');
+                }
+            });
+        }
+
+        if (subtitleCancelBtn) {
+            subtitleCancelBtn.addEventListener('click', () => {
+                this.hidePromptContainer('subtitle');
+            });
+        }
+
+        // Enter key support for prompt inputs
+        if (titlePromptInput) {
+            titlePromptInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    titleGenerateBtn.click();
+                }
+            });
+        }
+
+        if (subtitlePromptInput) {
+            subtitlePromptInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    subtitleGenerateBtn.click();
+                }
             });
         }
     }
 
-    showTextPromptDialog(textType) {
-        const promptText = textType === 'title' ? 'title' : 'subtitle or description';
-        const prompt = window.prompt(`Enter a brief description of your product/service to generate an AI ${promptText}:`);
+    showPromptContainer(textType) {
+        const container = document.getElementById(`${textType}PromptContainer`);
+        const input = document.getElementById(`${textType}PromptInput`);
         
-        if (prompt && prompt.trim()) {
-            this.generateAIText(prompt.trim(), textType);
+        if (container) {
+            container.classList.remove('hidden');
+            if (input) {
+                input.focus();
+            }
+        }
+    }
+
+    hidePromptContainer(textType) {
+        const container = document.getElementById(`${textType}PromptContainer`);
+        const input = document.getElementById(`${textType}PromptInput`);
+        
+        if (container) {
+            container.classList.add('hidden');
+            if (input) {
+                input.value = '';
+            }
         }
     }
 
     async generateAIText(prompt, textType) {
-        const button = document.getElementById(textType === 'title' ? 'generateTitleBtn' : 'generateSubtitleBtn');
+        const generateButton = document.getElementById(`${textType}GenerateBtn`);
         const input = document.getElementById(textType === 'title' ? 'titleText' : 'subtitleText');
         
         // Show loading state
-        button.disabled = true;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        generateButton.disabled = true;
+        generateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
         
         try {
             const response = await fetch('/api/gemini/generate-text', {
@@ -4423,15 +4496,16 @@ class TemplateAdsEditor {
                 // Update the canvas text
                 this.updateText(textType, data.text);
                 
+                // Hide the prompt container
+                this.hidePromptContainer(textType);
+                
                 // Show success feedback
-                button.style.color = '#28a745';
-                button.innerHTML = '<i class="fas fa-check"></i>';
+                generateButton.innerHTML = '<i class="fas fa-check"></i> Generated!';
                 
                 setTimeout(() => {
-                    button.style.color = '#666';
-                    button.innerHTML = '<i class="fas fa-sparkles"></i><i class="fas fa-chevron-down"></i>';
-                    button.disabled = false;
-                }, 2000);
+                    generateButton.innerHTML = 'Generate';
+                    generateButton.disabled = false;
+                }, 1500);
             } else {
                 throw new Error(data.error || 'Text generation failed');
             }
@@ -4439,13 +4513,11 @@ class TemplateAdsEditor {
             console.error('AI text generation error:', error);
             
             // Show error feedback
-            button.style.color = '#dc3545';
-            button.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            generateButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
             
             setTimeout(() => {
-                button.style.color = '#666';
-                button.innerHTML = '<i class="fas fa-sparkles"></i><i class="fas fa-chevron-down"></i>';
-                button.disabled = false;
+                generateButton.innerHTML = 'Generate';
+                generateButton.disabled = false;
             }, 3000);
             
             alert('Failed to generate text. Please try again.');
