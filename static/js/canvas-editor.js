@@ -1679,6 +1679,8 @@ class TemplateAdsEditor {
             return;
         }
         
+        // Temporarily commented out undo/redo functionality
+        /*
         // Clear redo history when new action is performed
         if (this.historyStep < this.history.length - 1) {
             this.history = this.history.slice(0, this.historyStep + 1);
@@ -1695,8 +1697,10 @@ class TemplateAdsEditor {
         
         this.historyStep = this.history.length - 1;
         this.updateUndoRedoButtonStates();
+        */
     }
 
+    /* Temporarily commented out undo/redo functionality
     undo() {
         if (this.historyStep > 0) {
             this.historyStep--;
@@ -1736,7 +1740,9 @@ class TemplateAdsEditor {
             });
         }
     }
+    */
 
+    /* Temporarily commented out undo/redo button state management
     updateUndoButtonState() {
         this.updateUndoRedoButtonStates();
     }
@@ -1753,6 +1759,7 @@ class TemplateAdsEditor {
             redoButton.disabled = this.historyStep >= this.history.length - 1;
         }
     }
+    */
 
     updateObjectReferences() {
         // Update object references after undo
