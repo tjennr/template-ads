@@ -3342,7 +3342,7 @@ class TemplateAdsEditor {
             // Set loading flag to prevent state saving during reset
             this.isLoadingTemplate = true;
             
-            // Reset image references but don't clear canvas yet
+            // Reset image references
             this.mainImage = null;
             this.logo = null;
             
@@ -3352,15 +3352,21 @@ class TemplateAdsEditor {
             // Reload template which will clear canvas and rebuild everything
             this.loadTemplate(currentTemplate);
             
-            // Hide any open toolbars
-            this.hideTextToolbar();
-            this.hideCtaToolbar();
-            this.hideBackgroundToolbar();
-            
-            // Clear history and save the reset state
-            this.history = [];
-            this.historyStep = -1;
-            this.saveState();
+            // Load default image after template is loaded
+            setTimeout(() => {
+                this.loadDefaultImage();
+                this.isLoadingTemplate = false;
+                
+                // Hide any open toolbars
+                this.hideTextToolbar();
+                this.hideCtaToolbar();
+                this.hideBackgroundToolbar();
+                
+                // Clear history and save the reset state
+                this.history = [];
+                this.historyStep = -1;
+                this.saveState();
+            }, 100);
             
             // Update focusable objects for keyboard navigation
             this.updateFocusableObjects();
