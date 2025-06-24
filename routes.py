@@ -10,6 +10,7 @@ from flask import render_template, request, jsonify, send_file, current_app
 from werkzeug.utils import secure_filename
 from app import app
 from shutterstock_api import ShutterstockAPI
+from openai import OpenAI
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}
 
@@ -253,8 +254,6 @@ def shutterstock_download():
 def generate_ai_image():
     """Generate an AI image using OpenAI DALL-E"""
     try:
-        import openai
-        
         data = request.get_json()
         prompt = data.get('prompt', '').strip()
         orientation = data.get('orientation', 'square')
@@ -268,7 +267,7 @@ def generate_ai_image():
             return jsonify({'error': 'OpenAI API credentials not configured'}), 503
         
         # Initialize OpenAI client
-        client = openai.OpenAI(api_key=api_key)
+        client = OpenAI(api_key=api_key)
         
         # Determine image size based on orientation
         if orientation == 'horizontal':
@@ -286,7 +285,8 @@ def generate_ai_image():
             prompt=prompt,
             n=1,
             size=size,
-            quality="standard"
+            quality="standard",
+            response_format="url"
         )
         
         return jsonify({
@@ -294,11 +294,9 @@ def generate_ai_image():
             'image_url': response.data[0].url
         })
         
-    except ImportError:
-        return jsonify({'error': 'OpenAI library not available'}), 503
     except Exception as e:
         current_app.logger.error(f"OpenAI image generation error: {str(e)}")
-        return jsonify({'error': 'Failed to generate AI image'}), 500
+        return jsonify({'error': f'Failed to generate AI image: {str(e)}'}), 500
 
 @app.errorhandler(413)
 def too_large(e):
