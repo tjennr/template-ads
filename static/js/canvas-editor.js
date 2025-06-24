@@ -60,7 +60,7 @@ class TemplateAdsEditor {
         // Initial fit to container after everything is set up
         setTimeout(() => {
             this.fitCanvasToContainer();
-        }, 200);
+        }, 500);
     }
 
     initializeDefaultContent() {
@@ -288,7 +288,14 @@ class TemplateAdsEditor {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 this.fitCanvasToContainer();
-            }, 100);
+            }, 50); // Faster response
+        });
+        
+        // Also listen for orientation changes on mobile
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                this.fitCanvasToContainer();
+            }, 200);
         });
     }
 
@@ -306,15 +313,63 @@ class TemplateAdsEditor {
         const scaleX = containerWidth / canvasWidth;
         const scaleY = containerHeight / canvasHeight;
         
-        // Use the smaller scale to ensure the entire canvas fits
-        // Allow scaling up to maxZoom (3x) and down to minimum (0.1x)
-        const newScale = Math.min(Math.max(Math.min(scaleX, scaleY), 0.1), this.maxZoom);
+        // Use the smaller scale to ensure the entire canvas fits, but allow reasonable scaling
+        let newScale = Math.min(scaleX, scaleY);
         
-        // Only update if the scale has changed significantly to avoid unnecessary updates
-        if (Math.abs(this.zoomLevel - newScale) > 0.01) {
-            this.zoomLevel = Math.max(newScale, 0.1); // Ensure minimum scale
-            this.applyZoom();
-        }
+        // Apply scaling limits
+        newScale = Math.max(newScale, 0.1); // Minimum scale
+        newScale = Math.min(newScale, this.maxZoom); // Maximum scale
+        
+        // Update zoom level and apply scaling
+        this.zoomLevel = newScale;
+        this.applyZoom();
+        
+        // Scale text and button elements proportionally
+        this.scaleElementsProportionally(newScale);
+    }
+
+    scaleElementsProportionally(scale) {
+        const baseScale = 1; // Reference scale
+        const scaleFactor = scale / baseScale;
+        
+        // Scale text objects
+        this.canvas.getObjects().forEach(obj => {
+            if (obj.type === 'textbox' || obj.type === 'text') {
+                const baseFontSize = obj.baseFontSize || obj.fontSize;
+                if (!obj.baseFontSize) {
+                    obj.baseFontSize = obj.fontSize; // Store original size
+                }
+                obj.set('fontSize', Math.max(baseFontSize * scaleFactor, 8)); // Minimum font size
+            }
+            
+            // Scale CTA button groups
+            if (obj.type === 'group' && obj.id && obj.id.includes('cta')) {
+                const baseWidth = obj.baseWidth || obj.width;
+                const baseHeight = obj.baseHeight || obj.height;
+                if (!obj.baseWidth) {
+                    obj.baseWidth = obj.width;
+                    obj.baseHeight = obj.height;
+                }
+                
+                obj.set({
+                    width: baseWidth * scaleFactor,
+                    height: baseHeight * scaleFactor
+                });
+                
+                // Scale text within the CTA button
+                obj.getObjects().forEach(child => {
+                    if (child.type === 'textbox' || child.type === 'text') {
+                        const baseFontSize = child.baseFontSize || child.fontSize;
+                        if (!child.baseFontSize) {
+                            child.baseFontSize = child.fontSize;
+                        }
+                        child.set('fontSize', Math.max(baseFontSize * scaleFactor, 8));
+                    }
+                });
+            }
+        });
+        
+        this.canvas.renderAll();
     }
     
     setupOrientationDropdown() {
@@ -2045,6 +2100,8 @@ class TemplateAdsEditor {
         setTimeout(() => {
             this.updateBrandControlsFromCanvas('title');
             this.updateBrandControlsFromCanvas('subtitle');
+            // Ensure proportional scaling after template load
+            this.scaleElementsProportionally(this.zoomLevel);
         }, 100);
         
         // Re-enable state saving
