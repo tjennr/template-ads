@@ -185,9 +185,8 @@ class TemplateAdsEditor {
             scaleFactor = Math.min(canvasWidth / 640, canvasHeight / 800);
         }
         
-        // Apply the zoom level for initial sizing
-        const currentZoom = this.zoomLevel || 1;
-        const effectiveScale = scaleFactor * currentZoom;
+        // Don't apply zoom level for initial sizing - let CSS handle the visual scaling
+        const effectiveScale = scaleFactor;
         
         // Calculate responsive font size with reasonable limits
         const responsiveSize = baseSize * effectiveScale;
@@ -2328,7 +2327,7 @@ class TemplateAdsEditor {
         this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.6 : canvasHeight * 0.65,
-            fontSize: 40,
+            fontSize: this.getResponsiveFontSize(40, 'title'),
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             fontWeight: 'bold',
@@ -2345,7 +2344,7 @@ class TemplateAdsEditor {
         this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
             left: canvasWidth / 2,
             top: isVertical ? canvasHeight * 0.7 : canvasHeight * 0.75,
-            fontSize: 24,
+            fontSize: this.getResponsiveFontSize(24, 'subtitle'),
             fill: '#ffffff',
             fontFamily: 'Source Sans Pro, sans-serif',
             textAlign: 'center',
