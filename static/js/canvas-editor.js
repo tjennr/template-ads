@@ -2097,7 +2097,7 @@ class TemplateAdsEditor {
                     width: canvasWidth,
                     height: canvasHeight
                 };
-            case 'template4': // Split Right - Image right half, text left half
+            case 'template4': // Split Right - adapts based on orientation
                 if (isVertical) {
                     // Vertical: Image right half, text left half
                     return {
@@ -2407,7 +2407,7 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Right Layout - Image right half, text left half
+        // Split Right Layout - adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         const isVertical = this.currentOrientation === 'vertical';
