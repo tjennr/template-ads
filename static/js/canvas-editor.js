@@ -3339,31 +3339,18 @@ class TemplateAdsEditor {
             const currentTemplate = this.currentTemplate;
             const currentOrientation = this.currentOrientation;
             
-            // Clear canvas completely
-            this.canvas.clear();
-            this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+            // Set loading flag to prevent state saving during reset
+            this.isLoadingTemplate = true;
             
-            // Reset image references
+            // Reset image references but don't clear canvas yet
             this.mainImage = null;
             this.logo = null;
             
             // Set canvas dimensions for current orientation
             this.setCanvasDimensions();
             
-            // Set loading flag to prevent state saving during reset
-            this.isLoadingTemplate = true;
-            
-            // Reload current template with default values
+            // Reload template which will clear canvas and rebuild everything
             this.loadTemplate(currentTemplate);
-            
-            // Load default images after template is loaded
-            setTimeout(() => {
-                this.loadDefaultImage();
-                // Clear loading flag after everything is loaded
-                setTimeout(() => {
-                    this.isLoadingTemplate = false;
-                }, 100);
-            }, 200);
             
             // Hide any open toolbars
             this.hideTextToolbar();

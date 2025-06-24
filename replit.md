@@ -183,6 +183,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 24, 2025: Redesigned AI interface - moved diamond icon buttons below inputs as separate entities, replaced popup prompts with integrated slide-in containers featuring dedicated input fields and Generate/Cancel buttons, enhanced with Enter key support and smooth visual feedback
 - June 24, 2025: Fixed reset button glitch where main image disappeared - improved template loading sequence and timing to ensure default image loads properly
 - June 24, 2025: Switched from OpenAI to Google Gemini for AI image generation - updated endpoint from /api/openai/generate-image to /api/gemini/generate-image with proper error handling
+- June 24, 2025: Removed all OpenAI code and dependencies - uninstalled openai package and cleaned up routes to use only Google Gemini for AI features
+- June 24, 2025: Improved reset button timing - template loading now happens before clearing image references to prevent visual glitch where main image disappears momentarily
 
 ## Changelog
 - June 16, 2025. Initial setup

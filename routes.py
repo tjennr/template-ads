@@ -10,7 +10,7 @@ from flask import render_template, request, jsonify, send_file, current_app
 from werkzeug.utils import secure_filename
 from app import app
 from shutterstock_api import ShutterstockAPI
-from openai import OpenAI
+
 from google import genai
 from google.genai import types
 
@@ -252,27 +252,7 @@ def shutterstock_download():
         current_app.logger.error(f"Shutterstock download error: {str(e)}")
         return jsonify({'error': 'Failed to download image'}), 500
 
-@app.route('/api/openai/test-key', methods=['GET'])
-def test_openai_key():
-    """Test if OpenAI API key is valid"""
-    try:
-        api_key = os.environ.get('OPENAI_API_KEY')
-        if not api_key:
-            return jsonify({'error': 'OpenAI API key not configured'}), 503
-        
-        client = OpenAI(api_key=api_key)
-        
-        # Test with a simple chat completion
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": "Hello"}],
-            max_tokens=5
-        )
-        
-        return jsonify({'success': True, 'message': 'API key is valid'})
-        
-    except Exception as e:
-        return jsonify({'error': f'API key test failed: {str(e)}'}), 500
+
 
 @app.route('/api/gemini/generate-image', methods=['POST'])
 def generate_ai_image():
