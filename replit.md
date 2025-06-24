@@ -191,7 +191,6 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 24, 2025: Updated AI section styling - changed purple color to blue (#0077B5) for consistency, changed button text from "Generate with AI" to "Generate text", made export dropdown appear upward instead of downward for better visibility, optimized export section sizing
 - June 24, 2025: Temporarily commented out undo/redo functionality and buttons to test interface appearance without them - all code preserved for easy restoration
 - June 24, 2025: Fixed canvas centering issue for horizontal aspect ratio - improved canvas container centering with proper flexbox alignment and responsive padding to ensure canvas remains centered regardless of panel resizing
-- June 24, 2025: Enhanced window resize responsiveness - canvas now dynamically resizes in both directions (larger and smaller) with ResizeObserver for real-time container changes, improved aspect ratio calculations, and faster response times
 
 ## Changelog
 - June 16, 2025. Initial setup
