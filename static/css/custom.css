@@ -279,9 +279,6 @@ h1, h2, h3, h4, h5, h6 {
     transform-origin: center;
     /* Add drop shadow behind the ad borders */
     filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
-    /* Round the corners of the ad */
-    border-radius: 12px;
-    overflow: hidden;
 }
 
 .canvas-actions {

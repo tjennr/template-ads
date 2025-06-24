@@ -327,8 +327,22 @@ class TemplateAdsEditor {
         // Use the smaller scale to ensure canvas fits, but allow up-scaling
         let optimalScale = Math.min(scaleX, scaleY);
         
-        // Apply reasonable limits (Canva-style: allow significant scaling)
-        optimalScale = Math.max(optimalScale, 0.05); // Very small minimum
+        // Apply Canva-style minimum size constraints
+        const minScaleHorizontal = 0.3; // Don't let horizontal ads get too small
+        const minScaleVertical = 0.2;   // Vertical can be a bit smaller
+        const minScaleSquare = 0.25;    // Square in between
+        
+        let minScale;
+        if (this.currentOrientation === 'horizontal') {
+            minScale = minScaleHorizontal;
+        } else if (this.currentOrientation === 'vertical') {
+            minScale = minScaleVertical;
+        } else {
+            minScale = minScaleSquare;
+        }
+        
+        // Apply scaling limits with orientation-specific minimums
+        optimalScale = Math.max(optimalScale, minScale);
         optimalScale = Math.min(optimalScale, 5); // Allow significant zoom
         
         // Apply the scaling

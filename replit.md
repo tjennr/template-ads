@@ -192,6 +192,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 24, 2025: Temporarily commented out undo/redo functionality and buttons to test interface appearance without them - all code preserved for easy restoration
 - June 24, 2025: Fixed canvas centering issue for horizontal aspect ratio - improved canvas container centering with proper flexbox alignment and responsive padding to ensure canvas remains centered regardless of panel resizing
 - June 24, 2025: Implemented Canva-style responsive scaling - canvas automatically scales to fit available space in both directions, fixed horizontal orientation scaling issue, added responsive font sizing that adapts to initial canvas scale and zoom level
+- June 24, 2025: Added Canva-style minimum size constraints - horizontal ads won't scale below 30%, vertical below 20%, square below 25% to maintain readability, removed rounded corners from ad canvas for cleaner appearance
 
 ## Changelog
 - June 16, 2025. Initial setup
