@@ -181,6 +181,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 24, 2025: Added Google Gemini AI text generation for title and subtitle fields - users can click sparkle buttons next to text inputs to generate creative content based on their product description prompts
 - June 24, 2025: Enhanced text input fields with 200 character limits, real-time character counters (0/200) positioned in bottom right, and redesigned AI buttons with sparkle+dropdown styling positioned in bottom left of input fields
 - June 24, 2025: Redesigned AI interface - moved diamond icon buttons below inputs as separate entities, replaced popup prompts with integrated slide-in containers featuring dedicated input fields and Generate/Cancel buttons, enhanced with Enter key support and smooth visual feedback
+- June 24, 2025: Fixed reset button glitch where main image disappeared - improved template loading sequence and timing to ensure default image loads properly
+- June 24, 2025: Switched from OpenAI to Google Gemini for AI image generation - updated endpoint from /api/openai/generate-image to /api/gemini/generate-image with proper error handling
 
 ## Changelog
 - June 16, 2025. Initial setup
