@@ -60,7 +60,7 @@ class TemplateAdsEditor {
         // Initial fit to container after everything is set up
         setTimeout(() => {
             this.fitCanvasToContainer();
-        }, 300);
+        }, 100);
     }
 
     initializeDefaultContent() {
@@ -148,54 +148,55 @@ class TemplateAdsEditor {
     setCanvasDimensions() {
         let canvasWidth, canvasHeight;
         
-        // Get container dimensions to ensure canvas fits properly
-        const container = document.querySelector('.canvas-container-centered');
-        const containerWidth = container ? container.offsetWidth - 40 : 800; // Account for padding
-        const containerHeight = container ? container.offsetHeight - 40 : 600;
-        
+        // Use fixed canvas dimensions - scaling will be handled by CSS transforms
         if (this.currentOrientation === 'horizontal') {
-            // Horizontal: 1.91:1 aspect ratio
-            const baseWidth = 1528;
-            const baseHeight = 800;
-            const aspectRatio = baseWidth / baseHeight;
-            
-            // Scale to fit container while maintaining aspect ratio
-            let scaledWidth = Math.min(baseWidth, containerWidth);
-            let scaledHeight = scaledWidth / aspectRatio;
-            
-            if (scaledHeight > containerHeight) {
-                scaledHeight = containerHeight;
-                scaledWidth = scaledHeight * aspectRatio;
-            }
-            
-            canvasWidth = scaledWidth;
-            canvasHeight = scaledHeight;
+            // Horizontal: 1.91:1 aspect ratio - fixed size
+            canvasWidth = 1528;
+            canvasHeight = 800;
         } else if (this.currentOrientation === 'square') {
-            // Square: 1:1 aspect ratio
-            const size = Math.min(800, containerWidth, containerHeight);
-            canvasWidth = size;
-            canvasHeight = size;
+            // Square: 1:1 aspect ratio - fixed size
+            canvasWidth = 800;
+            canvasHeight = 800;
         } else {
-            // Vertical: 4:5 aspect ratio
-            const baseWidth = 640;
-            const baseHeight = 800;
-            const aspectRatio = baseWidth / baseHeight;
-            
-            // Scale to fit container while maintaining aspect ratio
-            let scaledHeight = Math.min(baseHeight, containerHeight);
-            let scaledWidth = scaledHeight * aspectRatio;
-            
-            if (scaledWidth > containerWidth) {
-                scaledWidth = containerWidth;
-                scaledHeight = scaledWidth / aspectRatio;
-            }
-            
-            canvasWidth = scaledWidth;
-            canvasHeight = scaledHeight;
+            // Vertical: 4:5 aspect ratio - fixed size
+            canvasWidth = 640;
+            canvasHeight = 800;
         }
         
         this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});
         this.canvas.renderAll();
+    }
+
+    // Calculate responsive font sizes based on canvas dimensions and scale
+    getResponsiveFontSize(baseSize, canvasType = 'title') {
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Calculate a scale factor based on canvas size relative to standard sizes
+        let scaleFactor;
+        if (this.currentOrientation === 'horizontal') {
+            // Base horizontal canvas: 1528x800
+            scaleFactor = Math.min(canvasWidth / 1528, canvasHeight / 800);
+        } else if (this.currentOrientation === 'square') {
+            // Base square canvas: 800x800
+            scaleFactor = Math.min(canvasWidth / 800, canvasHeight / 800);
+        } else {
+            // Base vertical canvas: 640x800
+            scaleFactor = Math.min(canvasWidth / 640, canvasHeight / 800);
+        }
+        
+        // Apply the zoom level for initial sizing
+        const currentZoom = this.zoomLevel || 1;
+        const effectiveScale = scaleFactor * currentZoom;
+        
+        // Calculate responsive font size with reasonable limits
+        const responsiveSize = baseSize * effectiveScale;
+        
+        // Set minimum and maximum font sizes
+        const minSize = canvasType === 'title' ? 16 : (canvasType === 'subtitle' ? 12 : 10);
+        const maxSize = canvasType === 'title' ? 120 : (canvasType === 'subtitle' ? 80 : 60);
+        
+        return Math.max(minSize, Math.min(maxSize, responsiveSize));
     }
 
     changeOrientation(orientation) {
@@ -2089,7 +2090,9 @@ class TemplateAdsEditor {
         setTimeout(() => {
             this.updateBrandControlsFromCanvas('title');
             this.updateBrandControlsFromCanvas('subtitle');
-        }, 100);
+            // Ensure canvas fits properly after template load
+            this.fitCanvasToContainer();
+        }, 50);
         
         // Re-enable state saving
         this.isLoadingTemplate = false;
