@@ -34,11 +34,11 @@ class TemplateAdsEditor {
         this.selectedCtaObject = null;
         this.backgroundToolbar = document.getElementById('backgroundToolbar');
         
-        // Zoom properties
+        // Zoom properties (Canva-style limits)
         this.zoomLevel = 1;
-        this.minZoom = 0.25;
-        this.maxZoom = 3;
-        this.zoomStep = 0.25;
+        this.minZoom = 0.05;
+        this.maxZoom = 5;
+        this.zoomStep = 0.1;
         
         // Smart guides properties
         this.guidelines = [];
@@ -60,7 +60,7 @@ class TemplateAdsEditor {
         // Initial fit to container after everything is set up
         setTimeout(() => {
             this.fitCanvasToContainer();
-        }, 500);
+        }, 300);
     }
 
     initializeDefaultContent() {
@@ -284,92 +284,81 @@ class TemplateAdsEditor {
 
     setupResizeListener() {
         let resizeTimeout;
-        window.addEventListener('resize', () => {
+        
+        // Smooth resize handling like Canva
+        const handleResize = () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 this.fitCanvasToContainer();
-            }, 50); // Faster response
+            }, 16); // ~60fps for smooth scaling
+        };
+        
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(handleResize, 100);
         });
         
-        // Also listen for orientation changes on mobile
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                this.fitCanvasToContainer();
-            }, 200);
-        });
+        // Also handle dynamic sidebar resizing
+        if (window.ResizeObserver) {
+            const resizeObserver = new ResizeObserver(handleResize);
+            const canvasArea = document.querySelector('.canvas-area-panel');
+            if (canvasArea) {
+                resizeObserver.observe(canvasArea);
+            }
+        }
     }
 
     fitCanvasToContainer() {
         const container = document.querySelector('.canvas-container-centered');
         if (!container) return;
         
-        const containerWidth = container.clientWidth - 40; // Account for padding
-        const containerHeight = container.clientHeight - 40;
+        // Get available space with padding
+        const availableWidth = container.clientWidth - 40;
+        const availableHeight = container.clientHeight - 40;
         
+        // Get canvas dimensions
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Calculate the scale needed to fit the canvas within the container
-        const scaleX = containerWidth / canvasWidth;
-        const scaleY = containerHeight / canvasHeight;
+        // Calculate optimal scale to fill available space
+        const scaleX = availableWidth / canvasWidth;
+        const scaleY = availableHeight / canvasHeight;
         
-        // Use the smaller scale to ensure the entire canvas fits, but allow reasonable scaling
-        let newScale = Math.min(scaleX, scaleY);
+        // Use the smaller scale to ensure canvas fits, but allow up-scaling
+        let optimalScale = Math.min(scaleX, scaleY);
         
-        // Apply scaling limits
-        newScale = Math.max(newScale, 0.1); // Minimum scale
-        newScale = Math.min(newScale, this.maxZoom); // Maximum scale
+        // Apply reasonable limits (Canva-style: allow significant scaling)
+        optimalScale = Math.max(optimalScale, 0.05); // Very small minimum
+        optimalScale = Math.min(optimalScale, 5); // Allow significant zoom
         
-        // Update zoom level and apply scaling
-        this.zoomLevel = newScale;
-        this.applyZoom();
-        
-        // Scale text and button elements proportionally
-        this.scaleElementsProportionally(newScale);
+        // Apply the scaling
+        this.zoomLevel = optimalScale;
+        this.applyCanvaScale();
     }
 
-    scaleElementsProportionally(scale) {
-        const baseScale = 1; // Reference scale
-        const scaleFactor = scale / baseScale;
+    applyCanvaScale() {
+        // Apply CSS transform scaling (Canva-style)
+        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
+        if (canvasWrapper) {
+            canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
+            canvasWrapper.style.transformOrigin = 'center center';
+        }
         
-        // Scale text objects
-        this.canvas.getObjects().forEach(obj => {
-            if (obj.type === 'textbox' || obj.type === 'text') {
-                const baseFontSize = obj.baseFontSize || obj.fontSize;
-                if (!obj.baseFontSize) {
-                    obj.baseFontSize = obj.fontSize; // Store original size
-                }
-                obj.set('fontSize', Math.max(baseFontSize * scaleFactor, 8)); // Minimum font size
-            }
-            
-            // Scale CTA button groups
-            if (obj.type === 'group' && obj.id && obj.id.includes('cta')) {
-                const baseWidth = obj.baseWidth || obj.width;
-                const baseHeight = obj.baseHeight || obj.height;
-                if (!obj.baseWidth) {
-                    obj.baseWidth = obj.width;
-                    obj.baseHeight = obj.height;
-                }
-                
-                obj.set({
-                    width: baseWidth * scaleFactor,
-                    height: baseHeight * scaleFactor
-                });
-                
-                // Scale text within the CTA button
-                obj.getObjects().forEach(child => {
-                    if (child.type === 'textbox' || child.type === 'text') {
-                        const baseFontSize = child.baseFontSize || child.fontSize;
-                        if (!child.baseFontSize) {
-                            child.baseFontSize = child.fontSize;
-                        }
-                        child.set('fontSize', Math.max(baseFontSize * scaleFactor, 8));
-                    }
-                });
-            }
-        });
+        // Update zoom display
+        const zoomLevelElement = document.getElementById('zoomLevel');
+        if (zoomLevelElement) {
+            zoomLevelElement.textContent = Math.round(this.zoomLevel * 100) + '%';
+        }
         
-        this.canvas.renderAll();
+        // Update zoom button states
+        this.updateZoomButtonStates();
+    }
+
+    updateZoomButtonStates() {
+        const zoomInBtn = document.getElementById('zoomIn');
+        const zoomOutBtn = document.getElementById('zoomOut');
+        if (zoomInBtn) zoomInBtn.disabled = this.zoomLevel >= 5;
+        if (zoomOutBtn) zoomOutBtn.disabled = this.zoomLevel <= 0.05;
     }
     
     setupOrientationDropdown() {
@@ -2100,8 +2089,6 @@ class TemplateAdsEditor {
         setTimeout(() => {
             this.updateBrandControlsFromCanvas('title');
             this.updateBrandControlsFromCanvas('subtitle');
-            // Ensure proportional scaling after template load
-            this.scaleElementsProportionally(this.zoomLevel);
         }, 100);
         
         // Re-enable state saving
@@ -3574,20 +3561,7 @@ class TemplateAdsEditor {
     }
     
     applyZoom() {
-        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-        canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
-        
-        // Update zoom level display
-        const zoomLevelElement = document.getElementById('zoomLevel');
-        if (zoomLevelElement) {
-            zoomLevelElement.textContent = Math.round(this.zoomLevel * 100) + '%';
-        }
-        
-        // Update zoom button states
-        const zoomInBtn = document.getElementById('zoomIn');
-        const zoomOutBtn = document.getElementById('zoomOut');
-        if (zoomInBtn) zoomInBtn.disabled = this.zoomLevel >= this.maxZoom;
-        if (zoomOutBtn) zoomOutBtn.disabled = this.zoomLevel <= this.minZoom;
+        this.applyCanvaScale();
     }
 
     repositionElementsForOrientation() {
