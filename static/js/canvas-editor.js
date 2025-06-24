@@ -1974,6 +1974,12 @@ class TemplateAdsEditor {
         this.enforceProperLayering();
         this.canvas.renderAll();
         
+        // Update brand controls to reflect actual canvas text colors
+        setTimeout(() => {
+            this.updateBrandControlsFromCanvas('title');
+            this.updateBrandControlsFromCanvas('subtitle');
+        }, 100);
+        
         // Re-enable state saving
         this.isLoadingTemplate = false;
     }
@@ -4043,44 +4049,8 @@ class TemplateAdsEditor {
     initializeBrandControlValues() {
         // Set initial values based on canvas text objects
         setTimeout(() => {
-            const titleObj = this.canvas.getObjects().find(obj => obj.id === 'title');
-            const subtitleObj = this.canvas.getObjects().find(obj => obj.id === 'subtitle');
-            
-            if (titleObj) {
-                const titleFontSelect = document.getElementById('titleFontSelect');
-                const titleColorSelect = document.getElementById('titleColorSelect');
-                if (titleFontSelect) {
-                    // Clean font family name
-                    let fontFamily = titleObj.fontFamily || 'Source Sans Pro';
-                    if (fontFamily.includes(',')) {
-                        fontFamily = fontFamily.split(',')[0].trim();
-                    }
-                    titleFontSelect.value = fontFamily;
-                    console.log('Title font initialized to:', fontFamily);
-                }
-                if (titleColorSelect) {
-                    titleColorSelect.value = titleObj.fill || '#ffffff';
-                    console.log('Title color initialized to:', titleObj.fill);
-                }
-            }
-            
-            if (subtitleObj) {
-                const subtitleFontSelect = document.getElementById('subtitleFontSelect');
-                const subtitleColorSelect = document.getElementById('subtitleColorSelect');
-                if (subtitleFontSelect) {
-                    // Clean font family name
-                    let fontFamily = subtitleObj.fontFamily || 'Source Sans Pro';
-                    if (fontFamily.includes(',')) {
-                        fontFamily = fontFamily.split(',')[0].trim();
-                    }
-                    subtitleFontSelect.value = fontFamily;
-                    console.log('Subtitle font initialized to:', fontFamily);
-                }
-                if (subtitleColorSelect) {
-                    subtitleColorSelect.value = subtitleObj.fill || '#ffffff';
-                    console.log('Subtitle color initialized to:', subtitleObj.fill);
-                }
-            }
+            this.updateBrandControlsFromCanvas('title');
+            this.updateBrandControlsFromCanvas('subtitle');
         }, 1500);
     }
 
@@ -4114,13 +4084,25 @@ class TemplateAdsEditor {
         if (textType === 'title') {
             const titleFontSelect = document.getElementById('titleFontSelect');
             const titleColorSelect = document.getElementById('titleColorSelect');
-            if (titleFontSelect) titleFontSelect.value = fontFamily;
-            if (titleColorSelect) titleColorSelect.value = textObj.fill || '#ffffff';
+            if (titleFontSelect) {
+                titleFontSelect.value = fontFamily;
+                console.log('Updated title font to:', fontFamily);
+            }
+            if (titleColorSelect) {
+                titleColorSelect.value = textObj.fill || '#ffffff';
+                console.log('Updated title color to:', textObj.fill);
+            }
         } else if (textType === 'subtitle') {
             const subtitleFontSelect = document.getElementById('subtitleFontSelect');
             const subtitleColorSelect = document.getElementById('subtitleColorSelect');
-            if (subtitleFontSelect) subtitleFontSelect.value = fontFamily;
-            if (subtitleColorSelect) subtitleColorSelect.value = textObj.fill || '#ffffff';
+            if (subtitleFontSelect) {
+                subtitleFontSelect.value = fontFamily;
+                console.log('Updated subtitle font to:', fontFamily);
+            }
+            if (subtitleColorSelect) {
+                subtitleColorSelect.value = textObj.fill || '#ffffff';
+                console.log('Updated subtitle color to:', textObj.fill);
+            }
         }
     }
 
