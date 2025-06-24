@@ -2099,14 +2099,14 @@ class TemplateAdsEditor {
                 };
             case 'template4': // Split Right - Image right half, text left half
                 if (isVertical) {
-                    // Vertical: Image bottom half, text top half
+                    // Vertical: Image right half, text left half
                     return {
-                        left: canvasWidth / 2,
-                        top: canvasHeight * 0.75,
+                        left: canvasWidth * 0.75,
+                        top: canvasHeight / 2,
                         originX: 'center',
                         originY: 'center',
-                        width: canvasWidth,
-                        height: canvasHeight * 0.5
+                        width: canvasWidth * 0.5,
+                        height: canvasHeight
                     };
                 } else {
                     // Horizontal: Image right half, text left half
