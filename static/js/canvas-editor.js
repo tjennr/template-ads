@@ -145,48 +145,50 @@ class TemplateAdsEditor {
         
         // Get container dimensions to ensure canvas fits properly
         const container = document.querySelector('.canvas-container-centered');
-        const containerWidth = container ? container.offsetWidth - 40 : 800; // Account for padding
-        const containerHeight = container ? container.offsetHeight - 40 : 600;
+        if (!container) return;
+        
+        const containerWidth = container.offsetWidth - 40; // Account for padding
+        const containerHeight = container.offsetHeight - 40;
+        
+        // Ensure minimum dimensions
+        const minWidth = 300;
+        const minHeight = 200;
         
         if (this.currentOrientation === 'horizontal') {
             // Horizontal: 1.91:1 aspect ratio
-            const baseWidth = 1528;
-            const baseHeight = 800;
-            const aspectRatio = baseWidth / baseHeight;
+            const aspectRatio = 1.91;
             
             // Scale to fit container while maintaining aspect ratio
-            let scaledWidth = Math.min(baseWidth, containerWidth);
+            let scaledWidth = Math.max(minWidth, Math.min(containerWidth, containerWidth));
             let scaledHeight = scaledWidth / aspectRatio;
             
             if (scaledHeight > containerHeight) {
-                scaledHeight = containerHeight;
+                scaledHeight = Math.max(minHeight, containerHeight);
                 scaledWidth = scaledHeight * aspectRatio;
             }
             
-            canvasWidth = scaledWidth;
-            canvasHeight = scaledHeight;
+            canvasWidth = Math.round(scaledWidth);
+            canvasHeight = Math.round(scaledHeight);
         } else if (this.currentOrientation === 'square') {
             // Square: 1:1 aspect ratio
-            const size = Math.min(800, containerWidth, containerHeight);
-            canvasWidth = size;
-            canvasHeight = size;
+            const size = Math.max(minWidth, Math.min(containerWidth, containerHeight));
+            canvasWidth = Math.round(size);
+            canvasHeight = Math.round(size);
         } else {
-            // Vertical: 4:5 aspect ratio
-            const baseWidth = 640;
-            const baseHeight = 800;
-            const aspectRatio = baseWidth / baseHeight;
+            // Vertical: 4:5 aspect ratio (0.8)
+            const aspectRatio = 0.8;
             
             // Scale to fit container while maintaining aspect ratio
-            let scaledHeight = Math.min(baseHeight, containerHeight);
+            let scaledHeight = Math.max(minHeight, Math.min(containerHeight, containerHeight));
             let scaledWidth = scaledHeight * aspectRatio;
             
             if (scaledWidth > containerWidth) {
-                scaledWidth = containerWidth;
+                scaledWidth = Math.max(minWidth, containerWidth);
                 scaledHeight = scaledWidth / aspectRatio;
             }
             
-            canvasWidth = scaledWidth;
-            canvasHeight = scaledHeight;
+            canvasWidth = Math.round(scaledWidth);
+            canvasHeight = Math.round(scaledHeight);
         }
         
         this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});
@@ -282,10 +284,36 @@ class TemplateAdsEditor {
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                this.setCanvasDimensions();
-                // Reload current template to adjust element positions for new dimensions
-                this.loadTemplate(this.currentTemplate);
-            }, 250);
+                this.handleResize();
+            }, 100); // Reduced timeout for more responsive resizing
+        });
+        
+        // Also listen for specific container changes
+        if (window.ResizeObserver) {
+            const container = document.querySelector('.canvas-container-centered');
+            if (container) {
+                const resizeObserver = new ResizeObserver(() => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        this.handleResize();
+                    }, 100);
+                });
+                resizeObserver.observe(container);
+            }
+        }
+    }
+    
+    handleResize() {
+        // Store current canvas state before resizing
+        const canvasState = this.canvas.toJSON(['id']);
+        
+        // Update canvas dimensions
+        this.setCanvasDimensions();
+        
+        // Restore canvas state and reposition elements
+        this.canvas.loadFromJSON(canvasState, () => {
+            this.canvas.renderAll();
+            this.updateObjectReferences();
         });
     }
     
