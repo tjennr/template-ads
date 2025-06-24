@@ -579,6 +579,9 @@ class TemplateAdsEditor {
         // Setup brand font and color controls
         this.setupBrandControls();
         this.setupStockImageInterface();
+        
+        // Setup AI text generation
+        this.setupTextGeneration();
     }
 
     setupCanvasEvents() {

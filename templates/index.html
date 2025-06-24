@@ -245,13 +245,23 @@
                         <!-- Title -->
                         <div class="control-item">
                             <label class="control-label">Title</label>
-                            <input type="text" class="clean-input wide-input" id="titleText" placeholder="Enter your title" value="Your Amazing Product">
+                            <div class="input-with-ai">
+                                <input type="text" class="clean-input wide-input" id="titleText" placeholder="Enter your title" value="Your Amazing Product">
+                                <button class="ai-generate-btn" id="generateTitleBtn" title="Generate AI title">
+                                    <i class="fas fa-sparkles"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Subtitle -->
                         <div class="control-item">
                             <label class="control-label">Subtitle</label>
-                            <textarea class="clean-input wide-input" id="subtitleText" placeholder="Enter your subtitle" rows="3">Discover the innovation that will change your life</textarea>
+                            <div class="input-with-ai">
+                                <textarea class="clean-input wide-input" id="subtitleText" placeholder="Enter your subtitle" rows="3">Discover the innovation that will change your life</textarea>
+                                <button class="ai-generate-btn" id="generateSubtitleBtn" title="Generate AI subtitle">
+                                    <i class="fas fa-sparkles"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Call to Action -->
