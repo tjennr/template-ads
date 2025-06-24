@@ -2097,19 +2097,41 @@ class TemplateAdsEditor {
                     width: canvasWidth,
                     height: canvasHeight
                 };
-            case 'template4': // Split Right - adapts based on orientation
+            case 'template4': // Split Layout - adapt based on orientation
                 if (isVertical) {
-                    // Vertical: Image right half, text left half
+                    // Vertical: top half for image
                     return {
-                        left: canvasWidth * 0.75,
+                        left: canvasWidth / 2,
+                        top: canvasHeight * 0.25,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5
+                    };
+                } else {
+                    // Horizontal: left half for image
+                    return {
+                        left: canvasWidth * 0.25,
                         top: canvasHeight / 2,
                         originX: 'center',
                         originY: 'center',
                         width: canvasWidth * 0.5,
                         height: canvasHeight
                     };
+                }
+            case 'template5': // Split Layout - adapt based on orientation
+                if (isVertical) {
+                    // Vertical: bottom half for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight * 0.75,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5
+                    };
                 } else {
-                    // Horizontal: Image right half, text left half
+                    // Horizontal: right half for image
                     return {
                         left: canvasWidth * 0.75,
                         top: canvasHeight / 2,
@@ -2119,24 +2141,28 @@ class TemplateAdsEditor {
                         height: canvasHeight
                     };
                 }
-            case 'template5': // Split Top - Image top half, text bottom half
-                return {
-                    left: canvasWidth / 2,
-                    top: canvasHeight * 0.25,
-                    originX: 'center',
-                    originY: 'center',
-                    width: canvasWidth,
-                    height: canvasHeight * 0.5
-                };
-            case 'template6': // Split Bottom - Text top half, image bottom half
-                return {
-                    left: canvasWidth / 2,
-                    top: canvasHeight * 0.75,
-                    originX: 'center',
-                    originY: 'center',
-                    width: canvasWidth,
-                    height: canvasHeight * 0.5
-                };
+            case 'template6': // Split Layout - adapt based on orientation
+                if (isVertical) {
+                    // Vertical: center area for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth * 0.8,
+                        height: canvasHeight * 0.6
+                    };
+                } else {
+                    // Horizontal: top half for image
+                    return {
+                        left: canvasWidth / 2,
+                        top: canvasHeight * 0.25,
+                        originX: 'center',
+                        originY: 'center',
+                        width: canvasWidth,
+                        height: canvasHeight * 0.5
+                    };
+                }
             default:
                 return {
                     left: canvasWidth / 2,
@@ -2407,7 +2433,168 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Right Layout - adapts based on orientation
+        // Split Layout - Adapts based on orientation
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        const isVertical = this.currentOrientation === 'vertical';
+        
+        if (isVertical) {
+            // Vertical: Image left half, text right half
+            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.4,
+                fontSize: 40,
+                fill: '#333333',
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'title',
+                width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
+                splitByGrapheme: false
+            });
+            
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.55,
+                fontSize: 24,
+                fill: '#666666',
+                fontFamily: 'Source Sans Pro, sans-serif',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'subtitle',
+                width: canvasWidth * 0.35,
+                lockScalingFlip: true,
+                noScaleCache: false,
+                splitByGrapheme: false
+            });
+            
+            const ctaButtonBg = new fabric.Rect({
+                left: 0,
+                top: 0,
+                width: 120,
+                height: 40,
+                fill: '#0077B5',
+                rx: 8,
+                ry: 8,
+                originX: 'center',
+                originY: 'center',
+                selectable: true,
+                evented: true,
+                id: 'ctaBackground'
+            });
+
+            this.ctaText = new fabric.Text('Shop Now', {
+                left: 0,
+                top: 0,
+                fontSize: 18,
+                fill: '#ffffff',
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'cta'
+            });
+
+            this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.7,
+                originX: 'center',
+                originY: 'center',
+                id: 'ctaGroup'
+            });
+        } else {
+            // Horizontal: Image left half, text right half
+            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
+                left: canvasWidth * 0.75, // Match Split Right positioning
+                top: canvasHeight * 0.4,
+                fontSize: 40, // Match Split Right font size
+                fill: '#333333',
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'title',
+                width: canvasWidth * 0.35, // Match Split Right width
+                lockScalingFlip: true,
+                noScaleCache: false,
+                splitByGrapheme: false
+            });
+            
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+                left: canvasWidth * 0.75, // Match Split Right positioning
+                top: canvasHeight * 0.55,
+                fontSize: 24, // Match Split Right font size
+                fill: '#666666',
+                fontFamily: 'Source Sans Pro, sans-serif',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'subtitle',
+                width: canvasWidth * 0.35, // Match Split Right width
+                lockScalingFlip: true,
+                noScaleCache: false,
+                splitByGrapheme: false
+            });
+            
+            // Calculate responsive button width
+            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
+            const tempText = new fabric.Text(ctaTextValue, {
+                fontSize: 18,
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold'
+            });
+            const buttonWidth = Math.max(80, tempText.width + 32);
+
+            const ctaButtonBg = new fabric.Rect({
+                left: 0,
+                top: 0,
+                width: buttonWidth,
+                height: 40,
+                fill: '#0077B5',
+                rx: 8,
+                ry: 8,
+                originX: 'center',
+                originY: 'center',
+                selectable: true,
+                evented: true,
+                id: 'ctaBackground'
+            });
+
+            this.ctaText = new fabric.Text('Shop Now', {
+                left: 0,
+                top: 0,
+                fontSize: 18,
+                fill: '#ffffff',
+                fontFamily: 'Source Sans Pro, sans-serif',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                originX: 'center',
+                originY: 'center',
+                id: 'cta'
+            });
+
+            this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
+                left: canvasWidth * 0.75, // Match Split Right positioning
+                top: canvasHeight * 0.7,
+                originX: 'center',
+                originY: 'center',
+                id: 'ctaGroup'
+            });
+        }
+        
+        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
+        this.canvas.renderAll();
+    }
+
+    createTemplate5() {
+        // Split Layout - Adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         const isVertical = this.currentOrientation === 'vertical';
@@ -2484,7 +2671,7 @@ class TemplateAdsEditor {
             });
         } else {
             // Horizontal: Image right half, text left half
-            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
+            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.4,
                 fontSize: 40,
@@ -2501,7 +2688,7 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
-            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.55,
                 fontSize: 24,
@@ -2567,12 +2754,12 @@ class TemplateAdsEditor {
         this.canvas.renderAll();
     }
 
-    createTemplate5() {
+    createTemplate6() {
         // Split Top - Image covers top half, text on bottom half
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         
-        // Title - positioned in bottom text area
+        // Title - positioned in bottom text area, using color scheme
         this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.65,
@@ -2589,7 +2776,7 @@ class TemplateAdsEditor {
             id: 'title'
         });
         
-        // Subtitle - positioned in bottom text area
+        // Subtitle - positioned in bottom text area, using color scheme
         this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
             top: canvasHeight * 0.78,
@@ -2646,94 +2833,6 @@ class TemplateAdsEditor {
         this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
             left: canvasWidth / 2,
             top: canvasHeight * 0.9,
-            originX: 'center',
-            originY: 'center',
-            id: 'ctaGroup'
-        });
-        
-        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
-        this.canvas.renderAll();
-    }
-
-    createTemplate6() {
-        // Split Bottom - Text on top half, image covers bottom half
-        const canvasWidth = this.canvas.getWidth();
-        const canvasHeight = this.canvas.getHeight();
-        
-        // Title - positioned in top text area
-        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.15,
-            fontSize: 40,
-            fill: '#333333',
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            width: canvasWidth * 0.8,
-            lockScalingFlip: true,
-            noScaleCache: false,
-            id: 'title'
-        });
-        
-        // Subtitle - positioned in top text area
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.28,
-            fontSize: 24,
-            fill: '#666666',
-            fontFamily: 'Source Sans Pro, sans-serif',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            width: canvasWidth * 0.8,
-            lockScalingFlip: true,
-            noScaleCache: false,
-            id: 'subtitle'
-        });
-        
-        // Calculate responsive button width
-        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        const tempText = new fabric.Text(ctaTextValue, {
-            fontSize: 18,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold'
-        });
-        const buttonWidth = Math.max(80, tempText.width + 32);
-
-        // CTA Button - positioned in top text area
-        const ctaButtonBg = new fabric.Rect({
-            left: 0,
-            top: 0,
-            width: buttonWidth,
-            height: 40,
-            fill: '#0077B5',
-            rx: 8,
-            ry: 8,
-            originX: 'center',
-            originY: 'center',
-            selectable: true,
-            evented: true,
-            id: 'ctaBackground'
-        });
-
-        this.ctaText = new fabric.Text('Shop Now', {
-            left: 0,
-            top: 0,
-            fontSize: 18,
-            fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'cta'
-        });
-
-        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.4,
             originX: 'center',
             originY: 'center',
             id: 'ctaGroup'

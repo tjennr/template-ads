@@ -178,7 +178,6 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Redesigned CTA floating toolbar with compact layout - removed text labels, reduced font dropdown width to 120px, minimized spacing and padding for narrower overall width
 - June 23, 2025: Reverted CTA toolbar button sizes to original dimensions, kept only minimal 1px spacing between elements
 - June 23, 2025: Implemented Canva-style text resizing behavior - converted all text objects to Textbox with lockScalingFlip, text now wraps within boundaries without font scaling during resize operations
-- June 24, 2025: Replaced Split Left template with Split Bottom layout - templates now include Split Right (template4), Split Top (template5), and Split Bottom (template6) where text elements appear at top and main image at bottom, providing exact opposite of Split Top layout
 
 ## Changelog
 - June 16, 2025. Initial setup
