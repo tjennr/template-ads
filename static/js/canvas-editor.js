@@ -143,18 +143,50 @@ class TemplateAdsEditor {
     setCanvasDimensions() {
         let canvasWidth, canvasHeight;
         
+        // Get container dimensions to ensure canvas fits properly
+        const container = document.querySelector('.canvas-container-centered');
+        const containerWidth = container ? container.offsetWidth - 40 : 800; // Account for padding
+        const containerHeight = container ? container.offsetHeight - 40 : 600;
+        
         if (this.currentOrientation === 'horizontal') {
             // Horizontal: 1.91:1 aspect ratio
-            canvasWidth = 1528;
-            canvasHeight = 800;
+            const baseWidth = 1528;
+            const baseHeight = 800;
+            const aspectRatio = baseWidth / baseHeight;
+            
+            // Scale to fit container while maintaining aspect ratio
+            let scaledWidth = Math.min(baseWidth, containerWidth);
+            let scaledHeight = scaledWidth / aspectRatio;
+            
+            if (scaledHeight > containerHeight) {
+                scaledHeight = containerHeight;
+                scaledWidth = scaledHeight * aspectRatio;
+            }
+            
+            canvasWidth = scaledWidth;
+            canvasHeight = scaledHeight;
         } else if (this.currentOrientation === 'square') {
             // Square: 1:1 aspect ratio
-            canvasWidth = 800;
-            canvasHeight = 800;
+            const size = Math.min(800, containerWidth, containerHeight);
+            canvasWidth = size;
+            canvasHeight = size;
         } else {
             // Vertical: 4:5 aspect ratio
-            canvasWidth = 640;
-            canvasHeight = 800;
+            const baseWidth = 640;
+            const baseHeight = 800;
+            const aspectRatio = baseWidth / baseHeight;
+            
+            // Scale to fit container while maintaining aspect ratio
+            let scaledHeight = Math.min(baseHeight, containerHeight);
+            let scaledWidth = scaledHeight * aspectRatio;
+            
+            if (scaledWidth > containerWidth) {
+                scaledWidth = containerWidth;
+                scaledHeight = scaledWidth / aspectRatio;
+            }
+            
+            canvasWidth = scaledWidth;
+            canvasHeight = scaledHeight;
         }
         
         this.canvas.setDimensions({width: canvasWidth, height: canvasHeight});

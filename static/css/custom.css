@@ -392,7 +392,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    overflow: visible; /* Allow canvas to overflow behind other elements */
+    overflow: hidden; /* Prevent canvas from overflowing and causing centering issues */
 }
 
 .canvas-actions {
@@ -521,10 +521,11 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
     padding: 20px;
     margin: 0;
-    overflow: visible;
+    overflow: hidden;
     min-height: 0;
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
 }
 
 .canvas-container {
@@ -1036,6 +1037,9 @@ textarea.clean-input {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     display: block;
     margin: 0 auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 /* Responsive adjustments */
