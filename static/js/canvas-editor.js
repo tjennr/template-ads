@@ -307,7 +307,8 @@ class TemplateAdsEditor {
         const scaleY = containerHeight / canvasHeight;
         
         // Use the smaller scale to ensure the entire canvas fits
-        const newScale = Math.min(scaleX, scaleY, 1); // Don't zoom in beyond 100%
+        // Allow scaling up to maxZoom (3x) and down to minimum (0.1x)
+        const newScale = Math.min(Math.max(Math.min(scaleX, scaleY), 0.1), this.maxZoom);
         
         // Only update if the scale has changed significantly to avoid unnecessary updates
         if (Math.abs(this.zoomLevel - newScale) > 0.01) {
