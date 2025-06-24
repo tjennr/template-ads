@@ -56,6 +56,11 @@ class TemplateAdsEditor {
         
         // Initialize canvas with default content
         this.initializeDefaultContent();
+        
+        // Initial fit to container after everything is set up
+        setTimeout(() => {
+            this.fitCanvasToContainer();
+        }, 200);
     }
 
     initializeDefaultContent() {
@@ -282,11 +287,33 @@ class TemplateAdsEditor {
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                this.setCanvasDimensions();
-                // Reload current template to adjust element positions for new dimensions
-                this.loadTemplate(this.currentTemplate);
-            }, 250);
+                this.fitCanvasToContainer();
+            }, 100);
         });
+    }
+
+    fitCanvasToContainer() {
+        const container = document.querySelector('.canvas-container-centered');
+        if (!container) return;
+        
+        const containerWidth = container.clientWidth - 40; // Account for padding
+        const containerHeight = container.clientHeight - 40;
+        
+        const canvasWidth = this.canvas.getWidth();
+        const canvasHeight = this.canvas.getHeight();
+        
+        // Calculate the scale needed to fit the canvas within the container
+        const scaleX = containerWidth / canvasWidth;
+        const scaleY = containerHeight / canvasHeight;
+        
+        // Use the smaller scale to ensure the entire canvas fits
+        const newScale = Math.min(scaleX, scaleY, 1); // Don't zoom in beyond 100%
+        
+        // Only update if the scale has changed significantly to avoid unnecessary updates
+        if (Math.abs(this.zoomLevel - newScale) > 0.01) {
+            this.zoomLevel = Math.max(newScale, 0.1); // Ensure minimum scale
+            this.applyZoom();
+        }
     }
     
     setupOrientationDropdown() {
@@ -3485,18 +3512,7 @@ class TemplateAdsEditor {
     }
     
     zoomToFit() {
-        const container = document.querySelector('.canvas-container-centered');
-        const containerWidth = container.clientWidth - 40; // Account for padding
-        const containerHeight = container.clientHeight - 40;
-        
-        const canvasWidth = this.canvas.getWidth();
-        const canvasHeight = this.canvas.getHeight();
-        
-        const scaleX = containerWidth / canvasWidth;
-        const scaleY = containerHeight / canvasHeight;
-        
-        this.zoomLevel = Math.min(scaleX, scaleY, 1); // Don't zoom in beyond 100%
-        this.applyZoom();
+        this.fitCanvasToContainer();
     }
     
     applyZoom() {
