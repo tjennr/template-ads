@@ -3335,6 +3335,10 @@ class TemplateAdsEditor {
             if (mainImageUpload) mainImageUpload.value = '';
             if (logoUpload) logoUpload.value = '';
             
+            // Preserve current template and orientation before clearing
+            const currentTemplate = this.currentTemplate;
+            const currentOrientation = this.currentOrientation;
+            
             // Clear canvas completely
             this.canvas.clear();
             this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
@@ -3343,12 +3347,11 @@ class TemplateAdsEditor {
             this.mainImage = null;
             this.logo = null;
             
-            // Preserve current template and orientation
-            const currentTemplate = this.currentTemplate;
-            const currentOrientation = this.currentOrientation;
-            
             // Set canvas dimensions for current orientation
             this.setCanvasDimensions();
+            
+            // Set loading flag to prevent state saving during reset
+            this.isLoadingTemplate = true;
             
             // Reload current template with default values
             this.loadTemplate(currentTemplate);
@@ -3356,7 +3359,11 @@ class TemplateAdsEditor {
             // Load default images after template is loaded
             setTimeout(() => {
                 this.loadDefaultImage();
-            }, 100);
+                // Clear loading flag after everything is loaded
+                setTimeout(() => {
+                    this.isLoadingTemplate = false;
+                }, 100);
+            }, 200);
             
             // Hide any open toolbars
             this.hideTextToolbar();
@@ -4290,7 +4297,7 @@ class TemplateAdsEditor {
         generateResults.innerHTML = '<div class="stock-loading"><i class="fas fa-spinner fa-spin"></i> Generating AI image...</div>';
         
         try {
-            const response = await fetch('/api/openai/generate-image', {
+            const response = await fetch('/api/gemini/generate-image', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -4314,7 +4321,7 @@ class TemplateAdsEditor {
             let errorMessage = 'Failed to generate AI image';
             
             if (error.message.includes('credentials not configured')) {
-                errorMessage = 'OpenAI API credentials not configured. Please contact support.';
+                errorMessage = 'Gemini API credentials not configured. Please contact support.';
             }
             
             generateResults.innerHTML = `<div class="stock-error">${errorMessage}</div>`;
