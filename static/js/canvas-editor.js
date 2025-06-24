@@ -1363,21 +1363,22 @@ class TemplateAdsEditor {
 
     setupCtaToolbarEvents() {
         // Get CTA toolbar elements
-        const fontFamilySelect = document.getElementById('ctaToolbarFontFamily');
-        const fontSizeInput = document.getElementById('ctaToolbarFontSize');
-        const textColorInput = document.getElementById('ctaToolbarTextColor');
-        const buttonColorInput = document.getElementById('ctaToolbarButtonColor');
+        const fontFamilySelect = document.getElementById('ctaFontFamily');
+        const fontSizeInput = document.getElementById('ctaFontSize');
+        const textColorInput = document.getElementById('ctaTextColor');
+        const buttonColorInput = document.getElementById('ctaButtonColor');
 
         // Font family change
         if (fontFamilySelect) {
             fontFamilySelect.addEventListener('change', (e) => {
+                console.log('CTA font family change:', e.target.value);
                 if (this.selectedCtaObject) {
                     const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
                     if (ctaText) {
                         ctaText.set('fontFamily', e.target.value);
                         this.resizeCtaButtonToFitText(this.selectedCtaObject);
                         this.canvas.renderAll();
-                        this.saveState();
+                        this.debouncedSaveState();
                     }
                 }
             });
@@ -1386,13 +1387,15 @@ class TemplateAdsEditor {
         // Font size change
         if (fontSizeInput) {
             fontSizeInput.addEventListener('input', (e) => {
+                console.log('CTA font size change:', e.target.value);
                 if (this.selectedCtaObject) {
                     const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
                     if (ctaText) {
-                        ctaText.set('fontSize', parseInt(e.target.value) || 18);
+                        const fontSize = parseInt(e.target.value) || 18;
+                        ctaText.set('fontSize', fontSize);
                         this.resizeCtaButtonToFitText(this.selectedCtaObject);
                         this.canvas.renderAll();
-                        this.saveState();
+                        this.debouncedSaveState();
                     }
                 }
             });
@@ -1401,12 +1404,13 @@ class TemplateAdsEditor {
         // Text color change
         if (textColorInput) {
             textColorInput.addEventListener('input', (e) => {
+                console.log('CTA text color change:', e.target.value);
                 if (this.selectedCtaObject) {
                     const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
                     if (ctaText) {
                         ctaText.set('fill', e.target.value);
                         this.canvas.renderAll();
-                        this.saveState();
+                        this.debouncedSaveState();
                     }
                 }
             });
@@ -1415,12 +1419,13 @@ class TemplateAdsEditor {
         // Button color change
         if (buttonColorInput) {
             buttonColorInput.addEventListener('input', (e) => {
+                console.log('CTA button color change:', e.target.value);
                 if (this.selectedCtaObject) {
                     const ctaBackground = this.selectedCtaObject.getObjects().find(obj => obj.id === 'ctaBackground');
                     if (ctaBackground) {
                         ctaBackground.set('fill', e.target.value);
                         this.canvas.renderAll();
-                        this.saveState();
+                        this.debouncedSaveState();
                     }
                 }
             });
@@ -1466,10 +1471,10 @@ class TemplateAdsEditor {
         const ctaText = this.selectedCtaObject.getObjects().find(obj => obj.id === 'cta');
         const ctaBackground = this.selectedCtaObject.getObjects().find(obj => obj.id === 'ctaBackground');
 
-        const fontFamilySelect = document.getElementById('ctaToolbarFontFamily');
-        const fontSizeInput = document.getElementById('ctaToolbarFontSize');
-        const textColorInput = document.getElementById('ctaToolbarTextColor');
-        const buttonColorInput = document.getElementById('ctaToolbarButtonColor');
+        const fontFamilySelect = document.getElementById('ctaFontFamily');
+        const fontSizeInput = document.getElementById('ctaFontSize');
+        const textColorInput = document.getElementById('ctaTextColor');
+        const buttonColorInput = document.getElementById('ctaButtonColor');
 
         if (ctaText && fontFamilySelect) {
             fontFamilySelect.value = ctaText.fontFamily || 'Source Sans Pro, sans-serif';
@@ -3355,6 +3360,28 @@ class TemplateAdsEditor {
             // Load default image after template is loaded
             setTimeout(() => {
                 this.loadDefaultImage();
+                
+                // Update canvas text objects with reset values
+                const canvasObjects = this.canvas.getObjects();
+                const titleObj = canvasObjects.find(obj => obj.id === 'title');
+                const subtitleObj = canvasObjects.find(obj => obj.id === 'subtitle');
+                const ctaGroupObj = canvasObjects.find(obj => obj.id === 'ctaGroup');
+                
+                if (titleObj) {
+                    titleObj.set('text', 'Your Amazing Product');
+                }
+                if (subtitleObj) {
+                    subtitleObj.set('text', 'Premium quality at affordable prices');
+                }
+                if (ctaGroupObj) {
+                    const ctaTextObj = ctaGroupObj.getObjects().find(obj => obj.id === 'cta');
+                    if (ctaTextObj) {
+                        ctaTextObj.set('text', 'Shop Now');
+                        this.resizeCtaButtonToFitText(ctaGroupObj);
+                    }
+                }
+                
+                this.canvas.renderAll();
                 this.isLoadingTemplate = false;
                 
                 // Hide any open toolbars
