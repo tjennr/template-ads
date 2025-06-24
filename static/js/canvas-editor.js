@@ -2407,7 +2407,7 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Right - Image right half, text left half
+        // Split Right Layout - Image right half, text left half
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         const isVertical = this.currentOrientation === 'vertical';
@@ -2484,7 +2484,7 @@ class TemplateAdsEditor {
             });
         } else {
             // Horizontal: Image right half, text left half
-            this.titleText = new fabric.Textbox(document.getElementById('titleText').value, {
+            this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.4,
                 fontSize: 40,
@@ -2501,7 +2501,7 @@ class TemplateAdsEditor {
                 splitByGrapheme: false
             });
             
-            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText').value, {
+            this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
                 left: canvasWidth * 0.25,
                 top: canvasHeight * 0.55,
                 fontSize: 24,
