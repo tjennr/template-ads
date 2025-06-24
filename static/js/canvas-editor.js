@@ -582,6 +582,9 @@ class TemplateAdsEditor {
         
         // Setup AI text generation
         this.setupTextGeneration();
+        
+        // Setup character counters
+        this.setupCharacterCounters();
     }
 
     setupCanvasEvents() {
@@ -4414,16 +4417,19 @@ class TemplateAdsEditor {
                 // Update the input field
                 input.value = data.text;
                 
+                // Update character counter
+                this.updateCharacterCounter(textType);
+                
                 // Update the canvas text
                 this.updateText(textType, data.text);
                 
                 // Show success feedback
-                button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                button.style.color = '#28a745';
                 button.innerHTML = '<i class="fas fa-check"></i>';
                 
                 setTimeout(() => {
-                    button.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                    button.innerHTML = '<i class="fas fa-sparkles"></i>';
+                    button.style.color = '#666';
+                    button.innerHTML = '<i class="fas fa-sparkles"></i><i class="fas fa-chevron-down"></i>';
                     button.disabled = false;
                 }, 2000);
             } else {
@@ -4433,16 +4439,50 @@ class TemplateAdsEditor {
             console.error('AI text generation error:', error);
             
             // Show error feedback
-            button.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            button.style.color = '#dc3545';
             button.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
             
             setTimeout(() => {
-                button.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                button.innerHTML = '<i class="fas fa-sparkles"></i>';
+                button.style.color = '#666';
+                button.innerHTML = '<i class="fas fa-sparkles"></i><i class="fas fa-chevron-down"></i>';
                 button.disabled = false;
             }, 3000);
             
             alert('Failed to generate text. Please try again.');
+        }
+    }
+
+    setupCharacterCounters() {
+        const titleInput = document.getElementById('titleText');
+        const subtitleInput = document.getElementById('subtitleText');
+        const titleCounter = document.getElementById('titleCounter');
+        const subtitleCounter = document.getElementById('subtitleCounter');
+
+        // Update counters on input
+        titleInput.addEventListener('input', () => this.updateCharacterCounter('title'));
+        subtitleInput.addEventListener('input', () => this.updateCharacterCounter('subtitle'));
+
+        // Initialize counters
+        this.updateCharacterCounter('title');
+        this.updateCharacterCounter('subtitle');
+    }
+
+    updateCharacterCounter(textType) {
+        const input = document.getElementById(textType === 'title' ? 'titleText' : 'subtitleText');
+        const counter = document.getElementById(textType === 'title' ? 'titleCounter' : 'subtitleCounter');
+        
+        if (input && counter) {
+            const length = input.value.length;
+            counter.textContent = `${length}/200`;
+            
+            // Change color if approaching limit
+            if (length > 180) {
+                counter.style.color = '#dc3545'; // Red
+            } else if (length > 160) {
+                counter.style.color = '#ffc107'; // Yellow
+            } else {
+                counter.style.color = '#999'; // Default gray
+            }
         }
     }
 

@@ -357,9 +357,9 @@ def generate_text():
         
         # Create appropriate prompt based on text type
         if text_type == 'title':
-            system_prompt = f"Generate a compelling, concise ad title (under 8 words) for: {prompt}. Return only the title text, no quotes or explanations."
+            system_prompt = f"Generate a compelling, concise ad title (maximum 200 characters, preferably under 8 words) for: {prompt}. Return only the title text, no quotes or explanations."
         else:  # subtitle
-            system_prompt = f"Generate an engaging subtitle or description (under 25 words) for: {prompt}. Return only the subtitle text, no quotes or explanations."
+            system_prompt = f"Generate an engaging subtitle or description (maximum 200 characters, preferably under 25 words) for: {prompt}. Return only the subtitle text, no quotes or explanations."
         
         # Generate text with Gemini
         response = client.models.generate_content(
@@ -377,6 +377,10 @@ def generate_text():
             generated_text = generated_text[1:-1]
         if generated_text.startswith("'") and generated_text.endswith("'"):
             generated_text = generated_text[1:-1]
+        
+        # Ensure text doesn't exceed 200 characters
+        if len(generated_text) > 200:
+            generated_text = generated_text[:200].strip()
         
         return jsonify({
             'success': True,

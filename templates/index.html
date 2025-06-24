@@ -245,22 +245,26 @@
                         <!-- Title -->
                         <div class="control-item">
                             <label class="control-label">Title</label>
-                            <div class="input-with-ai">
-                                <input type="text" class="clean-input wide-input" id="titleText" placeholder="Enter your title" value="Your Amazing Product">
-                                <button class="ai-generate-btn" id="generateTitleBtn" title="Generate AI title">
+                            <div class="input-container">
+                                <input type="text" class="clean-input wide-input" id="titleText" placeholder="Enter your title" value="Your Amazing Product" maxlength="200">
+                                <button class="ai-generate-btn-new" id="generateTitleBtn" title="Generate AI title">
                                     <i class="fas fa-sparkles"></i>
+                                    <i class="fas fa-chevron-down"></i>
                                 </button>
+                                <span class="character-counter" id="titleCounter">0/200</span>
                             </div>
                         </div>
 
                         <!-- Subtitle -->
                         <div class="control-item">
                             <label class="control-label">Subtitle</label>
-                            <div class="input-with-ai">
-                                <textarea class="clean-input wide-input" id="subtitleText" placeholder="Enter your subtitle" rows="3">Discover the innovation that will change your life</textarea>
-                                <button class="ai-generate-btn" id="generateSubtitleBtn" title="Generate AI subtitle">
+                            <div class="input-container">
+                                <textarea class="clean-input wide-input" id="subtitleText" placeholder="Enter your subtitle" rows="3" maxlength="200">Discover the innovation that will change your life</textarea>
+                                <button class="ai-generate-btn-new" id="generateSubtitleBtn" title="Generate AI subtitle">
                                     <i class="fas fa-sparkles"></i>
+                                    <i class="fas fa-chevron-down"></i>
                                 </button>
+                                <span class="character-counter" id="subtitleCounter">0/200</span>
                             </div>
                         </div>
 

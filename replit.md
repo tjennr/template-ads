@@ -179,6 +179,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 23, 2025: Reverted CTA toolbar button sizes to original dimensions, kept only minimal 1px spacing between elements
 - June 23, 2025: Implemented Canva-style text resizing behavior - converted all text objects to Textbox with lockScalingFlip, text now wraps within boundaries without font scaling during resize operations
 - June 24, 2025: Added Google Gemini AI text generation for title and subtitle fields - users can click sparkle buttons next to text inputs to generate creative content based on their product description prompts
+- June 24, 2025: Enhanced text input fields with 200 character limits, real-time character counters (0/200) positioned in bottom right, and redesigned AI buttons with sparkle+dropdown styling positioned in bottom left of input fields
 
 ## Changelog
 - June 16, 2025. Initial setup

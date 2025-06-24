@@ -2129,48 +2129,72 @@ input[type="number"]::after {
     flex-shrink: 0;
 }
 
-/* AI generate button styling */
-.input-with-ai {
+/* New input container with AI button and character counter */
+.input-container {
     position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    display: block;
 }
 
-.input-with-ai .wide-input {
-    flex: 1;
+.input-container .wide-input {
+    width: 100%;
+    padding-right: 60px; /* Space for character counter */
+    padding-left: 40px; /* Space for AI button */
 }
 
-.ai-generate-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.ai-generate-btn-new {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
     border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
+    color: #666;
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s;
-    flex-shrink: 0;
-    height: fit-content;
-    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    z-index: 2;
 }
 
-.ai-generate-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.ai-generate-btn-new:hover {
+    color: #333;
 }
 
-.ai-generate-btn:active {
-    transform: translateY(0);
+.ai-generate-btn-new i:first-child {
+    font-size: 14px;
 }
 
-.ai-generate-btn i {
-    font-size: 12px;
+.ai-generate-btn-new i:last-child {
+    font-size: 10px;
 }
 
-.ai-generate-btn:disabled {
-    background: #ccc;
+.ai-generate-btn-new:disabled {
+    color: #ccc;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+}
+
+.character-counter {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    font-size: 12px;
+    color: #999;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 4px;
+    border-radius: 3px;
+    z-index: 2;
+}
+
+/* For textarea, position counter at bottom right */
+.input-container textarea + .character-counter {
+    bottom: 12px;
+}
+
+/* For input, position counter vertically centered */
+.input-container input + .ai-generate-btn-new + .character-counter {
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
 }
