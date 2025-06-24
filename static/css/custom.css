@@ -43,6 +43,8 @@ body {
     flex-shrink: 0;
     height: 100%;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Right Canvas Area Panel */
@@ -56,7 +58,8 @@ body {
 /* Unified Sidebar Styling */
 .unified-sidebar {
     padding: 20px;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
 }
 
 .sidebar-section {
@@ -70,6 +73,21 @@ body {
 /* Export section specific styling - compact sizing */
 .sidebar-section:has(.export-container) {
     margin-bottom: 0;
+}
+
+/* Ensure unified sidebar fits content properly */
+.unified-sidebar {
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Make sure the last section doesn't add extra space */
+.unified-sidebar .sidebar-section:last-child {
+    margin-bottom: 0;
+    flex-shrink: 0;
 }
 
 .section-heading {
