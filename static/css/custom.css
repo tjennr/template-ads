@@ -2128,3 +2128,49 @@ input[type="number"]::after {
 .control-option svg {
     flex-shrink: 0;
 }
+
+/* AI generate button styling */
+.input-with-ai {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.input-with-ai .wide-input {
+    flex: 1;
+}
+
+.ai-generate-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    height: fit-content;
+    margin-top: 2px;
+}
+
+.ai-generate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.ai-generate-btn:active {
+    transform: translateY(0);
+}
+
+.ai-generate-btn i {
+    font-size: 12px;
+}
+
+.ai-generate-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

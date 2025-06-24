@@ -4362,6 +4362,90 @@ class TemplateAdsEditor {
         }
     }
 
+    setupTextGeneration() {
+        const generateTitleBtn = document.getElementById('generateTitleBtn');
+        const generateSubtitleBtn = document.getElementById('generateSubtitleBtn');
+
+        if (generateTitleBtn) {
+            generateTitleBtn.addEventListener('click', () => {
+                this.showTextPromptDialog('title');
+            });
+        }
+
+        if (generateSubtitleBtn) {
+            generateSubtitleBtn.addEventListener('click', () => {
+                this.showTextPromptDialog('subtitle');
+            });
+        }
+    }
+
+    showTextPromptDialog(textType) {
+        const promptText = textType === 'title' ? 'title' : 'subtitle or description';
+        const prompt = window.prompt(`Enter a brief description of your product/service to generate an AI ${promptText}:`);
+        
+        if (prompt && prompt.trim()) {
+            this.generateAIText(prompt.trim(), textType);
+        }
+    }
+
+    async generateAIText(prompt, textType) {
+        const button = document.getElementById(textType === 'title' ? 'generateTitleBtn' : 'generateSubtitleBtn');
+        const input = document.getElementById(textType === 'title' ? 'titleText' : 'subtitleText');
+        
+        // Show loading state
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        try {
+            const response = await fetch('/api/gemini/generate-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prompt: prompt,
+                    type: textType
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update the input field
+                input.value = data.text;
+                
+                // Update the canvas text
+                this.updateText(textType, data.text);
+                
+                // Show success feedback
+                button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                
+                setTimeout(() => {
+                    button.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                    button.innerHTML = '<i class="fas fa-sparkles"></i>';
+                    button.disabled = false;
+                }, 2000);
+            } else {
+                throw new Error(data.error || 'Text generation failed');
+            }
+        } catch (error) {
+            console.error('AI text generation error:', error);
+            
+            // Show error feedback
+            button.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            button.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            
+            setTimeout(() => {
+                button.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                button.innerHTML = '<i class="fas fa-sparkles"></i>';
+                button.disabled = false;
+            }, 3000);
+            
+            alert('Failed to generate text. Please try again.');
+        }
+    }
+
 }
 
 // Initialize the editor when the page loads
