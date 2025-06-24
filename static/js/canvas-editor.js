@@ -2663,7 +2663,7 @@ class TemplateAdsEditor {
         // Title - positioned in top text area
         this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.2,
+            top: canvasHeight * 0.15,
             fontSize: 40,
             fill: '#333333',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -2680,7 +2680,7 @@ class TemplateAdsEditor {
         // Subtitle - positioned in top text area
         this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.33,
+            top: canvasHeight * 0.28,
             fontSize: 24,
             fill: '#666666',
             fontFamily: 'Source Sans Pro, sans-serif',
@@ -2733,7 +2733,7 @@ class TemplateAdsEditor {
 
         this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
             left: canvasWidth / 2,
-            top: canvasHeight * 0.45,
+            top: canvasHeight * 0.4,
             originX: 'center',
             originY: 'center',
             id: 'ctaGroup'
