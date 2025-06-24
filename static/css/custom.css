@@ -2215,17 +2215,24 @@ input[type="number"]::after {
 .ai-prompt-input {
     width: 100%;
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #e9ecef;
     border-radius: 4px;
     font-size: 14px;
     font-family: inherit;
     margin-bottom: 8px;
+    background: #ffffff;
+    color: #495057;
 }
 
 .ai-prompt-input:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+    background: #ffffff;
+}
+
+.ai-prompt-input::placeholder {
+    color: #6c757d;
 }
 
 .ai-prompt-actions {
