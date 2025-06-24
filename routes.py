@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from app import app
 from shutterstock_api import ShutterstockAPI
 from openai import OpenAI
+from google import genai
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}
 
@@ -334,6 +335,57 @@ def generate_ai_image():
             return jsonify({'error': 'DALL-E model not available. Please try again later.'}), 503
         else:
             return jsonify({'error': f'Image generation failed: {error_msg}'}), 500
+
+@app.route('/api/gemini/generate-text', methods=['POST'])
+def generate_text():
+    """Generate text content using Google Gemini"""
+    try:
+        data = request.get_json()
+        prompt = data.get('prompt', '').strip()
+        text_type = data.get('type', 'title')  # 'title' or 'subtitle'
+        
+        if not prompt:
+            return jsonify({'error': 'Prompt is required'}), 400
+        
+        # Check if Gemini API key is available
+        api_key = os.environ.get('GEMINI_API_KEY')
+        if not api_key:
+            return jsonify({'error': 'Gemini API key not configured'}), 503
+        
+        # Initialize Gemini client
+        client = genai.Client(api_key=api_key)
+        
+        # Create appropriate prompt based on text type
+        if text_type == 'title':
+            system_prompt = f"Generate a compelling, concise ad title (under 8 words) for: {prompt}. Return only the title text, no quotes or explanations."
+        else:  # subtitle
+            system_prompt = f"Generate an engaging subtitle or description (under 25 words) for: {prompt}. Return only the subtitle text, no quotes or explanations."
+        
+        # Generate text with Gemini
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=system_prompt
+        )
+        
+        if not response or not response.text:
+            return jsonify({'error': 'No text generated'}), 500
+        
+        # Clean up the response text
+        generated_text = response.text.strip()
+        # Remove quotes if present
+        if generated_text.startswith('"') and generated_text.endswith('"'):
+            generated_text = generated_text[1:-1]
+        if generated_text.startswith("'") and generated_text.endswith("'"):
+            generated_text = generated_text[1:-1]
+        
+        return jsonify({
+            'success': True,
+            'text': generated_text
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Gemini text generation error: {str(e)}")
+        return jsonify({'error': f'Text generation failed: {str(e)}'}), 500
 
 @app.errorhandler(413)
 def too_large(e):
