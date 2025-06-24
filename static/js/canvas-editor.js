@@ -345,6 +345,17 @@ class TemplateAdsEditor {
         optimalScale = Math.max(optimalScale, minScale);
         optimalScale = Math.min(optimalScale, 5); // Allow significant zoom
         
+        // If we hit minimum scale, adjust container alignment to prevent centering
+        if (optimalScale === minScale) {
+            // Change container to align to top-left instead of center when at minimum
+            container.style.alignItems = 'flex-start';
+            container.style.justifyContent = 'flex-start';
+        } else {
+            // Normal centering when not at minimum
+            container.style.alignItems = 'center';
+            container.style.justifyContent = 'center';
+        }
+        
         // Apply the scaling
         this.zoomLevel = optimalScale;
         this.applyCanvaScale();
