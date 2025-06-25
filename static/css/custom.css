@@ -280,6 +280,8 @@ h1, h2, h3, h4, h5, h6 {
     transform-origin: center;
     /* Add drop shadow behind the ad borders */
     filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+    /* Remove transition animations */
+    transition: none !important;
 }
 
 .canvas-actions {
@@ -544,6 +546,8 @@ h1, h2, h3, h4, h5, h6 {
     height: auto;
     /* Removed z-index constraint to allow proper element selection */
     /* Removed max-width constraint to allow overflow behind sidebar */
+    /* Remove transition animations */
+    transition: none !important;
 }
 
 /* Minimalist Sidebar Sections */

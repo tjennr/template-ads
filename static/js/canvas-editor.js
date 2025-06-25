@@ -348,14 +348,14 @@ class TemplateAdsEditor {
         
         // Lock canvas position when at minimum scale
         if (isAtMinimum) {
-            // Lock the canvas wrapper at fixed position and size
+            // Lock the canvas wrapper at center-left position
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
             if (canvasWrapper) {
                 canvasWrapper.style.position = 'absolute';
-                canvasWrapper.style.top = '20px';
+                canvasWrapper.style.top = '50%';
                 canvasWrapper.style.left = '20px';
-                canvasWrapper.style.transform = `scale(${minScale})`;
-                canvasWrapper.style.transformOrigin = 'top left';
+                canvasWrapper.style.transform = `translateY(-50%) scale(${minScale})`;
+                canvasWrapper.style.transformOrigin = 'left center';
             }
             
             // Ensure container allows overflow
