@@ -360,45 +360,15 @@ class TemplateAdsEditor {
             container.style.overflow = 'hidden';
             
             if (canvasWrapper) {
-                // Only switch to absolute positioning if not already positioned
-                if (canvasWrapper.style.position !== 'absolute') {
-                    canvasWrapper.style.position = 'absolute';
-                    canvasWrapper.style.left = '50%';
-                    canvasWrapper.style.top = '50%';
-                    canvasWrapper.style.transform = `translate(-50%, -50%) scale(${optimalScale})`;
-                    canvasWrapper.style.transformOrigin = 'center';
-                } else {
-                    // Already positioned - just update scale, preserve position
-                    const currentTransform = canvasWrapper.style.transform;
-                    if (currentTransform.includes('translate')) {
-                        canvasWrapper.style.transform = currentTransform.replace(/scale\([^)]*\)/, `scale(${optimalScale})`);
-                    }
-                }
-                
-                // Adjust position to prevent overflow without jumping
-                let currentLeft = canvasWrapper.style.left;
-                let currentTop = canvasWrapper.style.top;
-                let translateX = '-50%';
-                let translateY = '-50%';
-                
-                // Lock X-axis if width exceeds boundary
-                if (exceedsWidth) {
-                    currentLeft = '20px';
-                    translateX = '0%';
-                }
-                
-                // Lock Y-axis if height exceeds boundary  
-                if (exceedsHeight) {
-                    currentTop = '20px';
-                    translateY = '0%';
-                }
-                
-                canvasWrapper.style.left = currentLeft;
-                canvasWrapper.style.top = currentTop;
-                canvasWrapper.style.transform = `translate(${translateX}, ${translateY}) scale(${optimalScale})`;
+                // Keep using normal scaling when exceeding boundaries at minimum scale
+                // Don't switch to absolute positioning to avoid jumping
+                canvasWrapper.style.position = 'relative';
+                container.style.alignItems = 'center';
+                container.style.justifyContent = 'center';
             }
             
             this.zoomLevel = optimalScale;
+            this.applyCanvaScale();
         } else {
             // Normal responsive behavior - canvas fits within boundaries
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
