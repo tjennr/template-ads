@@ -352,11 +352,23 @@ def generate_text():
         # Initialize Gemini client
         client = genai.Client(api_key=api_key)
         
-        # Create appropriate prompt based on text type
-        if text_type == 'title':
-            system_prompt = f"Generate a compelling, concise ad title (maximum 200 characters, preferably under 8 words) for: {prompt}. Return only the title text, no quotes or explanations."
-        else:  # subtitle
-            system_prompt = f"Generate an engaging subtitle or description (maximum 200 characters, preferably under 25 words) for: {prompt}. Return only the subtitle text, no quotes or explanations."
+        # Create prompt for both title and subtitle generation
+        if text_type == 'both':
+            system_prompt = f"""
+            Generate both a compelling advertising title and subtitle for: {prompt}
+            
+            Requirements:
+            - Title: Short, catchy, max 10 words, under 200 characters
+            - Subtitle: Persuasive tagline that complements the title, max 15 words, under 200 characters
+            - Return in JSON format: {{"title": "Your Title", "subtitle": "Your Subtitle"}}
+            - Only return the JSON, nothing else
+            """
+        else:
+            # Fallback for individual text generation
+            if text_type == 'title':
+                system_prompt = f"Generate a compelling, concise ad title (maximum 200 characters, preferably under 8 words) for: {prompt}. Return only the title text, no quotes or explanations."
+            else:  # subtitle
+                system_prompt = f"Generate an engaging subtitle or description (maximum 200 characters, preferably under 25 words) for: {prompt}. Return only the subtitle text, no quotes or explanations."
         
         # Generate text with Gemini
         response = client.models.generate_content(
@@ -367,17 +379,49 @@ def generate_text():
         if not response or not response.text:
             return jsonify({'error': 'No text generated'}), 500
         
-        # Clean up the response text
-        generated_text = response.text.strip()
-        # Remove quotes if present
-        if generated_text.startswith('"') and generated_text.endswith('"'):
-            generated_text = generated_text[1:-1]
-        if generated_text.startswith("'") and generated_text.endswith("'"):
-            generated_text = generated_text[1:-1]
-        
-        # Ensure text doesn't exceed 200 characters
-        if len(generated_text) > 200:
-            generated_text = generated_text[:200].strip()
+        # Handle combined text generation
+        if text_type == 'both':
+            try:
+                import json
+                generated_text = response.text.strip()
+                
+                # Remove any markdown formatting if present
+                if generated_text.startswith('```json'):
+                    generated_text = generated_text.replace('```json', '').replace('```', '').strip()
+                elif generated_text.startswith('```'):
+                    generated_text = generated_text.replace('```', '').strip()
+                
+                result = json.loads(generated_text)
+                
+                return jsonify({
+                    'success': True,
+                    'title': result.get('title', '').strip()[:200],
+                    'subtitle': result.get('subtitle', '').strip()[:200]
+                })
+                
+            except json.JSONDecodeError:
+                # Fallback: try to extract title and subtitle from plain text
+                lines = [line.strip() for line in generated_text.split('\n') if line.strip()]
+                title = lines[0] if len(lines) > 0 else f"Amazing {prompt}"
+                subtitle = lines[1] if len(lines) > 1 else f"Discover the best {prompt}"
+                
+                return jsonify({
+                    'success': True,
+                    'title': title[:200],
+                    'subtitle': subtitle[:200]
+                })
+        else:
+            # Handle individual text generation
+            generated_text = response.text.strip()
+            # Remove quotes if present
+            if generated_text.startswith('"') and generated_text.endswith('"'):
+                generated_text = generated_text[1:-1]
+            if generated_text.startswith("'") and generated_text.endswith("'"):
+                generated_text = generated_text[1:-1]
+            
+            # Ensure text doesn't exceed 200 characters
+            if len(generated_text) > 200:
+                generated_text = generated_text[:200].strip()
         
         return jsonify({
             'success': True,

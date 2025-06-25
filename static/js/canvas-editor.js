@@ -4565,75 +4565,43 @@ class TemplateAdsEditor {
     }
 
     setupTextGeneration() {
-        // Title AI generation
-        const generateTitleBtn = document.getElementById('generateTitleBtn');
-        const titlePromptContainer = document.getElementById('titlePromptContainer');
-        const titlePromptInput = document.getElementById('titlePromptInput');
-        const titleGenerateBtn = document.getElementById('titleGenerateBtn');
-        const titleCancelBtn = document.getElementById('titleCancelBtn');
+        // Combined AI text generation for both title and subtitle
+        const generateBothTextBtn = document.getElementById('generateBothTextBtn');
+        const bothTextPromptContainer = document.getElementById('bothTextPromptContainer');
+        const bothTextPromptInput = document.getElementById('bothTextPromptInput');
+        const bothTextGenerateBtn = document.getElementById('bothTextGenerateBtn');
+        const bothTextCancelBtn = document.getElementById('bothTextCancelBtn');
 
-        if (generateTitleBtn) {
-            generateTitleBtn.addEventListener('click', () => {
-                this.showPromptContainer('title');
+        if (generateBothTextBtn) {
+            generateBothTextBtn.addEventListener('click', () => {
+                this.showPromptContainer('bothText');
             });
         }
 
-        if (titleGenerateBtn) {
-            titleGenerateBtn.addEventListener('click', () => {
-                const prompt = titlePromptInput.value.trim();
+        if (bothTextGenerateBtn) {
+            bothTextGenerateBtn.addEventListener('click', () => {
+                const prompt = bothTextPromptInput.value.trim();
                 if (prompt) {
-                    this.generateAIText(prompt, 'title');
+                    this.generateAIText(prompt, 'both');
                 }
             });
         }
 
-        if (titleCancelBtn) {
-            titleCancelBtn.addEventListener('click', () => {
-                this.hidePromptContainer('title');
+        if (bothTextCancelBtn) {
+            bothTextCancelBtn.addEventListener('click', () => {
+                this.hidePromptContainer('bothText');
             });
         }
 
-        // Subtitle AI generation
-        const generateSubtitleBtn = document.getElementById('generateSubtitleBtn');
-        const subtitlePromptContainer = document.getElementById('subtitlePromptContainer');
-        const subtitlePromptInput = document.getElementById('subtitlePromptInput');
-        const subtitleGenerateBtn = document.getElementById('subtitleGenerateBtn');
-        const subtitleCancelBtn = document.getElementById('subtitleCancelBtn');
-
-        if (generateSubtitleBtn) {
-            generateSubtitleBtn.addEventListener('click', () => {
-                this.showPromptContainer('subtitle');
-            });
-        }
-
-        if (subtitleGenerateBtn) {
-            subtitleGenerateBtn.addEventListener('click', () => {
-                const prompt = subtitlePromptInput.value.trim();
-                if (prompt) {
-                    this.generateAIText(prompt, 'subtitle');
-                }
-            });
-        }
-
-        if (subtitleCancelBtn) {
-            subtitleCancelBtn.addEventListener('click', () => {
-                this.hidePromptContainer('subtitle');
-            });
-        }
-
-        // Enter key support for prompt inputs
-        if (titlePromptInput) {
-            titlePromptInput.addEventListener('keypress', (e) => {
+        // Handle Enter keypress for prompt input
+        if (bothTextPromptInput) {
+            bothTextPromptInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    titleGenerateBtn.click();
-                }
-            });
-        }
-
-        if (subtitlePromptInput) {
-            subtitlePromptInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    subtitleGenerateBtn.click();
+                    e.preventDefault();
+                    const prompt = bothTextPromptInput.value.trim();
+                    if (prompt) {
+                        this.generateAIText(prompt, 'both');
+                    }
                 }
             });
         }
@@ -4664,8 +4632,9 @@ class TemplateAdsEditor {
     }
 
     async generateAIText(prompt, textType) {
-        const generateButton = document.getElementById(`${textType}GenerateBtn`);
-        const input = document.getElementById(textType === 'title' ? 'titleText' : 'subtitleText');
+        const generateButton = document.getElementById(`${textType}TextGenerateBtn`);
+        const titleInput = document.getElementById('titleText');
+        const subtitleInput = document.getElementById('subtitleText');
         
         // Show loading state
         generateButton.disabled = true;
@@ -4686,17 +4655,21 @@ class TemplateAdsEditor {
             const data = await response.json();
 
             if (data.success) {
-                // Update the input field
-                input.value = data.text;
+                // Update both title and subtitle fields with generated text
+                if (titleInput && data.title) {
+                    titleInput.value = data.title;
+                    this.updateText('title', data.title);
+                    this.updateCharacterCounter('title');
+                }
                 
-                // Update character counter
-                this.updateCharacterCounter(textType);
-                
-                // Update the canvas text
-                this.updateText(textType, data.text);
+                if (subtitleInput && data.subtitle) {
+                    subtitleInput.value = data.subtitle;
+                    this.updateText('subtitle', data.subtitle);
+                    this.updateCharacterCounter('subtitle');
+                }
                 
                 // Hide the prompt container
-                this.hidePromptContainer(textType);
+                this.hidePromptContainer('bothText');
                 
                 // Show success feedback
                 generateButton.innerHTML = '<i class="fas fa-check"></i> Generated!';
@@ -4706,18 +4679,15 @@ class TemplateAdsEditor {
                     generateButton.disabled = false;
                 }, 1500);
             } else {
-                throw new Error(data.error || 'Text generation failed');
+                throw new Error(data.error || 'Failed to generate text');
             }
         } catch (error) {
             console.error('AI text generation error:', error);
+            alert('Failed to generate text. Please try again.');
             
-            // Show error feedback
-            generateButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
-            
-            setTimeout(() => {
-                generateButton.innerHTML = 'Generate';
-                generateButton.disabled = false;
-            }, 3000);
+            // Reset button state
+            generateButton.disabled = false;
+            generateButton.innerHTML = 'Generate';
             
             alert('Failed to generate text. Please try again.');
         }
