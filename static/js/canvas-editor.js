@@ -1015,16 +1015,52 @@ class TemplateAdsEditor {
     focusNextObject() {
         if (this.focusableObjects.length === 0) return;
         
-        this.currentFocusIndex = (this.currentFocusIndex + 1) % this.focusableObjects.length;
+        // Check if we're at the end of focusable objects
+        if (this.currentFocusIndex >= this.focusableObjects.length - 1) {
+            // Exit canvas focus and let browser handle next focusable element
+            this.clearCanvasFocus();
+            // Find the next focusable element after canvas
+            const canvasElement = this.canvas.getElement();
+            const allFocusableElements = Array.from(document.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]:not([disabled])'));
+            const canvasIndex = allFocusableElements.indexOf(canvasElement);
+            
+            if (canvasIndex >= 0 && canvasIndex < allFocusableElements.length - 1) {
+                // Focus the next element after canvas
+                allFocusableElements[canvasIndex + 1].focus();
+            } else {
+                // Fallback: remove focus from canvas to allow natural browser tab flow
+                canvasElement.blur();
+            }
+            return;
+        }
+        
+        this.currentFocusIndex = this.currentFocusIndex + 1;
         this.highlightFocusedObject();
     }
 
     focusPreviousObject() {
         if (this.focusableObjects.length === 0) return;
         
-        this.currentFocusIndex = this.currentFocusIndex <= 0 
-            ? this.focusableObjects.length - 1 
-            : this.currentFocusIndex - 1;
+        // Check if we're at the beginning of focusable objects
+        if (this.currentFocusIndex <= 0) {
+            // Exit canvas focus and let browser handle previous focusable element
+            this.clearCanvasFocus();
+            // Find the previous focusable element before canvas
+            const canvasElement = this.canvas.getElement();
+            const allFocusableElements = Array.from(document.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]:not([disabled])'));
+            const canvasIndex = allFocusableElements.indexOf(canvasElement);
+            
+            if (canvasIndex > 0) {
+                // Focus the previous element before canvas
+                allFocusableElements[canvasIndex - 1].focus();
+            } else {
+                // Fallback: remove focus from canvas to allow natural browser tab flow
+                canvasElement.blur();
+            }
+            return;
+        }
+        
+        this.currentFocusIndex = this.currentFocusIndex - 1;
         this.highlightFocusedObject();
     }
 
@@ -1207,38 +1243,14 @@ class TemplateAdsEditor {
                         // Tab out of last element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
-                        // Continue with next canvas element or tab out of canvas completely
-                        if (this.currentFocusIndex < this.focusableObjects.length - 1) {
-                            this.focusNextObject();
-                        } else {
-                            // Tab out of canvas completely
-                            this.clearCanvasFocus();
-                            // Let the browser handle natural tab flow by focusing next element after canvas
-                            const canvasElement = this.canvas.getElement();
-                            const allFocusableElements = document.querySelectorAll('button, input, select, textarea, [tabindex="0"]');
-                            const canvasIndex = Array.from(allFocusableElements).indexOf(canvasElement);
-                            if (canvasIndex >= 0 && canvasIndex < allFocusableElements.length - 1) {
-                                allFocusableElements[canvasIndex + 1].focus();
-                            }
-                        }
+                        // Always continue with next canvas element first
+                        this.focusNextObject();
                     } else if (e.shiftKey && index === 0) {
                         // Shift+tab out of first element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
-                        // Continue with previous canvas element or tab out of canvas completely
-                        if (this.currentFocusIndex > 0) {
-                            this.focusPreviousObject();
-                        } else {
-                            // Tab out of canvas completely (backwards)
-                            this.clearCanvasFocus();
-                            // Let the browser handle natural tab flow by focusing previous element before canvas
-                            const canvasElement = this.canvas.getElement();
-                            const allFocusableElements = document.querySelectorAll('button, input, select, textarea, [tabindex="0"]');
-                            const canvasIndex = Array.from(allFocusableElements).indexOf(canvasElement);
-                            if (canvasIndex > 0) {
-                                allFocusableElements[canvasIndex - 1].focus();
-                            }
-                        }
+                        // Always continue with previous canvas element first
+                        this.focusPreviousObject();
                     }
                 }
             });
