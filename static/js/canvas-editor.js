@@ -342,23 +342,48 @@ class TemplateAdsEditor {
         }
         
         // Apply scaling limits with orientation-specific minimums
+        const isAtMinimum = optimalScale <= minScale;
         optimalScale = Math.max(optimalScale, minScale);
         optimalScale = Math.min(optimalScale, 5); // Allow significant zoom
         
-        // If we hit minimum scale, adjust container alignment to prevent centering
-        if (optimalScale === minScale) {
-            // Change container to align to top-left instead of center when at minimum
+        // Lock canvas position when at minimum scale
+        if (isAtMinimum) {
+            // Lock the canvas wrapper at fixed position and size
+            const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
+            if (canvasWrapper) {
+                canvasWrapper.style.position = 'absolute';
+                canvasWrapper.style.top = '20px';
+                canvasWrapper.style.left = '20px';
+                canvasWrapper.style.transform = `scale(${minScale})`;
+                canvasWrapper.style.transformOrigin = 'top left';
+            }
+            
+            // Ensure container allows overflow
+            container.style.overflow = 'hidden';
             container.style.alignItems = 'flex-start';
             container.style.justifyContent = 'flex-start';
         } else {
-            // Normal centering when not at minimum
+            // Normal responsive behavior when not at minimum
+            const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
+            if (canvasWrapper) {
+                canvasWrapper.style.position = 'relative';
+                canvasWrapper.style.top = 'auto';
+                canvasWrapper.style.left = 'auto';
+                canvasWrapper.style.transformOrigin = 'center';
+            }
+            
+            container.style.overflow = 'visible';
             container.style.alignItems = 'center';
             container.style.justifyContent = 'center';
+            
+            // Apply the scaling normally
+            this.zoomLevel = optimalScale;
+            this.applyCanvaScale();
+            return;
         }
         
-        // Apply the scaling
-        this.zoomLevel = optimalScale;
-        this.applyCanvaScale();
+        // When at minimum, don't call applyCanvaScale as we handle scaling directly
+        this.zoomLevel = minScale;
     }
 
     applyCanvaScale() {

@@ -272,6 +272,7 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 0; /* Allow shrinking */
     min-width: 0;  /* Allow shrinking */
     box-sizing: border-box;
+    position: relative; /* Enable absolute positioning of canvas when locked */
 }
 
 .canvas-wrapper-zoom {
