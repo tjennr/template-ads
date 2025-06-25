@@ -53,7 +53,7 @@ label, .control-label, .input-label {
 
 /* Left Sidebar Panel */
 .sidebar-panel {
-    width: 480px;
+    width: 520px;
     background: #ffffff;
     border-right: 1px solid #e9ecef;
     flex-shrink: 0;
