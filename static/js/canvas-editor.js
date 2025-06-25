@@ -3518,6 +3518,9 @@ class TemplateAdsEditor {
             this.mainImage = null;
             this.logo = null;
             
+            // Hide delete logo button
+            this.hideDeleteLogoButton();
+            
             // Set canvas dimensions for current orientation
             this.setCanvasDimensions();
             
