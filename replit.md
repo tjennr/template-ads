@@ -214,6 +214,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Updated image tab buttons background color to #EDF3F8 for consistency
 - June 25, 2025: Replaced individual title/subtitle AI generation with single "Generate text" button that creates both title and subtitle from one prompt
 - June 25, 2025: Removed "Minimal" template layout - deleted all related code including HTML button, JavaScript function, and template references
+- June 25, 2025: Fixed floating toolbar tab navigation - focus now properly continues to next ad element instead of jumping to URL bar
+- June 25, 2025: Updated CTA toggle elements to display inline - checkbox and "Show" label now appear in same row with flexbox styling
 
 ## Changelog
 - June 16, 2025. Initial setup
