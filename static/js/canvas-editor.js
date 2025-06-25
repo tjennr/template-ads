@@ -344,25 +344,45 @@ class TemplateAdsEditor {
         const isAtMinimum = optimalScale <= minScale;
         
         if (isAtMinimum) {
-            // Window is too small - lock canvas at minimum scale and keep current position
+            // Window is too small - lock canvas at minimum scale with intelligent positioning
             optimalScale = minScale;
             
-            // Only reposition if canvas wrapper isn't already positioned (first time hitting minimum)
+            // Calculate if width or height is the limiting factor
+            const scaledCanvasWidth = canvasWidth * minScale;
+            const scaledCanvasHeight = canvasHeight * minScale;
+            const widthTooSmall = scaledCanvasWidth > availableWidth;
+            const heightTooSmall = scaledCanvasHeight > availableHeight;
+            
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-            if (canvasWrapper && canvasWrapper.style.position !== 'absolute') {
-                // Lock canvas in current center position when first hitting minimum
+            if (canvasWrapper) {
                 canvasWrapper.style.position = 'absolute';
-                canvasWrapper.style.top = '50%';
-                canvasWrapper.style.left = '50%';
-                canvasWrapper.style.transform = `translate(-50%, -50%) scale(${minScale})`;
-                canvasWrapper.style.transformOrigin = 'center';
-            } else if (canvasWrapper && canvasWrapper.style.position === 'absolute') {
-                // Already positioned - just update scale while maintaining position
-                const currentTransform = canvasWrapper.style.transform;
-                if (currentTransform.includes('translate')) {
-                    // Preserve existing translate values, only update scale
-                    canvasWrapper.style.transform = currentTransform.replace(/scale\([^)]*\)/, `scale(${minScale})`);
+                
+                let translateX = '-50%'; // Default to center
+                let translateY = '-50%'; // Default to center
+                let left = '50%';
+                let top = '50%';
+                
+                // Determine positioning based on which dimension is constrained
+                if (widthTooSmall && heightTooSmall) {
+                    // Both dimensions too small → top-left alignment
+                    translateX = '0%';
+                    translateY = '0%';
+                    left = '20px';
+                    top = '20px';
+                } else if (widthTooSmall) {
+                    // Width too small → center-left alignment
+                    translateX = '0%';
+                    left = '20px';
+                } else if (heightTooSmall) {
+                    // Height too small → top-center alignment
+                    translateY = '0%';
+                    top = '20px';
                 }
+                
+                canvasWrapper.style.left = left;
+                canvasWrapper.style.top = top;
+                canvasWrapper.style.transform = `translate(${translateX}, ${translateY}) scale(${minScale})`;
+                canvasWrapper.style.transformOrigin = 'center';
             }
             
             container.style.overflow = 'hidden';
