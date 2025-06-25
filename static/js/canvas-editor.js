@@ -355,19 +355,32 @@ class TemplateAdsEditor {
         
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
-        // Apply scaling with overflow clipping at boundaries
+        // Apply scaling with boundary locking
         this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
         
         if (exceedsWidth || exceedsHeight) {
-            // Canvas exceeds boundaries - just clip with overflow
+            // Canvas exceeds boundaries - lock position on affected axes
             container.style.overflow = 'hidden';
+            
+            // Lock Y-axis if height exceeds (align to top)
+            if (exceedsHeight) {
+                container.style.alignItems = 'flex-start';
+            } else {
+                container.style.alignItems = 'center';
+            }
+            
+            // Lock X-axis if width exceeds (align to left)  
+            if (exceedsWidth) {
+                container.style.justifyContent = 'flex-start';
+            } else {
+                container.style.justifyContent = 'center';
+            }
         } else {
+            // Normal behavior - center both axes
             container.style.overflow = 'visible';
+            container.style.alignItems = 'center';
+            container.style.justifyContent = 'center';
         }
-        
-        // Always keep container centered - no positioning changes
-        container.style.alignItems = 'center';
-        container.style.justifyContent = 'center';
         
         this.applyCanvaScale();
     }
