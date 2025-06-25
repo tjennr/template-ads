@@ -707,14 +707,6 @@ class TemplateAdsEditor {
             });
         }
         
-        // Setup logo delete button
-        const deleteLogoBtn = document.getElementById('deleteLogo');
-        if (deleteLogoBtn) {
-            deleteLogoBtn.addEventListener('click', () => {
-                this.deleteLogo();
-            });
-        }
-        
         // Initialize slider fills on load
         this.initializeSliderFills();
         
@@ -3525,9 +3517,6 @@ class TemplateAdsEditor {
             // Reset image references
             this.mainImage = null;
             this.logo = null;
-            
-            // Hide delete logo button
-            this.hideDeleteLogoButton();
             
             // Set canvas dimensions for current orientation
             this.setCanvasDimensions();
