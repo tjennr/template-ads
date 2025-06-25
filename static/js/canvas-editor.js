@@ -348,29 +348,36 @@ class TemplateAdsEditor {
         }
         
         // Check if the canvas at current scale would exceed container boundaries
-        const scaledCanvasWidth = canvasWidth * optimalScale;
-        const scaledCanvasHeight = canvasHeight * optimalScale;
+        // Only when it ACTUALLY exceeds, not just at minimum scale
+        const scaledCanvasWidth = canvasWidth * this.zoomLevel;
+        const scaledCanvasHeight = canvasHeight * this.zoomLevel;
         const exceedsWidth = scaledCanvasWidth > availableWidth;
         const exceedsHeight = scaledCanvasHeight > availableHeight;
         
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
-        // Apply scaling with boundary locking
+        // Apply scaling first
         this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
         
-        if (exceedsWidth || exceedsHeight) {
+        // Check boundaries AFTER setting zoom level
+        const actualScaledWidth = canvasWidth * this.zoomLevel;
+        const actualScaledHeight = canvasHeight * this.zoomLevel;
+        const actualExceedsWidth = actualScaledWidth > availableWidth;
+        const actualExceedsHeight = actualScaledHeight > availableHeight;
+        
+        if (actualExceedsWidth || actualExceedsHeight) {
             // Canvas exceeds boundaries - lock position on affected axes
             container.style.overflow = 'hidden';
             
             // Lock Y-axis if height exceeds (align to top)
-            if (exceedsHeight) {
+            if (actualExceedsHeight) {
                 container.style.alignItems = 'flex-start';
             } else {
                 container.style.alignItems = 'center';
             }
             
             // Lock X-axis if width exceeds (align to left)  
-            if (exceedsWidth) {
+            if (actualExceedsWidth) {
                 container.style.justifyContent = 'flex-start';
             } else {
                 container.style.justifyContent = 'center';
