@@ -13,10 +13,16 @@ body {
     margin: 0;
 }
 
-/* Ensure all text inputs and body text use SF Pro Text with normal weight */
-input, textarea, select, button, label, .upload-label, .control-label, .input-label, .dropdown-btn, .control-dropdown-btn {
+/* Ensure text inputs, dropdown menus, and form elements use SF Pro Text with normal weight */
+input, textarea, select, .dropdown-btn, .control-dropdown-btn, .upload-label {
     font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     font-weight: 400 !important;
+}
+
+/* Ensure labels use SF Pro Text with semi-bold weight */
+label, .control-label, .input-label {
+    font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-weight: 600 !important;
 }
 
 /* App Layout Structure */
@@ -122,7 +128,7 @@ input, textarea, select, button, label, .upload-label, .control-label, .input-la
 .control-label {
     display: block;
     font-size: 0.9rem;
-    font-weight: 400;
+    font-weight: 600;
     font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #495057;
     margin-bottom: 6px;
@@ -158,7 +164,7 @@ input, textarea, select, button, label, .upload-label, .control-label, .input-la
 
 .cta-toggle .form-check-label {
     font-size: 0.8rem;
-    font-weight: 400;
+    font-weight: 600;
     font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
     color: #495057;
@@ -670,7 +676,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .input-label {
     font-size: 0.875rem;
-    font-weight: 400;
+    font-weight: 600;
     font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #495057;
 }
