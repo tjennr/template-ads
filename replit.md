@@ -206,6 +206,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Changed website font family from Source Sans Pro to SF Pro Text for improved visual consistency
 - June 25, 2025: Updated gray colors on left panel to use #EDF3F8 for consistent color scheme, reverted right panel to original gray colors
 - June 25, 2025: Changed all website text to use SF Pro Text font family with fallback fonts for consistent typography
+- June 25, 2025: Added font-weight: 400 to body text and ensured all inputs, textareas, and labels use SF Pro Text
 
 ## Changelog
 - June 16, 2025. Initial setup
