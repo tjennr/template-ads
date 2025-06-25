@@ -1574,7 +1574,7 @@ input[type="number"]::after {
 /* Export Container */
 .export-container {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
 }
 
 .export-main-btn {
