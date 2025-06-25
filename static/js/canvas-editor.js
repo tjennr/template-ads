@@ -356,19 +356,37 @@ class TemplateAdsEditor {
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
         if (exceedsWidth || exceedsHeight) {
-            // Canvas exceeds boundaries - lock position on affected axes
+            // Canvas exceeds boundaries - need to align to prevent overflow
             container.style.overflow = 'hidden';
             
             if (canvasWrapper) {
-                // Keep using normal scaling when exceeding boundaries at minimum scale
-                // Don't switch to absolute positioning to avoid jumping
-                canvasWrapper.style.position = 'relative';
-                container.style.alignItems = 'center';
-                container.style.justifyContent = 'center';
+                canvasWrapper.style.position = 'absolute';
+                
+                // Calculate safe positioning to prevent overflow
+                let left = '50%';
+                let top = '50%';
+                let translateX = '-50%';
+                let translateY = '-50%';
+                
+                if (exceedsWidth) {
+                    // Canvas width exceeds container - align to left edge
+                    left = '20px';
+                    translateX = '0%';
+                }
+                
+                if (exceedsHeight) {
+                    // Canvas height exceeds container - align to top edge
+                    top = '20px';
+                    translateY = '0%';
+                }
+                
+                canvasWrapper.style.left = left;
+                canvasWrapper.style.top = top;
+                canvasWrapper.style.transform = `translate(${translateX}, ${translateY}) scale(${optimalScale})`;
+                canvasWrapper.style.transformOrigin = 'center';
             }
             
             this.zoomLevel = optimalScale;
-            this.applyCanvaScale();
         } else {
             // Normal responsive behavior - canvas fits within boundaries
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
