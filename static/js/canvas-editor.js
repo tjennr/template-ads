@@ -347,23 +347,16 @@ class TemplateAdsEditor {
             optimalScale = minScale;
         }
         
-        // Check if the canvas at current scale would exceed container boundaries
-        // Only when it ACTUALLY exceeds, not just at minimum scale
-        const scaledCanvasWidth = canvasWidth * this.zoomLevel;
-        const scaledCanvasHeight = canvasHeight * this.zoomLevel;
-        const exceedsWidth = scaledCanvasWidth > availableWidth;
-        const exceedsHeight = scaledCanvasHeight > availableHeight;
-        
-        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-        
         // Apply scaling first
         this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
         
-        // Check boundaries AFTER setting zoom level
+        // Check boundaries AFTER setting zoom level using actual current scale
         const actualScaledWidth = canvasWidth * this.zoomLevel;
         const actualScaledHeight = canvasHeight * this.zoomLevel;
         const actualExceedsWidth = actualScaledWidth > availableWidth;
         const actualExceedsHeight = actualScaledHeight > availableHeight;
+        
+        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
         if (actualExceedsWidth || actualExceedsHeight) {
             // Canvas exceeds boundaries - lock position on affected axes
