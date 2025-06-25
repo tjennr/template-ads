@@ -196,6 +196,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Fixed canvas minimum scale locking - canvas now locks in position when reaching minimum scale and gets clipped by container instead of disappearing, preventing ads from vanishing on small screens
 - June 25, 2025: Updated minimum scale positioning to center-left instead of top-left for better visual alignment, removed transition animations when switching aspect ratios for instant feedback
 - June 25, 2025: Increased minimum scale to 40% for all aspect ratios for better readability, optimized resize performance with throttled scaling and requestAnimationFrame for smoother window resizing
+- June 25, 2025: Fixed canvas positioning during zoom operations - canvas now maintains position when manually zooming even if window is past minimum scale, only applies minimum scale constraints during window resizing
 
 ## Changelog
 - June 16, 2025. Initial setup

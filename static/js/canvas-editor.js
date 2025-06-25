@@ -339,37 +339,42 @@ class TemplateAdsEditor {
         // Use the smaller scale to ensure canvas fits, but allow up-scaling
         let optimalScale = Math.min(scaleX, scaleY);
         
-        // Apply Canva-style minimum size constraints - 40% for all orientations
+        // Apply Canva-style minimum size constraints only during window resize - 40% for all orientations
         const minScale = 0.4;
-        
-        // Apply scaling limits with orientation-specific minimums
         const isAtMinimum = optimalScale <= minScale;
-        optimalScale = Math.max(optimalScale, minScale);
-        optimalScale = Math.min(optimalScale, 5); // Allow significant zoom
         
-        // Lock canvas position when at minimum scale
         if (isAtMinimum) {
-            // Lock the canvas wrapper at center-left position
+            // Window is too small - lock canvas at minimum scale and keep current position
+            optimalScale = minScale;
+            
+            // Only reposition if canvas wrapper isn't already positioned (first time hitting minimum)
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-            if (canvasWrapper) {
+            if (canvasWrapper && canvasWrapper.style.position !== 'absolute') {
+                // Lock canvas in current center position when first hitting minimum
                 canvasWrapper.style.position = 'absolute';
                 canvasWrapper.style.top = '50%';
-                canvasWrapper.style.left = '20px';
-                canvasWrapper.style.transform = `translateY(-50%) scale(${minScale})`;
-                canvasWrapper.style.transformOrigin = 'left center';
+                canvasWrapper.style.left = '50%';
+                canvasWrapper.style.transform = `translate(-50%, -50%) scale(${minScale})`;
+                canvasWrapper.style.transformOrigin = 'center';
+            } else if (canvasWrapper && canvasWrapper.style.position === 'absolute') {
+                // Already positioned - just update scale while maintaining position
+                const currentTransform = canvasWrapper.style.transform;
+                if (currentTransform.includes('translate')) {
+                    // Preserve existing translate values, only update scale
+                    canvasWrapper.style.transform = currentTransform.replace(/scale\([^)]*\)/, `scale(${minScale})`);
+                }
             }
             
-            // Ensure container allows overflow
             container.style.overflow = 'hidden';
-            container.style.alignItems = 'flex-start';
-            container.style.justifyContent = 'flex-start';
         } else {
-            // Normal responsive behavior when not at minimum
+            // Normal responsive behavior - window is large enough
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-            if (canvasWrapper) {
+            if (canvasWrapper && canvasWrapper.style.position === 'absolute') {
+                // Reset to normal positioning when leaving minimum scale mode
                 canvasWrapper.style.position = 'relative';
                 canvasWrapper.style.top = 'auto';
                 canvasWrapper.style.left = 'auto';
+                canvasWrapper.style.transform = '';
                 canvasWrapper.style.transformOrigin = 'center';
             }
             
@@ -377,13 +382,13 @@ class TemplateAdsEditor {
             container.style.alignItems = 'center';
             container.style.justifyContent = 'center';
             
-            // Apply the scaling normally
-            this.zoomLevel = optimalScale;
+            // Apply normal scaling
+            this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
             this.applyCanvaScale();
             return;
         }
         
-        // When at minimum, don't call applyCanvaScale as we handle scaling directly
+        // When at minimum due to window size, set zoom level but don't call applyCanvaScale
         this.zoomLevel = minScale;
     }
 
@@ -3614,7 +3619,25 @@ class TemplateAdsEditor {
     }
     
     applyZoom() {
-        this.applyCanvaScale();
+        // Manual zoom should not trigger minimum scale repositioning
+        // Only apply the zoom level without window size constraints
+        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
+        if (canvasWrapper) {
+            if (canvasWrapper.style.position === 'absolute') {
+                // Canvas is locked due to small window - just update the scale part of transform
+                const currentTransform = canvasWrapper.style.transform;
+                if (currentTransform.includes('translate')) {
+                    // Preserve position, only update scale for manual zoom
+                    canvasWrapper.style.transform = currentTransform.replace(/scale\([^)]*\)/, `scale(${this.zoomLevel})`);
+                } else {
+                    // Fallback if no translate found
+                    canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
+                }
+            } else {
+                // Normal zoom behavior when not locked
+                this.applyCanvaScale();
+            }
+        }
     }
 
     repositionElementsForOrientation() {
