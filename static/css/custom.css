@@ -51,7 +51,7 @@ body {
 /* Right Canvas Area Panel */
 .canvas-area-panel {
     flex: 1;
-    background: #EDF3F8;
+    background: #F2F2F2;
     height: 100%;
     position: relative;
     min-width: 0; /* Allow shrinking */
@@ -261,7 +261,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     position: relative;
-    background: #EDF3F8;
+    background: #F5F5F5;
 }
 
 .canvas-container-centered {
