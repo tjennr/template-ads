@@ -355,32 +355,22 @@ class TemplateAdsEditor {
         
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
+        // Always apply the scaling and let overflow handle boundaries
+        this.zoomLevel = optimalScale;
+        
         if (exceedsWidth || exceedsHeight) {
-            // Canvas exceeds boundaries - adjust container alignment to prevent overflow
+            // Canvas exceeds boundaries - just clip with overflow
             container.style.overflow = 'hidden';
-            
-            if (canvasWrapper) {
-                // Keep relative positioning but adjust container flex alignment
-                canvasWrapper.style.position = 'relative';
-                
-                // Adjust container alignment based on which boundaries are exceeded
-                if (exceedsWidth && exceedsHeight) {
-                    // Both exceed - align to top-left
-                    container.style.alignItems = 'flex-start';
-                    container.style.justifyContent = 'flex-start';
-                } else if (exceedsWidth) {
-                    // Width exceeds - align to left but keep vertical center
-                    container.style.alignItems = 'center';
-                    container.style.justifyContent = 'flex-start';
-                } else if (exceedsHeight) {
-                    // Height exceeds - align to top but keep horizontal center
-                    container.style.alignItems = 'flex-start';
-                    container.style.justifyContent = 'center';
-                }
-            }
-            
-            this.zoomLevel = optimalScale;
-            this.applyCanvaScale();
+            // Don't change alignment - keep it centered
+            container.style.alignItems = 'center';
+            container.style.justifyContent = 'center';
+        } else {
+            container.style.overflow = 'visible';
+            container.style.alignItems = 'center';
+            container.style.justifyContent = 'center';
+        }
+        
+        this.applyCanvaScale();
         } else {
             // Normal responsive behavior - canvas fits within boundaries
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
