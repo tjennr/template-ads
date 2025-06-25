@@ -1070,6 +1070,7 @@ class TemplateAdsEditor {
         const focusedIndex = this.focusableObjects.findIndex(focusObj => focusObj.id === obj.id);
         if (focusedIndex >= 0) {
             this.currentFocusIndex = focusedIndex;
+            console.log('Set currentFocusIndex to:', this.currentFocusIndex, 'for object:', obj.id);
         }
     }
 
@@ -1206,12 +1207,14 @@ class TemplateAdsEditor {
                         // Tab out of last element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
+                        console.log('Tabbing out of toolbar, calling focusNextElementInDocument');
                         // Continue with next canvas element
                         this.focusNextElementInDocument();
                     } else if (e.shiftKey && index === 0) {
                         // Shift+tab out of first element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
+                        console.log('Shift+tabbing out of toolbar, calling focusPreviousElementInDocument');
                         // Continue with previous canvas element
                         this.focusPreviousElementInDocument();
                     }
