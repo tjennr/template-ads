@@ -203,6 +203,7 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Enhanced keyboard accessibility - floating toolbars now properly handle tab navigation, hide when focus moves away, and maintain proper focus flow without interrupting natural tab order
 - June 25, 2025: Fixed floating toolbar keyboard interaction - select dropdowns and inputs now respond properly to Enter/Space keys and arrow keys, preventing interference with canvas element movement
 - June 25, 2025: Enhanced tab navigation flow - after tabbing through floating toolbar, focus continues to next canvas element maintaining proper navigation sequence
+- June 25, 2025: Changed website font family from Source Sans Pro to SF Pro Text for improved visual consistency
 
 ## Changelog
 - June 16, 2025. Initial setup
