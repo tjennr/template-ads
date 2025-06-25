@@ -1192,17 +1192,29 @@ class TemplateAdsEditor {
                 } else if (e.key === 'Tab') {
                     // Handle tab navigation within toolbar
                     if (!e.shiftKey && index === focusableElements.length - 1) {
-                        // Tab out of last element - return to canvas
+                        // Tab out of last element - hide toolbar and continue tab flow
                         e.preventDefault();
                         this.hideAllToolbars();
-                        this.canvas.getElement().focus();
+                        // Find next focusable element in document
+                        this.focusNextElementInDocument();
                     } else if (e.shiftKey && index === 0) {
-                        // Shift+tab out of first element - return to canvas
+                        // Shift+tab out of first element - hide toolbar and continue tab flow
                         e.preventDefault();
                         this.hideAllToolbars();
-                        this.canvas.getElement().focus();
+                        // Find previous focusable element in document
+                        this.focusPreviousElementInDocument();
                     }
                 }
+            });
+            
+            // Hide toolbar when element loses focus and focus moves outside toolbar
+            element.addEventListener('blur', (e) => {
+                setTimeout(() => {
+                    const activeElement = document.activeElement;
+                    if (!toolbar.contains(activeElement)) {
+                        this.hideAllToolbars();
+                    }
+                }, 10);
             });
         });
         
