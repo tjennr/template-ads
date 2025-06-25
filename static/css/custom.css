@@ -80,14 +80,6 @@ label, .control-label, .input-label {
     min-height: 0;
 }
 
-.sidebar-section {
-    margin-bottom: 20px;
-}
-
-.sidebar-section:last-child {
-    margin-bottom: 0;
-}
-
 /* Export section specific styling - compact sizing */
 .sidebar-section:has(.export-container) {
     margin-bottom: 0;
@@ -131,7 +123,7 @@ label, .control-label, .input-label {
     font-weight: 600;
     font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #495057;
-    margin-bottom: 6Capx;
+    margin-bottom: 6px;
 }
 
 .cta-row {
@@ -217,21 +209,12 @@ label, .control-label, .input-label {
     background-color: #e3f2fd;
 }
 
-/* Position sidebar scrollbar on the left side */
 .sidebar-panel {
-    direction: rtl; /* Right-to-left to move scrollbar to left */
-}
-
-.sidebar-panel > * {
     direction: ltr; /* Reset content direction to left-to-right */
 }
 
 /* Ensure floating toolbars are not affected by direction changes */
 .floating-toolbar {
-    direction: ltr !important;
-}
-
-.floating-toolbar * {
     direction: ltr !important;
 }
 
@@ -572,7 +555,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Minimalist Sidebar Sections */
 .sidebar-section {
-    margin-bottom: 1.25rem;
+    margin-bottom: 16px;
     padding: 1.5rem;
     background: #ffffff;
     border: 1px solid #e9ecef;
