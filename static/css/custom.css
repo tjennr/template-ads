@@ -51,7 +51,7 @@ body {
 /* Right Canvas Area Panel */
 .canvas-area-panel {
     flex: 1;
-    background: #F2F2F2;
+    background: #EDF3F8;
     height: 100%;
     position: relative;
     min-width: 0; /* Allow shrinking */
@@ -190,7 +190,7 @@ body {
 
 .control-option:hover {
     color: #0077B5;
-    background-color: #f8f9fa;
+    background-color: #EDF3F8;
 }
 
 .control-option.active {
@@ -261,7 +261,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     position: relative;
-    background: #F5F5F5;
+    background: #EDF3F8;
 }
 
 .canvas-container-centered {
@@ -442,7 +442,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .zoom-btn:hover {
-    background: #f8f9fa;
+    background: #EDF3F8;
     color: var(--brand-primary);
 }
 
@@ -504,18 +504,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .action-btn-compact:hover {
-    background: #f8f9fa;
+    background: #EDF3F8;
     color: #212529;
 }
 
 .action-btn-compact:disabled {
-    background: #f8f9fa;
+    background: #EDF3F8;
     color: #adb5bd;
     cursor: not-allowed;
 }
 
 .action-btn-compact:disabled:hover {
-    background: #f8f9fa;
+    background: #EDF3F8;
     color: #adb5bd;
 }
 
@@ -581,7 +581,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.75rem 0.5rem;
     border: 2px solid #e9ecef;
     border-radius: 8px;
-    background: #f8f9fa;
+    background: #EDF3F8;
     color: #495057;
     transition: all 0.2s ease;
     cursor: pointer;
@@ -591,7 +591,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .template-btn:hover {
-    background: #e9ecef;
+    background: #EDF3F8;
     color: #212529;
     transform: translateY(-1px);
     border-color: #dee2e6;
@@ -619,7 +619,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1rem;
     border: 2px dashed #dee2e6;
     border-radius: 8px;
-    background: #f8f9fa;
+    background: #EDF3F8;
     color: #495057;
     cursor: pointer;
     transition: all 0.2s ease;
