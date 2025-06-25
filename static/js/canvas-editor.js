@@ -355,42 +355,21 @@ class TemplateAdsEditor {
         
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
-        // Always apply the scaling and let overflow handle boundaries
-        this.zoomLevel = optimalScale;
+        // Apply scaling with overflow clipping at boundaries
+        this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
         
         if (exceedsWidth || exceedsHeight) {
             // Canvas exceeds boundaries - just clip with overflow
             container.style.overflow = 'hidden';
-            // Don't change alignment - keep it centered
-            container.style.alignItems = 'center';
-            container.style.justifyContent = 'center';
         } else {
             container.style.overflow = 'visible';
-            container.style.alignItems = 'center';
-            container.style.justifyContent = 'center';
         }
         
+        // Always keep container centered - no positioning changes
+        container.style.alignItems = 'center';
+        container.style.justifyContent = 'center';
+        
         this.applyCanvaScale();
-        } else {
-            // Normal responsive behavior - canvas fits within boundaries
-            const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
-            if (canvasWrapper && canvasWrapper.style.position === 'absolute') {
-                // Reset to normal positioning when canvas fits normally
-                canvasWrapper.style.position = 'relative';
-                canvasWrapper.style.top = 'auto';
-                canvasWrapper.style.left = 'auto';
-                canvasWrapper.style.transform = '';
-                canvasWrapper.style.transformOrigin = 'center';
-            }
-            
-            container.style.overflow = 'visible';
-            container.style.alignItems = 'center';
-            container.style.justifyContent = 'center';
-            
-            // Apply normal scaling (capped at 500%)
-            this.zoomLevel = Math.min(optimalScale, 5);
-            this.applyCanvaScale();
-        }
     }
 
     applyCanvaScale() {
