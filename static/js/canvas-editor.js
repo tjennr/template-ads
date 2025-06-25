@@ -707,6 +707,14 @@ class TemplateAdsEditor {
             });
         }
         
+        // Setup logo delete button
+        const deleteLogoBtn = document.getElementById('deleteLogo');
+        if (deleteLogoBtn) {
+            deleteLogoBtn.addEventListener('click', () => {
+                this.deleteLogo();
+            });
+        }
+        
         // Initialize slider fills on load
         this.initializeSliderFills();
         
