@@ -339,58 +339,71 @@ class TemplateAdsEditor {
         // Use the smaller scale to ensure canvas fits, but allow up-scaling
         let optimalScale = Math.min(scaleX, scaleY);
         
-        // Apply Canva-style minimum size constraints only during window resize - 40% for all orientations
+        // Apply minimum scale constraint - 40% for all orientations
         const minScale = 0.4;
-        const isAtMinimum = optimalScale <= minScale;
         
-        if (isAtMinimum) {
-            // Window is too small - lock canvas at minimum scale with intelligent positioning
+        // Enforce minimum scale but keep normal centering until boundaries are hit
+        if (optimalScale < minScale) {
             optimalScale = minScale;
+        }
+        
+        // Check if the canvas at current scale would exceed container boundaries
+        const scaledCanvasWidth = canvasWidth * optimalScale;
+        const scaledCanvasHeight = canvasHeight * optimalScale;
+        const exceedsWidth = scaledCanvasWidth > availableWidth;
+        const exceedsHeight = scaledCanvasHeight > availableHeight;
+        
+        const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
+        
+        if (exceedsWidth || exceedsHeight) {
+            // Canvas exceeds boundaries - lock position on affected axes
+            container.style.overflow = 'hidden';
             
-            // Calculate if width or height is the limiting factor
-            const scaledCanvasWidth = canvasWidth * minScale;
-            const scaledCanvasHeight = canvasHeight * minScale;
-            const widthTooSmall = scaledCanvasWidth > availableWidth;
-            const heightTooSmall = scaledCanvasHeight > availableHeight;
-            
-            const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
             if (canvasWrapper) {
-                canvasWrapper.style.position = 'absolute';
-                
-                let translateX = '-50%'; // Default to center
-                let translateY = '-50%'; // Default to center
-                let left = '50%';
-                let top = '50%';
-                
-                // Determine positioning based on which dimension is constrained
-                if (widthTooSmall && heightTooSmall) {
-                    // Both dimensions too small → top-left alignment
-                    translateX = '0%';
-                    translateY = '0%';
-                    left = '20px';
-                    top = '20px';
-                } else if (widthTooSmall) {
-                    // Width too small → center-left alignment
-                    translateX = '0%';
-                    left = '20px';
-                } else if (heightTooSmall) {
-                    // Height too small → top-center alignment
-                    translateY = '0%';
-                    top = '20px';
+                // Only switch to absolute positioning if not already positioned
+                if (canvasWrapper.style.position !== 'absolute') {
+                    canvasWrapper.style.position = 'absolute';
+                    canvasWrapper.style.left = '50%';
+                    canvasWrapper.style.top = '50%';
+                    canvasWrapper.style.transform = `translate(-50%, -50%) scale(${optimalScale})`;
+                    canvasWrapper.style.transformOrigin = 'center';
+                } else {
+                    // Already positioned - just update scale, preserve position
+                    const currentTransform = canvasWrapper.style.transform;
+                    if (currentTransform.includes('translate')) {
+                        canvasWrapper.style.transform = currentTransform.replace(/scale\([^)]*\)/, `scale(${optimalScale})`);
+                    }
                 }
                 
-                canvasWrapper.style.left = left;
-                canvasWrapper.style.top = top;
-                canvasWrapper.style.transform = `translate(${translateX}, ${translateY}) scale(${minScale})`;
-                canvasWrapper.style.transformOrigin = 'center';
+                // Adjust position to prevent overflow without jumping
+                let currentLeft = canvasWrapper.style.left;
+                let currentTop = canvasWrapper.style.top;
+                let translateX = '-50%';
+                let translateY = '-50%';
+                
+                // Lock X-axis if width exceeds boundary
+                if (exceedsWidth) {
+                    currentLeft = '20px';
+                    translateX = '0%';
+                }
+                
+                // Lock Y-axis if height exceeds boundary  
+                if (exceedsHeight) {
+                    currentTop = '20px';
+                    translateY = '0%';
+                }
+                
+                canvasWrapper.style.left = currentLeft;
+                canvasWrapper.style.top = currentTop;
+                canvasWrapper.style.transform = `translate(${translateX}, ${translateY}) scale(${optimalScale})`;
             }
             
-            container.style.overflow = 'hidden';
+            this.zoomLevel = optimalScale;
         } else {
-            // Normal responsive behavior - window is large enough
+            // Normal responsive behavior - canvas fits within boundaries
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
             if (canvasWrapper && canvasWrapper.style.position === 'absolute') {
-                // Reset to normal positioning when leaving minimum scale mode
+                // Reset to normal positioning when canvas fits normally
                 canvasWrapper.style.position = 'relative';
                 canvasWrapper.style.top = 'auto';
                 canvasWrapper.style.left = 'auto';
@@ -402,14 +415,10 @@ class TemplateAdsEditor {
             container.style.alignItems = 'center';
             container.style.justifyContent = 'center';
             
-            // Apply normal scaling
-            this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
+            // Apply normal scaling (capped at 500%)
+            this.zoomLevel = Math.min(optimalScale, 5);
             this.applyCanvaScale();
-            return;
         }
-        
-        // When at minimum due to window size, set zoom level but don't call applyCanvaScale
-        this.zoomLevel = minScale;
     }
 
     applyCanvaScale() {
