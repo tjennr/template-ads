@@ -3524,8 +3524,15 @@ class TemplateAdsEditor {
             // Reload template which will clear canvas and rebuild everything
             this.loadTemplate(currentTemplate);
             
-            // Load default image after template is loaded
-            setTimeout(() => {
+            // Preload default image for smooth transition
+            const defaultImagePath = 'static/images/default-placeholder.png';
+            fabric.Image.fromURL(defaultImagePath, (defaultImg) => {
+                if (defaultImg) {
+                    // Store the preloaded image
+                    this.preloadedDefaultImage = defaultImg;
+                }
+                
+                // Load default image immediately with preloaded version
                 this.loadDefaultImage();
                 
                 // Update canvas text objects with reset values
@@ -3560,12 +3567,14 @@ class TemplateAdsEditor {
                 this.history = [];
                 this.historyStep = -1;
                 this.saveState();
-            }, 100);
+            }, {
+                crossOrigin: 'anonymous'
+            });
             
             // Update focusable objects for keyboard navigation
             this.updateFocusableObjects();
             
-            console.log('Canvas reset to default state');
+
         } catch (error) {
             console.error('Error during reset:', error);
             // Even if there's an error, try to clear the canvas
