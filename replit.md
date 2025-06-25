@@ -200,7 +200,6 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Implemented intelligent canvas positioning - canvas stays centered until hitting boundaries, then aligns center-left (width constrained), top-center (height constrained), or top-left (both constrained) without overflowing
 - June 25, 2025: Fixed canvas jumping issue by implementing axis-specific locking - canvas position locks on individual axes when boundaries are hit, preventing abrupt repositioning
 - June 25, 2025: Fixed canvas overflow past boundaries when at minimum scale - canvas now properly aligns to left/top edges when exceeding container dimensions, preventing content from being cut off outside viewport
-- June 25, 2025: Implemented axis-specific position locking - Y-axis locks to top when height exceeds boundary, X-axis locks to left when width exceeds boundary, preventing overflow while maintaining smooth scaling
 
 ## Changelog
 - June 16, 2025. Initial setup

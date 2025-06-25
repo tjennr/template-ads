@@ -347,40 +347,27 @@ class TemplateAdsEditor {
             optimalScale = minScale;
         }
         
-        // Apply scaling first
-        this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
-        
-        // Check boundaries AFTER setting zoom level using actual current scale
-        const actualScaledWidth = canvasWidth * this.zoomLevel;
-        const actualScaledHeight = canvasHeight * this.zoomLevel;
-        const actualExceedsWidth = actualScaledWidth > availableWidth;
-        const actualExceedsHeight = actualScaledHeight > availableHeight;
+        // Check if the canvas at current scale would exceed container boundaries
+        const scaledCanvasWidth = canvasWidth * optimalScale;
+        const scaledCanvasHeight = canvasHeight * optimalScale;
+        const exceedsWidth = scaledCanvasWidth > availableWidth;
+        const exceedsHeight = scaledCanvasHeight > availableHeight;
         
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
-        if (actualExceedsWidth || actualExceedsHeight) {
-            // Canvas exceeds boundaries - lock position on affected axes
+        // Apply scaling with overflow clipping at boundaries
+        this.zoomLevel = Math.min(optimalScale, 5); // Cap at 500%
+        
+        if (exceedsWidth || exceedsHeight) {
+            // Canvas exceeds boundaries - just clip with overflow
             container.style.overflow = 'hidden';
-            
-            // Lock Y-axis if height exceeds (align to top)
-            if (actualExceedsHeight) {
-                container.style.alignItems = 'flex-start';
-            } else {
-                container.style.alignItems = 'center';
-            }
-            
-            // Lock X-axis if width exceeds (align to left)  
-            if (actualExceedsWidth) {
-                container.style.justifyContent = 'flex-start';
-            } else {
-                container.style.justifyContent = 'center';
-            }
         } else {
-            // Normal behavior - center both axes
             container.style.overflow = 'visible';
-            container.style.alignItems = 'center';
-            container.style.justifyContent = 'center';
         }
+        
+        // Always keep container centered - no positioning changes
+        container.style.alignItems = 'center';
+        container.style.justifyContent = 'center';
         
         this.applyCanvaScale();
     }
