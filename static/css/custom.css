@@ -53,7 +53,7 @@ label, .control-label, .input-label {
 
 /* Left Sidebar Panel */
 .sidebar-panel {
-    width: 520px;
+    width: 480px;
     background: #ffffff;
     border-right: 1px solid #e9ecef;
     flex-shrink: 0;
@@ -619,7 +619,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 0.75rem;
     padding: 1rem;
-    border: 2px dashed #dee2e6;
+    border: 1px solid #dee2e6;
     border-radius: 8px;
     background: #EDF3F8;
     color: #495057;
@@ -2220,7 +2220,8 @@ input[type="number"]::after {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #f8f9fa;
+    /* background: #f8f9fa; */
+    background: #EDF3F8;
     border: 1px solid #e9ecef;
     color: #495057;
     padding: 8px 12px;

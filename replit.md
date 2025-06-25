@@ -211,6 +211,8 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Set labels to font-weight: 600 and form inputs/dropdowns to font-weight: 400 with SF Pro Text font family
 - June 25, 2025: Reduced sidebar section spacing from 32px/2rem to 20px/1.25rem for more compact layout
 - June 25, 2025: Increased sidebar panel width from 480px to 520px for better control spacing
+- June 25, 2025: Updated image tab buttons background color to #EDF3F8 for consistency
+- June 25, 2025: Replaced individual title/subtitle AI generation with single "Generate text" button that creates both title and subtitle from one prompt
 
 ## Changelog
 - June 16, 2025. Initial setup

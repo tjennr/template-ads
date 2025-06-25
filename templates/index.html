@@ -249,17 +249,6 @@
                                 <input type="text" class="clean-input wide-input" id="titleText" placeholder="Enter your title" value="Your Amazing Product" maxlength="200">
                                 <span class="character-counter" id="titleCounter">0/200</span>
                             </div>
-                            <button class="ai-generate-btn-separate" id="generateTitleBtn" title="Generate AI title">
-                                <i class="fas fa-diamond"></i>
-                                Generate text
-                            </button>
-                            <div class="ai-prompt-container hidden" id="titlePromptContainer">
-                                <input type="text" class="ai-prompt-input" id="titlePromptInput" placeholder="Describe your product/service for AI title generation...">
-                                <div class="ai-prompt-actions">
-                                    <button class="ai-prompt-btn generate" id="titleGenerateBtn">Generate</button>
-                                    <button class="ai-prompt-btn cancel" id="titleCancelBtn">Cancel</button>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Subtitle -->
@@ -269,15 +258,19 @@
                                 <textarea class="clean-input wide-input" id="subtitleText" placeholder="Enter your subtitle" rows="3" maxlength="200">Discover the innovation that will change your life</textarea>
                                 <span class="character-counter" id="subtitleCounter">0/200</span>
                             </div>
-                            <button class="ai-generate-btn-separate" id="generateSubtitleBtn" title="Generate AI subtitle">
+                        </div>
+
+                        <!-- AI Text Generation -->
+                        <div class="control-item">
+                            <button class="ai-generate-btn-separate" id="generateBothTextBtn" title="Generate AI text for both title and subtitle">
                                 <i class="fas fa-diamond"></i>
                                 Generate text
                             </button>
-                            <div class="ai-prompt-container hidden" id="subtitlePromptContainer">
-                                <input type="text" class="ai-prompt-input" id="subtitlePromptInput" placeholder="Describe your product/service for AI subtitle generation...">
+                            <div class="ai-prompt-container hidden" id="bothTextPromptContainer">
+                                <input type="text" class="ai-prompt-input" id="bothTextPromptInput" placeholder="Describe your product/service for AI text generation...">
                                 <div class="ai-prompt-actions">
-                                    <button class="ai-prompt-btn generate" id="subtitleGenerateBtn">Generate</button>
-                                    <button class="ai-prompt-btn cancel" id="subtitleCancelBtn">Cancel</button>
+                                    <button class="ai-prompt-btn generate" id="bothTextGenerateBtn">Generate</button>
+                                    <button class="ai-prompt-btn cancel" id="bothTextCancelBtn">Cancel</button>
                                 </div>
                             </div>
                         </div>
