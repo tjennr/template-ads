@@ -1677,7 +1677,8 @@ input[type="number"]::after {
     flex: 1;
     padding: 0.5rem 0.75rem;
     border: none;
-    background: #EDF3F8;
+    background: #f8f9fa;
+    /* background: #EDF3F8; */
     color: #495057;
     font-size: 0.875rem;
     font-weight: 500;

@@ -1207,16 +1207,38 @@ class TemplateAdsEditor {
                         // Tab out of last element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
-                        console.log('Tabbing out of toolbar, calling focusNextElementInDocument');
-                        // Continue with next canvas element
-                        this.focusNextElementInDocument();
+                        // Continue with next canvas element or tab out of canvas completely
+                        if (this.currentFocusIndex < this.focusableObjects.length - 1) {
+                            this.focusNextObject();
+                        } else {
+                            // Tab out of canvas completely
+                            this.clearCanvasFocus();
+                            // Let the browser handle natural tab flow by focusing next element after canvas
+                            const canvasElement = this.canvas.getElement();
+                            const allFocusableElements = document.querySelectorAll('button, input, select, textarea, [tabindex="0"]');
+                            const canvasIndex = Array.from(allFocusableElements).indexOf(canvasElement);
+                            if (canvasIndex >= 0 && canvasIndex < allFocusableElements.length - 1) {
+                                allFocusableElements[canvasIndex + 1].focus();
+                            }
+                        }
                     } else if (e.shiftKey && index === 0) {
                         // Shift+tab out of first element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
-                        console.log('Shift+tabbing out of toolbar, calling focusPreviousElementInDocument');
-                        // Continue with previous canvas element
-                        this.focusPreviousElementInDocument();
+                        // Continue with previous canvas element or tab out of canvas completely
+                        if (this.currentFocusIndex > 0) {
+                            this.focusPreviousObject();
+                        } else {
+                            // Tab out of canvas completely (backwards)
+                            this.clearCanvasFocus();
+                            // Let the browser handle natural tab flow by focusing previous element before canvas
+                            const canvasElement = this.canvas.getElement();
+                            const allFocusableElements = document.querySelectorAll('button, input, select, textarea, [tabindex="0"]');
+                            const canvasIndex = Array.from(allFocusableElements).indexOf(canvasElement);
+                            if (canvasIndex > 0) {
+                                allFocusableElements[canvasIndex - 1].focus();
+                            }
+                        }
                     }
                 }
             });
