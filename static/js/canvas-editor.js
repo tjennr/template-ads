@@ -356,37 +356,31 @@ class TemplateAdsEditor {
         const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
         
         if (exceedsWidth || exceedsHeight) {
-            // Canvas exceeds boundaries - need to align to prevent overflow
+            // Canvas exceeds boundaries - adjust container alignment to prevent overflow
             container.style.overflow = 'hidden';
             
             if (canvasWrapper) {
-                canvasWrapper.style.position = 'absolute';
+                // Keep relative positioning but adjust container flex alignment
+                canvasWrapper.style.position = 'relative';
                 
-                // Calculate safe positioning to prevent overflow
-                let left = '50%';
-                let top = '50%';
-                let translateX = '-50%';
-                let translateY = '-50%';
-                
-                if (exceedsWidth) {
-                    // Canvas width exceeds container - align to left edge
-                    left = '20px';
-                    translateX = '0%';
+                // Adjust container alignment based on which boundaries are exceeded
+                if (exceedsWidth && exceedsHeight) {
+                    // Both exceed - align to top-left
+                    container.style.alignItems = 'flex-start';
+                    container.style.justifyContent = 'flex-start';
+                } else if (exceedsWidth) {
+                    // Width exceeds - align to left but keep vertical center
+                    container.style.alignItems = 'center';
+                    container.style.justifyContent = 'flex-start';
+                } else if (exceedsHeight) {
+                    // Height exceeds - align to top but keep horizontal center
+                    container.style.alignItems = 'flex-start';
+                    container.style.justifyContent = 'center';
                 }
-                
-                if (exceedsHeight) {
-                    // Canvas height exceeds container - align to top edge
-                    top = '20px';
-                    translateY = '0%';
-                }
-                
-                canvasWrapper.style.left = left;
-                canvasWrapper.style.top = top;
-                canvasWrapper.style.transform = `translate(${translateX}, ${translateY}) scale(${optimalScale})`;
-                canvasWrapper.style.transformOrigin = 'center';
             }
             
             this.zoomLevel = optimalScale;
+            this.applyCanvaScale();
         } else {
             // Normal responsive behavior - canvas fits within boundaries
             const canvasWrapper = document.querySelector('.canvas-wrapper-zoom');
