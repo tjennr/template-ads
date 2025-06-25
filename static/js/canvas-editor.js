@@ -878,12 +878,17 @@ class TemplateAdsEditor {
         // Also add global keyboard listener for arrow keys when canvas has focus
         document.addEventListener('keydown', (e) => {
             // Only handle arrow keys if canvas is focused or an object is selected
+            // But NOT if focus is within a floating toolbar
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
-                const activeObject = this.canvas.getActiveObject();
-                console.log('Arrow key pressed:', e.key, 'Active object:', activeObject ? activeObject.id || activeObject.type : 'none');
-                if (activeObject) {
-                    e.preventDefault();
-                    this.moveSelectedObject(e.key, e.shiftKey);
+                const activeElement = document.activeElement;
+                const isInFloatingToolbar = activeElement && activeElement.closest('.floating-toolbar');
+                
+                if (!isInFloatingToolbar) {
+                    const activeObject = this.canvas.getActiveObject();
+                    if (activeObject) {
+                        e.preventDefault();
+                        this.moveSelectedObject(e.key, e.shiftKey);
+                    }
                 }
             }
         });
