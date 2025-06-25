@@ -128,7 +128,7 @@ label, .control-label, .input-label {
 
 .cta-row {
     display: flex;
-    gap: 12px;
+    gap: 18px;
     align-items: center;
 }
 
@@ -140,8 +140,8 @@ label, .control-label, .input-label {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 8px;
-    min-width: 60px;
+    gap: 4px;
+    min-width: 60Canpx;
 }
 
 /* Dropdown Row Layout */
@@ -2236,8 +2236,9 @@ input[type="number"]::after {
 }
 
 .ai-generate-btn-separate:hover {
-    background: #e9ecef;
-    border-color: #dee2e6;
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-light);
+    color: var(--brand-primary);
 }
 
 .ai-generate-btn-separate i {
