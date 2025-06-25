@@ -2637,17 +2637,17 @@ class TemplateAdsEditor {
     }
 
     createTemplate4() {
-        // Split Bottom Layout - Image on bottom half, text on top half
+        // Split Layout - Adapts based on orientation
         const canvasWidth = this.canvas.getWidth();
         const canvasHeight = this.canvas.getHeight();
         const isVertical = this.currentOrientation === 'vertical';
         
         if (isVertical) {
-            // Vertical: Text elements on top half, image on bottom half
+            // Vertical: Image left half, text right half
             this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
-                left: canvasWidth / 2,
-                top: canvasHeight * 0.2,
-                fontSize: this.getResponsiveFontSize(32, 'title'),
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.4,
+                fontSize: 40,
                 fill: '#333333',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 fontWeight: 'bold',
@@ -2655,41 +2655,32 @@ class TemplateAdsEditor {
                 originX: 'center',
                 originY: 'center',
                 id: 'title',
-                width: canvasWidth * 0.8,
+                width: canvasWidth * 0.35,
                 lockScalingFlip: true,
                 noScaleCache: false,
                 splitByGrapheme: false
             });
             
             this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-                left: canvasWidth / 2,
-                top: canvasHeight * 0.35,
-                fontSize: this.getResponsiveFontSize(20, 'subtitle'),
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.55,
+                fontSize: 24,
                 fill: '#666666',
                 fontFamily: 'Source Sans Pro, sans-serif',
                 textAlign: 'center',
                 originX: 'center',
                 originY: 'center',
                 id: 'subtitle',
-                width: canvasWidth * 0.8,
+                width: canvasWidth * 0.35,
                 lockScalingFlip: true,
                 noScaleCache: false,
                 splitByGrapheme: false
             });
             
-            // Calculate responsive button width
-            const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-            const tempText = new fabric.Text(ctaTextValue, {
-                fontSize: 18,
-                fontFamily: 'Source Sans Pro, sans-serif',
-                fontWeight: 'bold'
-            });
-            const buttonWidth = Math.max(80, tempText.width + 32);
-            
             const ctaButtonBg = new fabric.Rect({
                 left: 0,
                 top: 0,
-                width: buttonWidth,
+                width: 120,
                 height: 40,
                 fill: '#0077B5',
                 rx: 8,
@@ -2701,7 +2692,7 @@ class TemplateAdsEditor {
                 id: 'ctaBackground'
             });
 
-            this.ctaText = new fabric.Text(ctaTextValue, {
+            this.ctaText = new fabric.Text('Shop Now', {
                 left: 0,
                 top: 0,
                 fontSize: 18,
@@ -2715,8 +2706,8 @@ class TemplateAdsEditor {
             });
 
             this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-                left: canvasWidth / 2,
-                top: canvasHeight * 0.45,
+                left: canvasWidth * 0.75,
+                top: canvasHeight * 0.7,
                 originX: 'center',
                 originY: 'center',
                 id: 'ctaGroup'
@@ -3301,9 +3292,9 @@ class TemplateAdsEditor {
 
                 // Add clipping for split templates, remove for full templates
                 if (this.currentTemplate === 'template4') {
-                    // Split Bottom: Clip to bottom half
+                    // Split Left: Clip to left half
                     img.clipPath = new fabric.Rect({
-                        left: 0, top: canvasHeight * 0.5, width: canvasWidth, height: canvasHeight * 0.5, absolutePositioned: true
+                        left: 0, top: 0, width: canvasWidth * 0.5, height: canvasHeight, absolutePositioned: true
                     });
                 } else if (this.currentTemplate === 'template5') {
                     // Split Right: Clip to right half

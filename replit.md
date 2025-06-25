@@ -213,7 +213,6 @@ Template Ads is a Flask-based web application that provides a visual canvas edit
 - June 25, 2025: Increased sidebar panel width from 480px to 520px for better control spacing
 - June 25, 2025: Updated image tab buttons background color to #EDF3F8 for consistency
 - June 25, 2025: Replaced individual title/subtitle AI generation with single "Generate text" button that creates both title and subtitle from one prompt
-- June 25, 2025: Modified vertical aspect ratio templates - replaced Split Left with Split Bottom layout where image appears on bottom half and text/CTA elements on top half
 
 ## Changelog
 - June 16, 2025. Initial setup
