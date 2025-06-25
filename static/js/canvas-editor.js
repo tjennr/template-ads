@@ -64,7 +64,7 @@ class TemplateAdsEditor {
     }
 
     initializeDefaultContent() {
-        console.log('Initializing default content...');
+
         // Set loading flag to prevent undo states during initialization
         this.isLoadingTemplate = true;
         
@@ -77,7 +77,7 @@ class TemplateAdsEditor {
         
         // Load default image with proper error handling
         const defaultImagePath = 'static/images/default-placeholder.png';
-        console.log('Loading default image from:', defaultImagePath);
+
         
         fabric.Image.fromURL(defaultImagePath, (img) => {
             if (!img) {
@@ -86,7 +86,7 @@ class TemplateAdsEditor {
                 return;
             }
             
-            console.log('Default image loaded successfully');
+
             const canvasWidth = this.canvas.width;
             const canvasHeight = this.canvas.height;
             
@@ -126,7 +126,7 @@ class TemplateAdsEditor {
             this.historyStep = -1;
             this.saveState();
             
-            console.log('Default template initialized successfully');
+    
         }, {
             crossOrigin: 'anonymous'
         });
@@ -4229,22 +4229,22 @@ class TemplateAdsEditor {
             const titleColorSelect = document.getElementById('titleColorSelect');
             if (titleFontSelect) {
                 titleFontSelect.value = fontFamily;
-                console.log('Updated title font to:', fontFamily);
+
             }
             if (titleColorSelect) {
                 titleColorSelect.value = textObj.fill || '#ffffff';
-                console.log('Updated title color to:', textObj.fill);
+
             }
         } else if (textType === 'subtitle') {
             const subtitleFontSelect = document.getElementById('subtitleFontSelect');
             const subtitleColorSelect = document.getElementById('subtitleColorSelect');
             if (subtitleFontSelect) {
                 subtitleFontSelect.value = fontFamily;
-                console.log('Updated subtitle font to:', fontFamily);
+
             }
             if (subtitleColorSelect) {
                 subtitleColorSelect.value = textObj.fill || '#ffffff';
-                console.log('Updated subtitle color to:', textObj.fill);
+
             }
         }
     }
@@ -4264,13 +4264,13 @@ class TemplateAdsEditor {
             const titleFontSelect = document.getElementById('titleFontSelect');
             if (titleFontSelect && titleFontSelect.value !== fontFamily) {
                 titleFontSelect.value = fontFamily;
-                console.log('Maintained title font selector value:', fontFamily);
+
             }
         } else if (textType === 'subtitle') {
             const subtitleFontSelect = document.getElementById('subtitleFontSelect');
             if (subtitleFontSelect && subtitleFontSelect.value !== fontFamily) {
                 subtitleFontSelect.value = fontFamily;
-                console.log('Maintained subtitle font selector value:', fontFamily);
+
             }
         }
     }
