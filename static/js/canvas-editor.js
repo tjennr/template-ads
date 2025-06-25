@@ -1065,6 +1065,12 @@ class TemplateAdsEditor {
             this.updateCtaToolbarValues();
             this.updateCtaToolbarPosition();
         }
+        
+        // Store current focus index for when returning from toolbar
+        const focusedIndex = this.focusableObjects.findIndex(focusObj => focusObj.id === obj.id);
+        if (focusedIndex >= 0) {
+            this.currentFocusIndex = focusedIndex;
+        }
     }
 
     announceFocusedElement(obj) {
@@ -1197,16 +1203,16 @@ class TemplateAdsEditor {
                 } else if (e.key === 'Tab') {
                     // Handle tab navigation within toolbar
                     if (!e.shiftKey && index === focusableElements.length - 1) {
-                        // Tab out of last element - hide toolbar and continue tab flow
+                        // Tab out of last element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
-                        // Find next focusable element in document
+                        // Continue with next canvas element
                         this.focusNextElementInDocument();
                     } else if (e.shiftKey && index === 0) {
-                        // Shift+tab out of first element - hide toolbar and continue tab flow
+                        // Shift+tab out of first element - hide toolbar and continue canvas navigation
                         e.preventDefault();
                         this.hideAllToolbars();
-                        // Find previous focusable element in document
+                        // Continue with previous canvas element
                         this.focusPreviousElementInDocument();
                     }
                 }
