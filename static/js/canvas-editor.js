@@ -2122,7 +2122,7 @@ class TemplateAdsEditor {
         const templates = {
             template1: this.createTemplate1,
             template2: this.createTemplate2,
-            template3: this.createTemplate3,
+
             template4: this.createTemplate4,
             template5: this.createTemplate5,
             template6: this.createTemplate6
@@ -2210,13 +2210,7 @@ class TemplateAdsEditor {
                     originX: 'right',
                     originY: 'bottom'
                 };
-            case 'template3': // Minimalist - top left with margin (centered text)
-                return {
-                    left: margin,
-                    top: margin,
-                    originX: 'left',
-                    originY: 'top'
-                };
+
             case 'template4': // Split Left - top right in text area
                 return {
                     left: canvasWidth - margin,
@@ -2292,7 +2286,7 @@ class TemplateAdsEditor {
         switch(templateName) {
             case 'template1': // Classic - full canvas
             case 'template2': // Modern Grid - full canvas
-            case 'template3': // Minimalist - full canvas
+
                 return {
                     left: canvasWidth / 2,
                     top: canvasHeight / 2,
@@ -2545,96 +2539,7 @@ class TemplateAdsEditor {
         this.canvas.renderAll();
     }
     
-    createTemplate3() {
-        // Minimalist - Centered everything
-        const canvasWidth = this.canvas.getWidth();
-        const canvasHeight = this.canvas.getHeight();
-        
-        // Title - white text over image
-        this.titleText = new fabric.Textbox(document.getElementById('titleText')?.value || 'Your Title Here', {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.5,
-            fontSize: 40,
-            fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            width: canvasWidth * 0.8,
-            lockScalingFlip: true,
-            noScaleCache: false,
-            id: 'title'
-        });
-        
-        // Subtitle - white text over image
-        this.subtitleText = new fabric.Textbox(document.getElementById('subtitleText')?.value || 'Your subtitle text', {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.65,
-            fontSize: 24,
-            fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            width: canvasWidth * 0.8,
-            lockScalingFlip: true,
-            noScaleCache: false,
-            id: 'subtitle'
-        });
-        
-        // Calculate responsive button width based on text
-        const ctaTextValue = document.getElementById('ctaText')?.value || 'Shop Now';
-        const tempText = new fabric.Text(ctaTextValue, {
-            fontSize: 18,
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold'
-        });
-        const textWidth = tempText.width;
-        const buttonWidth = Math.max(80, textWidth + 32); // 16px padding each side
 
-        // CTA Button - Create rounded rectangle background
-        const ctaButtonBg = new fabric.Rect({
-            left: 0,
-            top: 0,
-            width: buttonWidth,
-            height: 40,
-            fill: '#0077B5',
-            rx: 8,
-            ry: 8,
-            originX: 'center',
-            originY: 'center',
-            selectable: true,
-            evented: true,
-            id: 'ctaBackground'
-        });
-
-        // CTA Button Text
-        this.ctaText = new fabric.Text(ctaTextValue, {
-            left: 0,
-            top: 0,
-            fontSize: 18,
-            fill: '#ffffff',
-            fontFamily: 'Source Sans Pro, sans-serif',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            originX: 'center',
-            originY: 'center',
-            id: 'cta'
-        });
-
-        // Group them together
-        this.ctaGroup = new fabric.Group([ctaButtonBg, this.ctaText], {
-            left: canvasWidth / 2,
-            top: canvasHeight * 0.8,
-            originX: 'center',
-            originY: 'center',
-            id: 'ctaGroup'
-        });
-        
-        this.canvas.add(this.titleText, this.subtitleText, this.ctaGroup);
-        this.canvas.renderAll();
-    }
 
     createTemplate4() {
         // Split Layout - Adapts based on orientation
