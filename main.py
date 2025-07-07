@@ -35,6 +35,16 @@ def manifest():
     except FileNotFoundError:
         return "Manifest not found", 404
 
+@app.route('/test')
+def test():
+    with open('test.html', 'r') as f:
+        return f.read()
+
+@app.route('/debug')
+def debug():
+    with open('debug.html', 'r') as f:
+        return f.read()
+
 def build_react_app():
     """Build React app for production"""
     try:
