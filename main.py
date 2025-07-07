@@ -4,38 +4,52 @@ import subprocess
 import sys
 import threading
 import time
-from flask import Flask, redirect
+import requests
+from flask import Flask, Response, request
 
-# Create a simple Flask proxy app
-app = Flask(__name__)
+# Create a Flask app that serves React build files
+app = Flask(__name__, static_folder='typescript-react/build/static', static_url_path='/static')
 
 @app.route('/')
 def index():
-    return redirect('http://localhost:3000', code=302)
+    try:
+        with open('typescript-react/build/index.html', 'r') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "React build not found. Building now...", 500
 
 @app.route('/<path:path>')
-def proxy(path):
-    return redirect(f'http://localhost:3000/{path}', code=302)
+def catch_all(path):
+    # For React Router - serve index.html for all non-static routes
+    try:
+        with open('typescript-react/build/index.html', 'r') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "React build not found", 404
 
-def start_react_server():
-    """Start React development server in background"""
+@app.route('/manifest.json')
+def manifest():
+    try:
+        with open('typescript-react/build/manifest.json', 'r') as f:
+            return Response(f.read(), mimetype='application/json')
+    except FileNotFoundError:
+        return "Manifest not found", 404
+
+def build_react_app():
+    """Build React app for production"""
     try:
         os.chdir('typescript-react')
-        os.environ['PORT'] = '3000'
-        os.environ['HOST'] = '0.0.0.0'
-        os.environ['BROWSER'] = 'none'
-        
-        print("Starting React development server on port 3000...")
-        subprocess.run(['npm', 'start'], check=False)
+        print("Building React app...")
+        result = subprocess.run(['npm', 'run', 'build'], check=True, capture_output=True, text=True)
+        print("React app built successfully!")
+        os.chdir('..')
+        return True
     except Exception as e:
-        print(f"Failed to start React app: {e}")
+        print(f"Failed to build React app: {e}")
+        return False
 
-# Start React server in background thread
-react_thread = threading.Thread(target=start_react_server, daemon=True)
-react_thread.start()
-
-# Give React time to start
-time.sleep(5)
+# Build React app on startup
+build_react_app()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

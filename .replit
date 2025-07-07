@@ -1,4 +1,4 @@
-modules = ["python-3.11", "nodejs-20"]
+modules = ["python-3.11", "nodejs-20", "python3"]
 
 [nix]
 channel = "stable-24_05"
@@ -44,6 +44,10 @@ args = "uv add pillow reportlab"
 [[ports]]
 localPort = 3000
 externalPort = 3000
+
+[[ports]]
+localPort = 3001
+externalPort = 3002
 
 [[ports]]
 localPort = 5000
