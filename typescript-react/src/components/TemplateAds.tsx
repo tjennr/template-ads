@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { fabric } from 'fabric';
+import { Canvas, Rect, Textbox, Image } from 'fabric';
 import { CanvasSize, Template, Orientation } from '../types';
 import './TemplateAds.css';
 
 const TemplateAds: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  const [canvas, setCanvas] = useState<Canvas | null>(null);
   const [currentOrientation, setCurrentOrientation] = useState<string>('vertical');
   const [currentTemplate, setCurrentTemplate] = useState<string>('classic');
   const [titleText, setTitleText] = useState<string>('Your Amazing Product');
@@ -29,7 +29,7 @@ const TemplateAds: React.FC = () => {
   // Initialize canvas
   useEffect(() => {
     if (canvasRef.current) {
-      const fabricCanvas = new fabric.Canvas(canvasRef.current, {
+      const fabricCanvas = new Canvas(canvasRef.current, {
         backgroundColor: '#ffffff',
         selection: true,
         preserveObjectStacking: true
@@ -47,38 +47,29 @@ const TemplateAds: React.FC = () => {
   }, []);
 
   // Load default content
-  const loadDefaultContent = useCallback((fabricCanvas: fabric.Canvas) => {
+  const loadDefaultContent = useCallback((fabricCanvas: Canvas) => {
     fabricCanvas.clear();
-    fabricCanvas.setBackgroundColor('#ffffff', fabricCanvas.renderAll.bind(fabricCanvas));
+    fabricCanvas.backgroundColor = '#ffffff';
     
     // Load default template
     loadTemplate(fabricCanvas, currentTemplate);
   }, [currentTemplate]);
 
   // Load template
-  const loadTemplate = useCallback((fabricCanvas: fabric.Canvas, templateId: string) => {
+  const loadTemplate = useCallback((fabricCanvas: Canvas, templateId: string) => {
     const width = fabricCanvas.width || 400;
     const height = fabricCanvas.height || 500;
 
     // Clear existing objects except background
     const objects = fabricCanvas.getObjects();
-    objects.forEach(obj => {
-      if ((obj as any).selectable !== false) {
+    objects.forEach((obj: any) => {
+      if (obj.selectable !== false) {
         fabricCanvas.remove(obj);
       }
     });
 
-    // Add background
-    const background = new fabric.Rect({
-      left: 0,
-      top: 0,
-      width: width,
-      height: height,
-      fill: '#ffffff',
-      selectable: false,
-      evented: false
-    });
-    fabricCanvas.add(background);
+    // Set background color
+    fabricCanvas.backgroundColor = '#ffffff';
 
     switch (templateId) {
       case 'classic':
@@ -103,9 +94,9 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.renderAll();
   }, [titleText, subtitleText]);
 
-  const loadClassicTemplate = (fabricCanvas: fabric.Canvas, width: number, height: number) => {
+  const loadClassicTemplate = (fabricCanvas: Canvas, width: number, height: number) => {
     // Add placeholder image
-    const imageRect = new fabric.Rect({
+    const imageRect = new Rect({
       left: width / 2,
       top: height * 0.3,
       width: width * 0.8,
@@ -122,7 +113,7 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(imageRect);
 
     // Add image placeholder text
-    const imagePlaceholder = new fabric.Text('Click to upload image', {
+    const imagePlaceholder = new Textbox('Click to upload image', {
       left: width / 2,
       top: height * 0.3,
       fontSize: 14,
@@ -136,7 +127,7 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(imagePlaceholder);
 
     // Add title text
-    const titleTextObj = new fabric.Textbox(titleText, {
+    const titleTextObj = new Textbox(titleText, {
       left: width / 2,
       top: height * 0.7,
       width: width * 0.8,
@@ -151,7 +142,7 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(titleTextObj);
 
     // Add subtitle text
-    const subtitleTextObj = new fabric.Textbox(subtitleText, {
+    const subtitleTextObj = new Textbox(subtitleText, {
       left: width / 2,
       top: height * 0.85,
       width: width * 0.8,
@@ -166,9 +157,9 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(subtitleTextObj);
   };
 
-  const loadSplitLeftTemplate = (fabricCanvas: fabric.Canvas, width: number, height: number) => {
+  const loadSplitLeftTemplate = (fabricCanvas: Canvas, width: number, height: number) => {
     // Left side image
-    const imageRect = new fabric.Rect({
+    const imageRect = new Rect({
       left: 0,
       top: 0,
       width: width * 0.5,
@@ -183,7 +174,7 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(imageRect);
 
     // Right side content
-    const titleTextObj = new fabric.Textbox(titleText, {
+    const titleTextObj = new Textbox(titleText, {
       left: width * 0.75,
       top: height * 0.4,
       width: width * 0.4,
@@ -197,7 +188,7 @@ const TemplateAds: React.FC = () => {
     (titleTextObj as any).textType = 'title';
     fabricCanvas.add(titleTextObj);
 
-    const subtitleTextObj = new fabric.Textbox(subtitleText, {
+    const subtitleTextObj = new Textbox(subtitleText, {
       left: width * 0.75,
       top: height * 0.6,
       width: width * 0.4,
@@ -212,9 +203,9 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(subtitleTextObj);
   };
 
-  const loadSplitRightTemplate = (fabricCanvas: fabric.Canvas, width: number, height: number) => {
+  const loadSplitRightTemplate = (fabricCanvas: Canvas, width: number, height: number) => {
     // Left side content
-    const titleTextObj = new fabric.Textbox(titleText, {
+    const titleTextObj = new Textbox(titleText, {
       left: width * 0.25,
       top: height * 0.4,
       width: width * 0.4,
@@ -228,7 +219,7 @@ const TemplateAds: React.FC = () => {
     (titleTextObj as any).textType = 'title';
     fabricCanvas.add(titleTextObj);
 
-    const subtitleTextObj = new fabric.Textbox(subtitleText, {
+    const subtitleTextObj = new Textbox(subtitleText, {
       left: width * 0.25,
       top: height * 0.6,
       width: width * 0.4,
@@ -243,7 +234,7 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(subtitleTextObj);
 
     // Right side image
-    const imageRect = new fabric.Rect({
+    const imageRect = new Rect({
       left: width * 0.5,
       top: 0,
       width: width * 0.5,
@@ -258,9 +249,9 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(imageRect);
   };
 
-  const loadSplitTopTemplate = (fabricCanvas: fabric.Canvas, width: number, height: number) => {
+  const loadSplitTopTemplate = (fabricCanvas: Canvas, width: number, height: number) => {
     // Top image
-    const imageRect = new fabric.Rect({
+    const imageRect = new Rect({
       left: 0,
       top: 0,
       width: width,
@@ -275,7 +266,7 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(imageRect);
 
     // Bottom content
-    const titleTextObj = new fabric.Textbox(titleText, {
+    const titleTextObj = new Textbox(titleText, {
       left: width / 2,
       top: height * 0.75,
       width: width * 0.8,
@@ -289,7 +280,7 @@ const TemplateAds: React.FC = () => {
     (titleTextObj as any).textType = 'title';
     fabricCanvas.add(titleTextObj);
 
-    const subtitleTextObj = new fabric.Textbox(subtitleText, {
+    const subtitleTextObj = new Textbox(subtitleText, {
       left: width / 2,
       top: height * 0.9,
       width: width * 0.8,
@@ -304,9 +295,9 @@ const TemplateAds: React.FC = () => {
     fabricCanvas.add(subtitleTextObj);
   };
 
-  const loadGridTemplate = (fabricCanvas: fabric.Canvas, width: number, height: number) => {
+  const loadGridTemplate = (fabricCanvas: Canvas, width: number, height: number) => {
     // 2x2 grid layout
-    const imageRect = new fabric.Rect({
+    const imageRect = new Rect({
       left: width * 0.05,
       top: height * 0.05,
       width: width * 0.4,
@@ -320,7 +311,7 @@ const TemplateAds: React.FC = () => {
     (imageRect as any).imageType = 'main';
     fabricCanvas.add(imageRect);
 
-    const titleTextObj = new fabric.Textbox(titleText, {
+    const titleTextObj = new Textbox(titleText, {
       left: width * 0.75,
       top: height * 0.25,
       width: width * 0.4,
@@ -334,7 +325,7 @@ const TemplateAds: React.FC = () => {
     (titleTextObj as any).textType = 'title';
     fabricCanvas.add(titleTextObj);
 
-    const subtitleTextObj = new fabric.Textbox(subtitleText, {
+    const subtitleTextObj = new Textbox(subtitleText, {
       left: width / 2,
       top: height * 0.7,
       width: width * 0.9,
@@ -390,9 +381,9 @@ const TemplateAds: React.FC = () => {
   const handleTextUpdate = useCallback((type: string, value: string) => {
     if (!canvas) return;
     
-    const textObject = canvas.getObjects().find(obj => 
-      obj.type === 'textbox' && (obj as any).textType === type
-    ) as fabric.Textbox;
+    const textObject = canvas.getObjects().find((obj: any) => 
+      obj.type === 'textbox' && obj.textType === type
+    ) as any;
     
     if (textObject) {
       textObject.set({ text: value });
@@ -418,12 +409,12 @@ const TemplateAds: React.FC = () => {
     reader.onload = (e) => {
       const imageUrl = e.target?.result as string;
       
-      fabric.Image.fromURL(imageUrl, (img) => {
+      Image.fromURL(imageUrl, (img: any) => {
         if (!img) return;
 
         // Find existing image placeholder
-        const existingImage = canvas.getObjects().find(obj => 
-          (obj as any).imageType === 'main'
+        const existingImage = canvas.getObjects().find((obj: any) => 
+          obj.imageType === 'main'
         );
         
         if (existingImage) {
@@ -446,7 +437,7 @@ const TemplateAds: React.FC = () => {
 
           // Set clipping path if needed
           if (currentTemplate !== 'classic') {
-            const clipPath = new fabric.Rect({
+            const clipPath = new Rect({
               left: -bounds.width / 2,
               top: -bounds.height / 2,
               width: bounds.width,
