@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Canvas, Rect, Textbox, Image } from 'fabric';
 import { CanvasSize, Template, Orientation } from '../types';
-import './TemplateAds.css';
 
 const TemplateAds: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -462,30 +461,30 @@ const TemplateAds: React.FC = () => {
   }, [canvas, currentTemplate]);
 
   return (
-    <div className="template-ads">
+    <div className="bg-yellow-50 font-sf-pro h-screen overflow-hidden">
       {/* Header */}
-      <header className="app-header">
-        <div className="header-content">
-          <h1>Template Ads</h1>
+      <header className="bg-white border-b border-border-color h-[70px] fixed left-0 right-0 top-0 z-[1000] px-5 py-3.5">
+        <div className="flex items-center h-full">
+          <h1 className="text-text-primary text-2xl font-semibold m-0">Template Ads</h1>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="main-content">
-        <div className="content-layout">
+      <div className="h-[calc(100vh-70px)] mt-[70px]">
+        <div className="flex h-full">
           {/* Left Sidebar */}
-          <div className="sidebar-panel">
-            <div className="sidebar-content">
+          <div className="bg-white border-r border-border-color flex-shrink-0 overflow-y-auto w-[520px]">
+            <div className="p-5">
               
               {/* Template Section */}
-              <div className="sidebar-section">
-                <h5 className="section-heading">Template</h5>
+              <div className="mb-5">
+                <h5 className="text-text-primary text-sm font-semibold mb-4">Template</h5>
                 
                 {/* Orientation */}
-                <div className="control-item">
-                  <label className="control-label">Aspect Ratio</label>
+                <div className="mb-4">
+                  <label className="block text-text-secondary text-sm font-medium mb-2">Aspect Ratio</label>
                   <select 
-                    className="form-select"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 font-sf-pro text-sm font-normal transition-colors focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/10"
                     value={currentOrientation}
                     onChange={(e) => handleOrientationChange(e.target.value)}
                   >
@@ -498,10 +497,10 @@ const TemplateAds: React.FC = () => {
                 </div>
 
                 {/* Template */}
-                <div className="control-item">
-                  <label className="control-label">Template</label>
+                <div className="mb-4">
+                  <label className="block text-text-secondary text-sm font-medium mb-2">Template</label>
                   <select 
-                    className="form-select"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 font-sf-pro text-sm font-normal transition-colors focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/10"
                     value={currentTemplate}
                     onChange={(e) => handleTemplateChange(e.target.value)}
                   >
@@ -515,26 +514,26 @@ const TemplateAds: React.FC = () => {
               </div>
 
               {/* Content Section */}
-              <div className="sidebar-section">
-                <h5 className="section-heading">Content</h5>
+              <div className="mb-5">
+                <h5 className="text-text-primary text-sm font-semibold mb-4">Content</h5>
                 
                 {/* Main Image */}
-                <div className="control-item">
-                  <label className="control-label">Main Image</label>
+                <div className="mb-4">
+                  <label className="block text-text-secondary text-sm font-medium mb-2">Main Image</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageUpload}
-                    className="form-control"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 font-sf-pro text-sm font-normal transition-colors focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/10 file:mr-4 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-brand-blue file:text-white hover:file:bg-brand-blue/90"
                   />
                 </div>
 
                 {/* Title */}
-                <div className="control-item">
-                  <label className="control-label">Title</label>
+                <div className="mb-4">
+                  <label className="block text-text-secondary text-sm font-medium mb-2">Title</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 font-sf-pro text-sm font-normal transition-colors focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/10"
                     value={titleText}
                     onChange={(e) => handleTextUpdate('title', e.target.value)}
                     placeholder="Enter title"
@@ -542,10 +541,10 @@ const TemplateAds: React.FC = () => {
                 </div>
 
                 {/* Subtitle */}
-                <div className="control-item">
-                  <label className="control-label">Subtitle</label>
+                <div className="mb-4">
+                  <label className="block text-text-secondary text-sm font-medium mb-2">Subtitle</label>
                   <textarea
-                    className="form-control"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 font-sf-pro text-sm font-normal transition-colors focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/10 min-h-[80px] resize-y"
                     value={subtitleText}
                     onChange={(e) => handleTextUpdate('subtitle', e.target.value)}
                     placeholder="Enter subtitle"
@@ -557,12 +556,13 @@ const TemplateAds: React.FC = () => {
           </div>
 
           {/* Canvas Area */}
-          <div className="canvas-area">
-            <div className="canvas-container">
+          <div className="flex-1 flex items-center justify-center bg-canvas-bg overflow-hidden">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden p-0">
               <canvas
                 ref={canvasRef}
                 width={canvasSize.width}
                 height={canvasSize.height}
+                className="rounded-lg block"
               />
             </div>
           </div>
