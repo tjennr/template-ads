@@ -7,67 +7,37 @@ import time
 import requests
 from flask import Flask, Response, request
 
-# Create a Flask proxy app that serves React content
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    try:
-        response = requests.get('http://localhost:3000', timeout=5)
-        return Response(response.content, mimetype=response.headers.get('content-type', 'text/html'))
-    except Exception as e:
-        return f"Error connecting to React dev server: {e}", 500
-
-@app.route('/<path:path>')
-def proxy(path):
-    try:
-        # Forward the request to React dev server
-        url = f'http://localhost:3000/{path}'
-        if request.query_string:
-            url += f'?{request.query_string.decode()}'
-        
-        response = requests.get(url, timeout=5)
-        
-        # Get the proper content type
-        content_type = response.headers.get('content-type', 'text/html')
-        
-        # Return the response with proper headers
-        return Response(response.content, 
-                       status=response.status_code,
-                       mimetype=content_type)
-    except Exception as e:
-        return f"Error connecting to React dev server: {e}", 500
-
-@app.route('/manifest.json')
-def manifest():
-    try:
-        response = requests.get('http://localhost:3000/manifest.json', timeout=5)
-        return Response(response.content, 
-                       status=response.status_code,
-                       mimetype='application/json')
-    except Exception as e:
-        return f"Error: {e}", 500
-
-@app.route('/test')
-def test():
-    with open('test.html', 'r') as f:
-        return f.read()
-
-@app.route('/debug')
-def debug():
-    with open('debug.html', 'r') as f:
-        return f.read()
-
 def start_react_dev_server():
     """Start React development server in background"""
     try:
-        os.chdir('typescript-react')
-        os.environ['PORT'] = '3000'
-        os.environ['HOST'] = '0.0.0.0'
-        os.environ['BROWSER'] = 'none'
+        # Kill any existing React processes
+        subprocess.run(['pkill', '-f', 'react-scripts'], check=False)
+        time.sleep(3)
         
-        print("Starting React development server on port 3000...")
-        subprocess.run(['npm', 'start'], check=False)
+        # Change to the React directory
+        current_dir = os.getcwd()
+        react_dir = os.path.join(current_dir, 'typescript-react')
+        
+        print(f"Starting React development server in {react_dir}")
+        
+        # Start the React dev server
+        process = subprocess.Popen(
+            ['npm', 'start'],
+            cwd=react_dir,
+            env={**os.environ, 'PORT': '3000', 'HOST': '0.0.0.0', 'BROWSER': 'none'},
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True
+        )
+        
+        # Monitor the process
+        while True:
+            output = process.stdout.readline()
+            if output:
+                print(output.strip())
+            if process.poll() is not None:
+                break
+        
     except Exception as e:
         print(f"Failed to start React dev server: {e}")
 
@@ -76,7 +46,45 @@ react_thread = threading.Thread(target=start_react_dev_server, daemon=True)
 react_thread.start()
 
 # Give React time to start
-time.sleep(5)
+time.sleep(20)
+
+# Create a Flask proxy app that serves React content
+app = Flask(__name__)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def proxy_to_react(path):
+    """Proxy all requests to React dev server"""
+    try:
+        # Build the target URL
+        target_url = f'http://localhost:3000/{path}'
+        
+        # Add query string if present
+        if request.query_string:
+            target_url += f'?{request.query_string.decode()}'
+        
+        # Forward the request
+        resp = requests.get(
+            target_url,
+            headers={key: value for key, value in request.headers if key.lower() != 'host'},
+            timeout=10
+        )
+        
+        # Create response
+        response = Response(
+            resp.content,
+            status=resp.status_code,
+            headers=dict(resp.headers)
+        )
+        
+        # Remove headers that might cause issues
+        response.headers.pop('content-encoding', None)
+        response.headers.pop('transfer-encoding', None)
+        
+        return response
+        
+    except Exception as e:
+        return f"Proxy error: {e}", 502
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(debug=True, host='0.0.0.0', port=5000)
