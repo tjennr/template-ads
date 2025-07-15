@@ -1,84 +1,15 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import Konva from 'konva';
-import { TemplateLayouts } from '../components/templates/TemplateLayouts';
+import { useState, useCallback } from 'react';
 import { CanvasSize } from '../types';
 
 export const useCanvas = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const stageRef = useRef<Konva.Stage | null>(null);
-  const layerRef = useRef<Konva.Layer | null>(null);
   const [currentOrientation, setCurrentOrientation] = useState<string>('vertical');
   const [currentTemplate, setCurrentTemplate] = useState<string>('classic');
   const [titleText, setTitleText] = useState<string>('Your Amazing Product');
   const [subtitleText, setSubtitleText] = useState<string>('Get started today with our incredible solution');
   const [canvasSize, setCanvasSize] = useState<CanvasSize>({ width: 400, height: 500 });
-  const [uploadedImage, setUploadedImage] = useState<HTMLImageElement | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
-  // Initialize Konva stage and layer
-  useEffect(() => {
-    if (!containerRef.current) return;
 
-    // Create stage
-    const stage = new Konva.Stage({
-      container: containerRef.current,
-      width: canvasSize.width,
-      height: canvasSize.height,
-    });
-
-    // Create layer
-    const layer = new Konva.Layer();
-    stage.add(layer);
-
-    stageRef.current = stage;
-    layerRef.current = layer;
-
-    // Load initial template
-    loadTemplate();
-
-    return () => {
-      stage.destroy();
-    };
-  }, []);
-
-  // Load template with current settings
-  const loadTemplate = useCallback(() => {
-    if (!layerRef.current) return;
-
-    TemplateLayouts.createTemplate(currentTemplate, layerRef.current, canvasSize.width, canvasSize.height, {
-      titleText,
-      subtitleText
-    });
-
-    // Handle image upload if available
-    if (uploadedImage) {
-      updateMainImage();
-    }
-
-    layerRef.current.draw();
-  }, [currentTemplate, canvasSize, titleText, subtitleText, uploadedImage]);
-
-  // Update main image when uploaded
-  const updateMainImage = useCallback(() => {
-    if (!layerRef.current || !uploadedImage) return;
-
-    const imageRect = layerRef.current.findOne('#main-image') as Konva.Rect;
-    if (!imageRect) return;
-
-    // Create Konva image
-    const konvaImage = new Konva.Image({
-      id: 'uploaded-image',
-      x: imageRect.x(),
-      y: imageRect.y(),
-      width: imageRect.width(),
-      height: imageRect.height(),
-      image: uploadedImage,
-    });
-
-    // Remove the placeholder rect and add the image
-    imageRect.destroy();
-    layerRef.current.add(konvaImage);
-    layerRef.current.draw();
-  }, [uploadedImage]);
 
   // Update canvas size based on orientation
   const updateCanvasSize = useCallback((orientation: string) => {
@@ -97,12 +28,6 @@ export const useCanvas = () => {
     }
 
     setCanvasSize(newSize);
-    
-    // Update stage size
-    if (stageRef.current) {
-      stageRef.current.width(newSize.width);
-      stageRef.current.height(newSize.height);
-    }
   }, []);
 
   // Handle orientation change
@@ -134,30 +59,19 @@ export const useCanvas = () => {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        setUploadedImage(img);
-      };
-      img.src = e.target?.result as string;
+      setUploadedImage(e.target?.result as string);
     };
     
     reader.readAsDataURL(file);
   }, []);
 
-  // Reload template when dependencies change
-  useEffect(() => {
-    loadTemplate();
-  }, [loadTemplate]);
-
   return {
-    containerRef,
-    stageRef,
-    layerRef,
     currentOrientation,
     currentTemplate,
     titleText,
     subtitleText,
     canvasSize,
+    uploadedImage,
     handleOrientationChange,
     handleTemplateChange,
     handleTextUpdate,

@@ -2,13 +2,13 @@
 
 ## Overview
 
-Template Ads is now a **TypeScript React application** that provides a visual canvas editor for creating professional advertisements. Originally built with Flask, the project has been completely converted to modern React with TypeScript for better type safety and maintainability. The application leverages **Konva.js** for canvas manipulation and offers features like image uploads, text editing, template selection with multiple orientations. The original Flask code is preserved as backup in the backup-flask/ directory.
+Template Ads is now a **TypeScript React application** that provides a visual canvas editor for creating professional advertisements. Originally built with Flask, the project has been completely converted to modern React with TypeScript for better type safety and maintainability. The application leverages **react-konva** for canvas manipulation and offers features like image uploads, text editing, template selection with multiple orientations. The original Flask code is preserved as backup in the backup-flask/ directory.
 
 ## System Architecture
 
 ### Frontend Architecture (TypeScript React)
 - **Framework**: React 18 with TypeScript for type safety and modern development
-- **Canvas Editor**: Built with **Konva.js** for interactive canvas manipulation using Stage/Layer architecture
+- **Canvas Editor**: Built with **react-konva** for interactive canvas manipulation using React components
 - **State Management**: React hooks (useState, useCallback, useEffect) for component state
 - **Font System**: Google Fonts integration (SF Pro Text, Source Sans Pro, Roboto, etc.)
 - **Build System**: Create React App with webpack bundling and hot reloading
@@ -103,11 +103,12 @@ Template Ads is now a **TypeScript React application** that provides a visual ca
 ```
 
 ## Recent Changes
-- July 15, 2025: **Successfully migrated from Fabric.js to Konva.js** for canvas rendering with Stage/Layer architecture
-- July 15, 2025: **Updated all template layouts** to use Konva.js API (Rect, Text, Image) instead of HTML5 Canvas
-- July 15, 2025: **Converted useCanvas hook** to use Konva Stage and Layer for professional canvas management
-- July 15, 2025: **Fixed TypeScript compilation** and updated component props to work with Konva containers
+- July 15, 2025: **Successfully migrated from Fabric.js to react-konva** for canvas rendering with React components
+- July 15, 2025: **Updated all template layouts** to use react-konva components (Stage, Layer, Rect, Text, Image)
+- July 15, 2025: **Converted useCanvas hook** to simplified state management for react-konva integration
+- July 15, 2025: **Created CanvasArea component** using react-konva Stage/Layer with proper image handling
 - July 15, 2025: **React app runs on port 3000** - access directly at http://localhost:3000 to bypass Flask proxy issues
+- July 15, 2025: **Completed migration to react-konva** - application now uses React components for canvas rendering with proper image loading and template switching
 - July 10, 2025: **Successfully removed Fabric.js dependency and replaced with pure HTML5 Canvas API** for clean TypeScript/React implementation
 - July 10, 2025: **Modularized code architecture** - separated template layouts, UI components, and canvas logic into focused files
 - July 10, 2025: **Created custom canvas rendering system** using HTML5 Canvas API with template layouts, image upload, and text rendering
