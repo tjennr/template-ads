@@ -118,7 +118,10 @@ const CanvasArea: React.FC = () => {
             overflow: 'hidden'
           }}
         >
-          <Stage width={canvasSize.width} height={canvasSize.height}>
+          <Stage
+            width={canvasSize.width}
+            height={canvasSize.height}
+          >
             <Layer>
               {templateElements.map((element, index) => renderElement(element, index))}
             </Layer>
