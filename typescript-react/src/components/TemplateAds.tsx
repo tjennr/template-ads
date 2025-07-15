@@ -7,12 +7,10 @@ import CanvasArea from './ui/CanvasArea';
 
 const TemplateAds: React.FC = () => {
   const {
-    canvasRef,
     currentOrientation,
     currentTemplate,
     titleText,
     subtitleText,
-    canvasSize,
     handleOrientationChange,
     handleTemplateChange,
     handleTextUpdate,
@@ -53,10 +51,7 @@ const TemplateAds: React.FC = () => {
             onImageUpload={handleImageUpload}
           />
           
-          <CanvasArea 
-            canvasRef={canvasRef}
-            canvasSize={canvasSize}
-          />
+          <CanvasArea />
         </div>
       </div>
     </div>

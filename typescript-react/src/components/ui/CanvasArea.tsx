@@ -1,19 +1,32 @@
 import React from 'react';
+import { useCanvas } from '../../hooks/useCanvas';
 
-interface CanvasAreaProps {
-  canvasRef: React.RefObject<HTMLCanvasElement | null>;
-  canvasSize: { width: number; height: number };
-}
+const CanvasArea: React.FC = () => {
+  const { containerRef, canvasSize } = useCanvas();
 
-const CanvasArea: React.FC<CanvasAreaProps> = ({ canvasRef, canvasSize }) => {
   return (
-    <div className="flex-1 bg-gray-50 flex items-center justify-center p-5">
-      <div className="bg-white rounded-lg shadow-lg p-4">
-        <canvas
-          ref={canvasRef}
-          width={canvasSize.width}
-          height={canvasSize.height}
-          className="border border-gray-200"
+    <div className="canvas-area">
+      <div 
+        className="canvas-container"
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#f5f5f5'
+        }}
+      >
+        <div
+          ref={containerRef}
+          style={{
+            width: canvasSize.width,
+            height: canvasSize.height,
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}
         />
       </div>
     </div>

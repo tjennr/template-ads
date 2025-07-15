@@ -1,124 +1,84 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { TemplateLayouts, CanvasElement } from '../components/templates/TemplateLayouts';
+import Konva from 'konva';
+import { TemplateLayouts } from '../components/templates/TemplateLayouts';
 import { CanvasSize } from '../types';
 
 export const useCanvas = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const stageRef = useRef<Konva.Stage | null>(null);
+  const layerRef = useRef<Konva.Layer | null>(null);
   const [currentOrientation, setCurrentOrientation] = useState<string>('vertical');
   const [currentTemplate, setCurrentTemplate] = useState<string>('classic');
   const [titleText, setTitleText] = useState<string>('Your Amazing Product');
   const [subtitleText, setSubtitleText] = useState<string>('Get started today with our incredible solution');
   const [canvasSize, setCanvasSize] = useState<CanvasSize>({ width: 400, height: 500 });
-  const [elements, setElements] = useState<CanvasElement[]>([]);
   const [uploadedImage, setUploadedImage] = useState<HTMLImageElement | null>(null);
 
-  // Draw canvas elements
-  const drawCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    elements.forEach(element => {
-      switch (element.type) {
-        case 'rect':
-          // Draw rectangle (image placeholder)
-          ctx.fillStyle = element.backgroundColor || '#f0f0f0';
-          ctx.fillRect(element.x, element.y, element.width, element.height);
-          
-          // Draw border
-          ctx.strokeStyle = '#ddd';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(element.x, element.y, element.width, element.height);
-
-          // If we have an uploaded image and this is the main image, draw it
-          if (element.id === 'main-image' && uploadedImage) {
-            // Calculate scaling to fit and cover the rectangle
-            const scaleX = element.width / uploadedImage.width;
-            const scaleY = element.height / uploadedImage.height;
-            const scale = Math.max(scaleX, scaleY);
-            
-            const scaledWidth = uploadedImage.width * scale;
-            const scaledHeight = uploadedImage.height * scale;
-            
-            const offsetX = (element.width - scaledWidth) / 2;
-            const offsetY = (element.height - scaledHeight) / 2;
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.rect(element.x, element.y, element.width, element.height);
-            ctx.clip();
-            
-            ctx.drawImage(
-              uploadedImage,
-              element.x + offsetX,
-              element.y + offsetY,
-              scaledWidth,
-              scaledHeight
-            );
-            ctx.restore();
-          } else if (element.id === 'main-image') {
-            // Draw placeholder text
-            ctx.fillStyle = '#999';
-            ctx.font = '14px SF Pro Text, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(
-              'Click to upload image',
-              element.x + element.width / 2,
-              element.y + element.height / 2
-            );
-          }
-          break;
-
-        case 'text':
-          ctx.fillStyle = element.color || '#000';
-          ctx.font = `${element.fontSize || 16}px ${element.fontFamily || 'SF Pro Text, sans-serif'}`;
-          ctx.textAlign = element.textAlign || 'center';
-          
-          // Handle text wrapping for long text
-          const words = (element.text || '').split(' ');
-          const lineHeight = (element.fontSize || 16) * 1.2;
-          let line = '';
-          let y = element.y;
-
-          for (let n = 0; n < words.length; n++) {
-            const testLine = line + words[n] + ' ';
-            const metrics = ctx.measureText(testLine);
-            const testWidth = metrics.width;
-            
-            if (testWidth > element.width && n > 0) {
-              ctx.fillText(line, element.x, y);
-              line = words[n] + ' ';
-              y += lineHeight;
-            } else {
-              line = testLine;
-            }
-          }
-          ctx.fillText(line, element.x, y);
-          break;
-      }
-    });
-  }, [elements, uploadedImage]);
-
-  // Initialize canvas and load template
+  // Initialize Konva stage and layer
   useEffect(() => {
-    const newElements = TemplateLayouts.createTemplate(currentTemplate, canvasSize.width, canvasSize.height, {
+    if (!containerRef.current) return;
+
+    // Create stage
+    const stage = new Konva.Stage({
+      container: containerRef.current,
+      width: canvasSize.width,
+      height: canvasSize.height,
+    });
+
+    // Create layer
+    const layer = new Konva.Layer();
+    stage.add(layer);
+
+    stageRef.current = stage;
+    layerRef.current = layer;
+
+    // Load initial template
+    loadTemplate();
+
+    return () => {
+      stage.destroy();
+    };
+  }, []);
+
+  // Load template with current settings
+  const loadTemplate = useCallback(() => {
+    if (!layerRef.current) return;
+
+    TemplateLayouts.createTemplate(currentTemplate, layerRef.current, canvasSize.width, canvasSize.height, {
       titleText,
       subtitleText
     });
-    setElements(newElements);
-  }, [currentTemplate, canvasSize, titleText, subtitleText]);
 
-  // Redraw canvas when elements change
-  useEffect(() => {
-    drawCanvas();
-  }, [drawCanvas]);
+    // Handle image upload if available
+    if (uploadedImage) {
+      updateMainImage();
+    }
+
+    layerRef.current.draw();
+  }, [currentTemplate, canvasSize, titleText, subtitleText, uploadedImage]);
+
+  // Update main image when uploaded
+  const updateMainImage = useCallback(() => {
+    if (!layerRef.current || !uploadedImage) return;
+
+    const imageRect = layerRef.current.findOne('#main-image') as Konva.Rect;
+    if (!imageRect) return;
+
+    // Create Konva image
+    const konvaImage = new Konva.Image({
+      id: 'uploaded-image',
+      x: imageRect.x(),
+      y: imageRect.y(),
+      width: imageRect.width(),
+      height: imageRect.height(),
+      image: uploadedImage,
+    });
+
+    // Remove the placeholder rect and add the image
+    imageRect.destroy();
+    layerRef.current.add(konvaImage);
+    layerRef.current.draw();
+  }, [uploadedImage]);
 
   // Update canvas size based on orientation
   const updateCanvasSize = useCallback((orientation: string) => {
@@ -137,6 +97,12 @@ export const useCanvas = () => {
     }
 
     setCanvasSize(newSize);
+    
+    // Update stage size
+    if (stageRef.current) {
+      stageRef.current.width(newSize.width);
+      stageRef.current.height(newSize.height);
+    }
   }, []);
 
   // Handle orientation change
@@ -178,8 +144,15 @@ export const useCanvas = () => {
     reader.readAsDataURL(file);
   }, []);
 
+  // Reload template when dependencies change
+  useEffect(() => {
+    loadTemplate();
+  }, [loadTemplate]);
+
   return {
-    canvasRef,
+    containerRef,
+    stageRef,
+    layerRef,
     currentOrientation,
     currentTemplate,
     titleText,
