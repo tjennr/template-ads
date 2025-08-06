@@ -1,7 +1,9 @@
-# Template Ads - Advertisement Designer
+# Template Ads
 
 ## Overview
 Template Ads is a Flask-based web application providing a visual canvas editor for creating professional advertisements. It offers features like image uploads, text editing, template selection, and PDF export. The application aims to be a user-friendly tool for marketing material creation with drag-and-drop functionality and real-time editing.
+
+Built as a prototype in Replit.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
