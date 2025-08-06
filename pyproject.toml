@@ -13,6 +13,5 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "reportlab>=4.4.1",
     "requests>=2.32.4",
-    "sift-stack-py>=0.7.0",
     "werkzeug>=3.1.3",
 ]

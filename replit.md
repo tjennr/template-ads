@@ -2,24 +2,23 @@
 
 ## Overview
 
-Template Ads is now a **TypeScript React application** that provides a visual canvas editor for creating professional advertisements. Originally built with Flask, the project has been completely converted to modern React with TypeScript for better type safety and maintainability. The application leverages **react-konva** for canvas manipulation and offers features like image uploads, text editing, template selection with multiple orientations. The original Flask code is preserved as backup in the backup-flask/ directory.
+Template Ads is a Flask-based web application that provides a visual canvas editor for creating professional advertisements. The application leverages Fabric.js for canvas manipulation and offers features like image uploads, text editing, template selection, and PDF export functionality. It's designed as a user-friendly tool for creating marketing materials with drag-and-drop functionality and real-time editing capabilities.
 
 ## System Architecture
 
-### Frontend Architecture (TypeScript React)
-- **Framework**: React 18 with TypeScript for type safety and modern development
-- **Canvas Editor**: Built with **react-konva** for interactive canvas manipulation using React components
-- **State Management**: React hooks (useState, useCallback, useEffect) for component state
-- **Font System**: Google Fonts integration (SF Pro Text, Source Sans Pro, Roboto, etc.)
-- **Build System**: Create React App with webpack bundling and hot reloading
-- **Type Safety**: Complete TypeScript interfaces for all data structures
+### Frontend Architecture
+- **Canvas Editor**: Built with Fabric.js for interactive canvas manipulation
+- **UI Framework**: Bootstrap with dark theme for responsive design
+- **Font System**: Google Fonts integration (Source Sans Pro)
+- **Icons**: Font Awesome for consistent iconography
+- **JavaScript Architecture**: Object-oriented approach with TemplateAdsEditor class
 
-### Legacy Backend Architecture (Backup)
-- **Original Flask Implementation**: Preserved in backup-flask/ directory
-- **Image Processing**: PIL (Pillow) for image manipulation and processing  
+### Backend Architecture
+- **Web Framework**: Flask with Werkzeug WSGI middleware
+- **Image Processing**: PIL (Pillow) for image manipulation and processing
 - **PDF Generation**: ReportLab for exporting designs to PDF format
-- **AI Integration**: Google Gemini for text generation and image creation
-- **Stock Images**: Shutterstock API integration
+- **File Handling**: Secure file upload with UUID-based naming
+- **Session Management**: Flask sessions with configurable secret key
 
 ### Key Components
 
@@ -103,23 +102,6 @@ Template Ads is now a **TypeScript React application** that provides a visual ca
 ```
 
 ## Recent Changes
-- July 15, 2025: **Successfully migrated from Fabric.js to react-konva** for canvas rendering with React components
-- July 15, 2025: **Updated all template layouts** to use react-konva components (Stage, Layer, Rect, Text, Image)
-- July 15, 2025: **Converted useCanvas hook** to simplified state management for react-konva integration
-- July 15, 2025: **Created CanvasArea component** using react-konva Stage/Layer with proper image handling
-- July 15, 2025: **Fixed TypeScript compilation errors** - Stage component props properly formatted, no more children prop issues
-- July 15, 2025: **React app runs on port 3000** - access directly at http://localhost:3000 to bypass Flask proxy issues
-- July 15, 2025: **Completed migration to react-konva** - application compiles successfully with no TypeScript errors and renders properly
-- July 10, 2025: **Successfully removed Fabric.js dependency and replaced with pure HTML5 Canvas API** for clean TypeScript/React implementation
-- July 10, 2025: **Modularized code architecture** - separated template layouts, UI components, and canvas logic into focused files
-- July 10, 2025: **Created custom canvas rendering system** using HTML5 Canvas API with template layouts, image upload, and text rendering
-- July 10, 2025: **Organized project structure**: TemplateLayouts.ts (canvas logic), UI components (Header, Sidebar, CanvasArea), useCanvas hook (state management)
-- July 10, 2025: **Application runs directly on React dev server** (port 3000) without Flask proxy to avoid rendering issues
-- July 7, 2025: **Successfully converted entire Flask application to TypeScript React** while preserving original code as backup in backup-flask/ directory
-- July 7, 2025: Implemented TypeScript React version with core functionality: aspect ratio selection, template selection (Classic, Split Left, Split Right, Split Top, Grid), image upload with scaling, and real-time text editing
-- July 7, 2025: Created complete project structure with proper TypeScript interfaces, component organization, and React development environment setup
-- July 7, 2025: Fixed Fabric.js integration for React with proper import statements and API compatibility for newer versions
-- July 7, 2025: React development server running on port 3000 with external access configuration
 - June 16, 2025: Implemented always-visible floating controls for undo, reset, and zoom buttons positioned in top-right corner
 - June 16, 2025: Removed canvas border container for cleaner interface with direct canvas access
 - June 16, 2025: Added responsive floating controls that move to bottom on mobile devices with icon-only display
